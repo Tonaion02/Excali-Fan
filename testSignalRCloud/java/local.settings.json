@@ -1,0 +1,9 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "java",
+    "AzureSignalRConnectionString": "Endpoint=https://testresourcesignalr.service.signalr.net;AccessKey=Zu7RrcYhULghj0FQE8wNrKowroLwi5TNckkWLqRUvAytuOu1UoTtJQQJ99ALAC5RqLJXJ3w3AAAAASRSoOae;Version=1.0;"
+  },
+  "ConnectionStrings": {}
+}
