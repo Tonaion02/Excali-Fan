@@ -66,7 +66,8 @@ public class SignalRController {
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.userId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
-        System.out.println("list: " + command.points.get(0));
+        // System.out.println("list: " + command.points.get(0));
+        System.out.println("list: " + command.points.get(0).first);
 
         HttpResponse<String> response =  Unirest.post(hubUrl)
             .header("Content-Type", "application/json")

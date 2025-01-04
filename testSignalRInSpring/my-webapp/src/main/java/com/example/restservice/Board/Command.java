@@ -22,5 +22,5 @@ public class Command {
 
     public String userId;
     public long timestamp;
-    public List<Integer> points;
+    public List<Pair> points;
 }
