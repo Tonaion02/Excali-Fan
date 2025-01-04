@@ -157,7 +157,7 @@ function draw() {
             document.getElementById("messages").appendChild(li) */
             
             listLines.push(message.points)
-            drawLine(message.points)
+            drawLine(message.points, ctx)
         }
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
