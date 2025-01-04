@@ -53,13 +53,14 @@ function drawLine(line, ctx) {
             ctx.moveTo(lx, ly);
             ctx.lineTo(point.first, point.second);
 
-            ctx.stroke();
+            
 
             lx = point.first;
             ly = point.second;
         }
     }
 
+    ctx.stroke();
 }
 
 function update() {
@@ -160,15 +161,6 @@ function draw() {
         // Set EventListener for mouse that goes out of the canvas (END)
 
 
-
-
-
-        // ctx.beginPath();        
-        // ctx.moveTo(0, 0);
-        // ctx.lineTo(100, 0);
-        // ctx.lineTo(200, 200);
-        // ctx.closePath();
-        // ctx.stroke();
     
         function newMessage(message) {
             console.log("newMessage is called");
