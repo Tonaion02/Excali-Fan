@@ -32,6 +32,7 @@ function drawLine(line, ctx) {
 
     let first = true;
     let lx, ly;
+    
     for(point in line) {
         if(first) {
             first = false;
@@ -79,7 +80,7 @@ function draw() {
         canvas.addEventListener('mousedown', 
             (e) => {
                 isDrawing = true;
-                // [lastX, lastY] = [e.offsetX, e.offsetX];
+                [lastX, lastY] = [e.offsetX, e.offsetY];
 
                 // Clear the current line and add the first point of the line
                 currentLine = [];
@@ -100,7 +101,7 @@ function draw() {
                 ctx.moveTo(lastX, lastY);
                 ctx.lineTo(e.offsetX, e.offsetY);
                 ctx.stroke();
-                // [lastX, lastY] = [e.offsetX, e.offsetY];
+                [lastX, lastY] = [e.offsetX, e.offsetY];
 
                 currentLine.push({first: e.offsetX, second: e.offsetY});
             }
