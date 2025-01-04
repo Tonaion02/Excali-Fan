@@ -1,4 +1,4 @@
-# Excali-Fan
+# Excali-Fan (Development Repository)
 
 Excali-Fan is a webapp inspired to Excalidraw: https://excalidraw.com/ 
 
