@@ -27,6 +27,34 @@ if (!data.username) {
 
 
 
+
+function drawLine(line, ctx) {
+
+    let first = true;
+    let lx, ly;
+    for(point in line) {
+        if(first) {
+            first = false;
+            lx = point.first;
+            ly = point.second;
+
+            ctx.beginPath();
+        }
+        else {
+            ctx.moveTo(lx, ly);
+            ctx.lineTo(point.first, point.second);
+
+            ctx.stroke();
+
+            lx = point.first;
+            ly = point.second;
+        }
+    }
+
+}
+
+
+
 function draw() {
 
     const canvas = document.getElementById("canvas");
@@ -124,6 +152,7 @@ function draw() {
             document.getElementById("messages").appendChild(li) */
             
             listLines.push(message.points)
+            drawLine(message.points)
         }
 
 
