@@ -67,7 +67,7 @@ function update() {
     const ctx = canvas.getContext("2d")
 
     // T: clear the canva
-    ctx.clearRect(0, 0, canvas.width, canvas.height)    
+    // ctx.clearRect(0, 0, canvas.width, canvas.height)    
     
     // T: redraw every lines from the synced list
     for(lineIndex in listLines) {
@@ -76,7 +76,7 @@ function update() {
     }
 
     // T: retrieve the current state of the line drawn until now from the forward
-    draw(currentLine)
+    drawLine(currentLine)
     isDrawing = true
 }
 
