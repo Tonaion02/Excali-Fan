@@ -18,16 +18,16 @@ const data = {
 
 
 
-// T: make the prompt to retrieve the username (START)
-data.username = prompt('Enter your username')
-if (!data.username) {
-    alert('No username entered. Reload page and try again.')
-    throw 'No username entered'
-} else {
-    console.log("im setting username");
-    document.getElementById("username").textContent = data.username;
-}
-// T: make the prompt to retrieve the username (END)
+// // T: make the prompt to retrieve the username (START)
+// data.username = prompt('Enter your username')
+// if (!data.username) {
+//     alert('No username entered. Reload page and try again.')
+//     throw 'No username entered'
+// } else {
+//     console.log("im setting username");
+//     document.getElementById("username").textContent = data.username;
+// }
+// // T: make the prompt to retrieve the username (END)
 
 
 
@@ -85,7 +85,7 @@ function update() {
 
 function draw() {
 
-    
+
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
 
@@ -173,26 +173,38 @@ function draw() {
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
         .then((response) => response.json())
         .then((json) => { 
-          console.log(json); 
-          data.userId = json.userId;
-        
-          const connection = new signalR.HubConnectionBuilder()
-          // .withUrl(`${apiBaseUrl}/signalr`)
-          .withUrl(`/signalr?userId=` + data.userId)
-          .withAutomaticReconnect()
-          .configureLogging(signalR.LogLevel.Information)
-          .build()
-        
-          connection.on('newMessage', newMessage)
-        
-          connection.start()
-          .then(() => data.ready = true)
-          .catch(console.error)
-        })
+            console.log(json); 
+            data.userId = json.userId;
 
+            // T: set the temporary userId
+            document.getElementById("username").textContent = "User" + data.userId
+
+            // T: write the code of the groupId
+            document.getElementById("groupId").textContent = data.userId
+            
+            const connection = new signalR.HubConnectionBuilder()
+            // .withUrl(`${apiBaseUrl}/signalr`)
+            .withUrl(`/signalr?userId=` + data.userId)
+            .withAutomaticReconnect()
+            .configureLogging(signalR.LogLevel.Information)
+            .build()
+            
+            connection.on('newMessage', newMessage)
+            
+            connection.start()
+            .then(() => data.ready = true)
+            .catch(console.error)
+        })
     }
 }
-  
-draw();
+
+function addToGroup() {
+    let groupId = document.getElementById("groupToAdd").value 
+
+    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId).
+    then((response) => console.log("adding to group: " + response.status))
+}
+
+window.addEventListener('load', draw)
 
 console.log("You can start to draw")

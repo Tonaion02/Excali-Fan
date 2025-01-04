@@ -18,103 +18,18 @@
 </head>
 
 <body>
-  <p>&nbsp;</p>
+  <!-- <p>&nbsp;</p> -->
   
-  <h1 id="username">null</h1>
-
-  <!-- <input type="text" id="message-box" name="textInput">
-  <button id="send-button" onclick="onClickSend()">Send</button> -->
-
-  <!-- <ol id="messages"></ol> -->
+  <div id="header">
+    <p id="username"></p>
+    <p id="groupId"></p>
+    <input type="text" id="groupToAdd"/>
+    <button id="addGroup" onclick="addToGroup()">send</button>  
+  </div>
 
   <canvas id="canvas"></canvas>
 
   <script src="draw.js"></script>
-
-
-  <!-- <script>
-    
-    const data = {
-      username: '',
-      userId: '',
-      newMessage: '',
-      messages: [],
-      ready: false
-    }
-
-    const apiBaseUrl = ''
-
-    data.username = prompt('Enter your username')
-    if (!data.username) {
-      alert('No username entered. Reload page and try again.')
-      throw 'No username entered'
-    } else {
-      console.log("im setting username");
-      document.getElementById("username").textContent = data.username;
-    }
-
-    
-    fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
-    .then((response) => response.json())
-    .then((json) => { 
-      console.log(json); 
-      data.userId = json.userId;
-
-      const connection = new signalR.HubConnectionBuilder()
-      // .withUrl(`${apiBaseUrl}/signalr`)
-      .withUrl(`/signalr?userId=` + data.userId)
-      .withAutomaticReconnect()
-      .configureLogging(signalR.LogLevel.Information)
-      .build()
-
-      connection.on('newMessage', newMessage)
-
-      connection.start()
-      .then(() => data.ready = true)
-      .catch(console.error)
-    })    
-
-    /*
-    function sendMessage(sender, messageText) {
-      return axios.post(`/api/messages`, {
-      // return axios.post(`${apiBaseUrl}/api/messages`, {
-        sender: sender,
-        text: messageText,
-        userId: data.userId,
-      }).then(resp => resp.data)
-    }
-    */
-
-    function sendMessage(sender, messageText) {
-      return axios.post(`/api/messages`, {
-      // return axios.post(`${apiBaseUrl}/api/messages`, {
-      //  sender: sender,
-      //  text: messageText,
-        userId: data.userId,
-        timestamp: Date.now(),
-        points: [{first: 1.0, second: 2.0}, {first: 3.0, second: 2.0},],
-      }).then(resp => resp.data)
-    }
-
-    function newMessage(message) {
-      console.log("newMessage is called");
-
-      data.messages.unshift(message)
-
-      const li = document.createElement("li") 
-      li.textContent = "User " + message.sender + " : " + message.text
-      document.getElementById("messages").appendChild(li)
-    }
-
-    function onClickSend() {
-      console.log("onClickSend is called")
-
-      sendButton = document.getElementById("send-button")
-      textMessage = document.getElementById("message-box").value
-      sendMessage(data.username, textMessage)
-      sendButton.text = "" // T: Reset the sendButton text
-    }
-  </script> -->
 
 </body>
 
