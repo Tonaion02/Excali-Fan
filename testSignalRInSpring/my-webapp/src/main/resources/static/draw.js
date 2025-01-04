@@ -32,8 +32,11 @@ function drawLine(line, ctx) {
 
     let first = true;
     let lx, ly;
-    
+
     for(point in line) {
+
+        point = line[point]
+
         if(first) {
             first = false;
             lx = point.first;
@@ -86,12 +89,12 @@ function draw() {
                 currentLine = [];
                 // currentLine.push([lastX, lastY]);
 
-                currentLine.push({first: e.offsetX, second: e.offsetX});
+                currentLine.push({first: e.offsetX, second: e.offsetY});
             }
         );
         // Set EventListener for mouse down (END)
 
-        // Set EventListener for mouse up (START)
+        // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
                 if(!isDrawing) 
@@ -106,7 +109,9 @@ function draw() {
                 currentLine.push({first: e.offsetX, second: e.offsetY});
             }
         );
+        // Set EventListener for mouse move (END)
         
+        // Set EventListener for mouse up (START)
         canvas.addEventListener('mouseup', 
             () => {
                 if (isDrawing) {
@@ -141,7 +146,6 @@ function draw() {
         // ctx.closePath();
         // ctx.stroke();
     
-        
         function newMessage(message) {
             console.log("newMessage is called");
             console.log(message.points)
@@ -155,7 +159,6 @@ function draw() {
             listLines.push(message.points)
             drawLine(message.points)
         }
-
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
         .then((response) => response.json())
@@ -177,8 +180,6 @@ function draw() {
           .catch(console.error)
         })
 
-
-        
     }
 }
   
