@@ -72,11 +72,11 @@ function update() {
     // T: redraw every lines from the synced list
     for(lineIndex in listLines) {
         let line = listLines[lineIndex]
-        drawLine(line)
+        drawLine(line, ctx)
     }
 
     // T: retrieve the current state of the line drawn until now from the forward
-    drawLine(currentLine)
+    drawLine(currentLine, ctx)
     isDrawing = true
 }
 
