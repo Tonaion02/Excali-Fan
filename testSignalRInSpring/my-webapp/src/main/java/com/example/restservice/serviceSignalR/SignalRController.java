@@ -66,9 +66,16 @@ public class SignalRController {
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.userId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
-        // System.out.println("list: " + command.points.get(0));
-        System.out.println("list: " + command.points.get(0).first);
 
+
+        System.out.print("List: ");
+        for(var point : command.points) {
+            System.out.print("(" + point.first + "," + point.second +")");
+        }
+        System.out.println("");
+
+
+        
         HttpResponse<String> response =  Unirest.post(hubUrl)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + accessKey)
