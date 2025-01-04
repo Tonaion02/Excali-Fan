@@ -112,6 +112,20 @@ function draw() {
         // ctx.closePath();
         // ctx.stroke();
     
+        
+        function newMessage(message) {
+            console.log("newMessage is called");
+            console.log(message.points)
+
+            /* data.messages.unshift(message)
+      
+            const li = document.createElement("li") 
+            li.textContent = "User " + message.sender + " : " + message.text
+            document.getElementById("messages").appendChild(li) */
+            
+            listLines.push(message.points)
+        }
+
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
         .then((response) => response.json())
@@ -133,6 +147,8 @@ function draw() {
           .catch(console.error)
         })
 
+
+        
     }
 }
   
