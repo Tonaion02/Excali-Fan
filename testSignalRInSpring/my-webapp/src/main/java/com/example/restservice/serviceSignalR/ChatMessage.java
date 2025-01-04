@@ -6,4 +6,5 @@ package com.example.restservice.serviceSignalR;
 public class ChatMessage {
     public String sender;
     public String text;
+    public String userId;
 }
