@@ -12,15 +12,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 
+import java.util.concurrent.ConcurrentHashMap;
+
 import kong.unirest.HttpResponse;
 import kong.unirest.Unirest;
 
 import java.util.concurrent.ThreadLocalRandom;
+
+import com.example.restservice.Board.BoardsRuntimeStorage;
+import com.example.restservice.Board.Board;
+import com.example.restservice.Board.Command;
 
 /**
  * SignalRController
@@ -28,14 +35,12 @@ import java.util.concurrent.ThreadLocalRandom;
 @RestController
 public class SignalRController {
 
-    public static class Login {
-        public Login(String userId) {
-            this.userId = userId;
-        }
+    private final BoardsRuntimeStorage boards;
 
-        public String userId;
+    @Autowired
+    public SignalRController(BoardsRuntimeStorage boards) {
+        this.boards = boards;
     }
-
 
     private String signalRServiceKey = "B0h2tYkhmCEQyw1zbYi5hmJdQs0w6BZOqwBGoHEZs2YvvC7awRa4JQQJ99BAAC5RqLJXJ3w3AAAAASRStVLQ";
     // https://foo.service.signalr.net
@@ -46,16 +51,62 @@ public class SignalRController {
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
 
         String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
-
-        // T: WARNING temporary randomic generated
-        // T: NOTE the UserId is also used as the groupname for a board
-        // int randomUserId = Math.abs(ThreadLocalRandom.current().nextInt());
-        // String userId = Integer.toString(randomUserId);
         System.out.println("UserID: " + userId);
-
         String accessKey = generateJwt(hubUrl, userId);
 
+        // T: WARNING temporary, we are adding the new board
+        // to the global hashmap
+        boards.boards.put(userId, new Board());        
+
         return new SignalRConnectionInfo(hubUrl, accessKey);
+    }
+
+    @PostMapping("/api/messages")
+    public void sendMessage(@RequestBody Command command) {
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.userId;
+        String accessKey = generateJwt(hubUrl, command.userId);
+
+        System.out.println("list: " + command.points.get(0));
+
+        HttpResponse<String> response =  Unirest.post(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .body(new SignalRMessage("newMessage", new Object[] { command }))
+            .asString();
+
+        System.out.println("sendMessage: " + response.getStatus());
+        System.out.println("sendMessage: " + response.getBody());
+    }
+
+
+
+
+
+    @PostMapping("/api/oldmessages")
+    public void sendMessage(@RequestBody ChatMessage message) {
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + message.userId;
+        String accessKey = generateJwt(hubUrl, message.userId);
+
+        HttpResponse<String> response =  Unirest.post(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .body(new SignalRMessage("newMessage", new Object[] { message }))
+            .asString();
+
+        System.out.println("sendMessage: " + response.getStatus());
+        System.out.println("sendMessage: " + response.getBody());
+    }
+
+    
+
+
+
+    public static class Login {
+        public Login(String userId) {
+            this.userId = userId;
+        }
+
+        public String userId;
     }
 
     // T: WARNING temporary, for now returns a temporary userId
@@ -79,7 +130,6 @@ public class SignalRController {
         HttpResponse<String> response = Unirest.put(hubUrl)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + accessKey)
-            // .body(new SignalRMessage("newMessage", new Object[] { message }))
             .asString();
 
         System.out.println("addgroup: " + response.getStatus());
@@ -101,36 +151,11 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getBody());
     }
 
-    @PostMapping("/api/messages")
-    public void sendMessage(@RequestBody ChatMessage message) {
-        // String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName;
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + message.userId;
-        String accessKey = generateJwt(hubUrl, message.userId);
 
-        HttpResponse<String> response =  Unirest.post(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("newMessage", new Object[] { message }))
-            .asString();
 
-        System.out.println("sendMessage: " + response.getStatus());
-        System.out.println("sendMessage: " + response.getBody());
-    }
 
-/*
-    @PostMapping("/api/messages")
-    public void sendMessage(@RequestBody ChatMessage message) {
-        // String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName;
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName;
-        String accessKey = generateJwt(hubUrl, null);
 
-        Unirest.post(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("newMessage", new Object[] { message }))
-            .asEmpty();
-    }
-*/
+
     private String generateJwt(String audience, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 

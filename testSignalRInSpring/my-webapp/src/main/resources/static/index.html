@@ -60,12 +60,25 @@
       .catch(console.error)
     })    
 
+    /*
     function sendMessage(sender, messageText) {
       return axios.post(`/api/messages`, {
       // return axios.post(`${apiBaseUrl}/api/messages`, {
         sender: sender,
         text: messageText,
         userId: data.userId,
+      }).then(resp => resp.data)
+    }
+    */
+
+    function sendMessage(sender, messageText) {
+      return axios.post(`/api/messages`, {
+      // return axios.post(`${apiBaseUrl}/api/messages`, {
+      //  sender: sender,
+      //  text: messageText,
+        userId: data.userId,
+        timestamp: Date.now(),
+        points: [1, 2, 3],
       }).then(resp => resp.data)
     }
 
