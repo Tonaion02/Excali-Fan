@@ -1,12 +1,17 @@
+// T: this will become the synced list
 let listLines = []
+// T: this will become the forward list
 let currentLine = []
 
+const canvas = document.getElementById("canvas");
+
+// T: data that must be stored
 const data = {
     username: '',
     userId: '',
     newMessage: '',
     messages: [],
-    ready: false
+    ready: false,
 }
 
 
@@ -16,11 +21,11 @@ const data = {
 // T: make the prompt to retrieve the username (START)
 data.username = prompt('Enter your username')
 if (!data.username) {
-  alert('No username entered. Reload page and try again.')
-  throw 'No username entered'
+    alert('No username entered. Reload page and try again.')
+    throw 'No username entered'
 } else {
-  console.log("im setting username");
-  document.getElementById("username").textContent = data.username;
+    console.log("im setting username");
+    document.getElementById("username").textContent = data.username;
 }
 // T: make the prompt to retrieve the username (END)
 
@@ -57,11 +62,28 @@ function drawLine(line, ctx) {
 
 }
 
+function update() {
+
+    const ctx = canvas.getContext("2d")
+
+    // T: clear the canva
+    ctx.clearRect(0, 0, canvas.width, canvas.height)    
+    
+    // T: redraw every lines from the synced list
+    for(lineIndex in listLines) {
+        let line = listLines[lineIndex]
+        drawLine(line)
+    }
+
+    // T: retrieve the current state of the line drawn until now from the forward
+    draw(currentLine)
+    isDrawing = true
+}
+
 
 
 function draw() {
 
-    const canvas = document.getElementById("canvas");
     
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
@@ -84,6 +106,8 @@ function draw() {
             (e) => {
                 isDrawing = true;
                 [lastX, lastY] = [e.offsetX, e.offsetY];
+                
+                ctx.beginPath();
 
                 // Clear the current line and add the first point of the line
                 currentLine = [];
@@ -100,7 +124,7 @@ function draw() {
                 if(!isDrawing) 
                     return;
 
-                ctx.beginPath();
+                // ctx.beginPath();
                 ctx.moveTo(lastX, lastY);
                 ctx.lineTo(e.offsetX, e.offsetY);
                 ctx.stroke();
@@ -115,7 +139,7 @@ function draw() {
         canvas.addEventListener('mouseup', 
             () => {
                 if (isDrawing) {
-                    listLines.push(currentLine);
+                    // listLines.push(currentLine);
 
                     axios.post(`/api/messages`, {
                       userId: data.userId,
@@ -149,15 +173,9 @@ function draw() {
         function newMessage(message) {
             console.log("newMessage is called");
             console.log(message.points)
-
-            /* data.messages.unshift(message)
-      
-            const li = document.createElement("li") 
-            li.textContent = "User " + message.sender + " : " + message.text
-            document.getElementById("messages").appendChild(li) */
             
             listLines.push(message.points)
-            drawLine(message.points, ctx)
+            update()            
         }
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
