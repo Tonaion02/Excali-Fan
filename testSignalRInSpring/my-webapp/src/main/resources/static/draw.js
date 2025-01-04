@@ -9,6 +9,7 @@ const canvas = document.getElementById("canvas");
 const data = {
     username: '',
     userId: '',
+    groupId: '',
     newMessage: '',
     messages: [],
     ready: false,
@@ -53,8 +54,6 @@ function drawLine(line, ctx) {
             ctx.moveTo(lx, ly);
             ctx.lineTo(point.first, point.second);
 
-            
-
             lx = point.first;
             ly = point.second;
         }
@@ -84,7 +83,6 @@ function update() {
 
 
 function draw() {
-
 
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
@@ -144,6 +142,7 @@ function draw() {
 
                     axios.post(`/api/messages`, {
                       userId: data.userId,
+                      groupId: data.groupId,
                       timestamp: Date.now(),
                       points: currentLine,
                     }).then(resp => resp.data)
@@ -179,7 +178,7 @@ function draw() {
             // T: set the temporary userId
             document.getElementById("username").textContent = "User" + data.userId
 
-            // T: write the code of the groupId
+            // T: write the code of the current groupId
             document.getElementById("groupId").textContent = data.userId
             
             const connection = new signalR.HubConnectionBuilder()
@@ -199,7 +198,10 @@ function draw() {
 }
 
 function addToGroup() {
-    let groupId = document.getElementById("groupToAdd").value 
+    let groupId = document.getElementById("groupToAdd").value
+    
+    data.groupId = groupId
+    document.getElementById("groupId").textContent = groupId
 
     fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId).
     then((response) => console.log("adding to group: " + response.status))

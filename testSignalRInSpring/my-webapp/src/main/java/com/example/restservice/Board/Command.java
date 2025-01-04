@@ -15,12 +15,14 @@ public class Command {
         public int second;
     }
 
-    public Command(String userId, long timestamp) {
+    public Command(String userId, String groupId, long timestamp) {
         this.userId = userId;
+        this.groupId = groupId;
         this.timestamp = timestamp;
     }
 
     public String userId;
+    public String groupId;
     public long timestamp;
     public List<Pair> points;
 }

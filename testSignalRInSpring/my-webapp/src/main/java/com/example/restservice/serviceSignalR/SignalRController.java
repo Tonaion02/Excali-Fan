@@ -63,7 +63,7 @@ public class SignalRController {
 
     @PostMapping("/api/messages")
     public void sendMessage(@RequestBody Command command) {
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.userId;
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
@@ -75,7 +75,7 @@ public class SignalRController {
         System.out.println("");
 
 
-            
+
         HttpResponse<String> response =  Unirest.post(hubUrl)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + accessKey)
