@@ -63,16 +63,24 @@ public class SignalRController {
 
     @PostMapping("/api/messages")
     public void sendMessage(@RequestBody Command command) {
+        Board board = boards.boards.get(command.groupId);
+        synchronized (board) {
+            board.commands.add(command);
+            System.out.println("number of lines: " + board.commands.size());        
+        }
+        
+
+        
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
 
-        System.out.print("List: ");
-        for(var point : command.points) {
-            System.out.print("(" + point.first + "," + point.second +")");
-        }
-        System.out.println("");
+        // System.out.print("List: ");
+        // for(var point : command.points) {
+        //     System.out.print("(" + point.first + "," + point.second +")");
+        // }
+        // System.out.println("");
 
 
 
@@ -80,25 +88,6 @@ public class SignalRController {
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + accessKey)
             .body(new SignalRMessage("newMessage", new Object[] { command }))
-            .asString();
-
-        System.out.println("sendMessage: " + response.getStatus());
-        System.out.println("sendMessage: " + response.getBody());
-    }
-
-
-
-
-
-    @PostMapping("/api/oldmessages")
-    public void sendMessage(@RequestBody ChatMessage message) {
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + message.userId;
-        String accessKey = generateJwt(hubUrl, message.userId);
-
-        HttpResponse<String> response =  Unirest.post(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("newMessage", new Object[] { message }))
             .asString();
 
         System.out.println("sendMessage: " + response.getStatus());
