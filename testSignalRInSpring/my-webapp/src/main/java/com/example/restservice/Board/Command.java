@@ -6,21 +6,23 @@ public class Command {
 
     public static class Pair {
 
-        public Pair(double first, double second) {
+        public Pair(int first, int second) {
             this.first = first;
             this.second = second;
         }
 
-        public double first;
-        public double second;
+        public int first;
+        public int second;
     }
 
-    public Command(String userId, long timestamp) {
+    public Command(String userId, String groupId, long timestamp) {
         this.userId = userId;
+        this.groupId = groupId;
         this.timestamp = timestamp;
     }
 
     public String userId;
+    public String groupId;
     public long timestamp;
-    public List<Integer> points;
+    public List<Pair> points;
 }

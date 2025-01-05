@@ -63,10 +63,18 @@ public class SignalRController {
 
     @PostMapping("/api/messages")
     public void sendMessage(@RequestBody Command command) {
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.userId;
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
-        System.out.println("list: " + command.points.get(0));
+
+
+        System.out.print("List: ");
+        for(var point : command.points) {
+            System.out.print("(" + point.first + "," + point.second +")");
+        }
+        System.out.println("");
+
+
 
         HttpResponse<String> response =  Unirest.post(hubUrl)
             .header("Content-Type", "application/json")
