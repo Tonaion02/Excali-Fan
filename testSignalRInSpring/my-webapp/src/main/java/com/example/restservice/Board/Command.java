@@ -15,6 +15,16 @@ public class Command {
         public int second;
     }
 
+    public static class Line {
+
+        public Line(String color) {
+            this.color = color;
+        }
+
+        public String color;
+        public List<Pair> points;
+    }
+
     public Command(String userId, String groupId, long timestamp) {
         this.userId = userId;
         this.groupId = groupId;
@@ -24,5 +34,5 @@ public class Command {
     public String userId;
     public String groupId;
     public long timestamp;
-    public List<Pair> points;
+    public Line line;
 }

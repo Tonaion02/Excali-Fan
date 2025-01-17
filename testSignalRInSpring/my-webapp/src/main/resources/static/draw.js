@@ -148,7 +148,7 @@ function draw() {
                       userId: data.userId,
                       groupId: data.groupId,
                       timestamp: Date.now(),
-                      points: currentLine,
+                      line: currentLine,
                     }).then(resp => resp.data)
                 }
 
@@ -229,7 +229,6 @@ function isPointInLine(point, line, tollerance) {
         const distance = Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) /
             Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
         if(distance < tollerance) {
-            console.log("Hello2")
             return true
         }
 
