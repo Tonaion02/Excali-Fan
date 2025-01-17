@@ -109,7 +109,7 @@ function draw() {
                 ctx.beginPath();
 
                 // Clear the current line and add the first point of the line
-                currentLine = [];
+                currentLine = {color: null,  points: []};
                 // currentLine.push([lastX, lastY]);
 
                 currentLine.push({first: e.offsetX, second: e.offsetY});
