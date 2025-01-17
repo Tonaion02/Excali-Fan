@@ -153,7 +153,8 @@ function draw() {
         // Set EventListener for mouse that goes out of the canvas (END)
 
         // T: Set EventListener for the keys (START)
-        canvas.addEventListener('keydown', (event) => {
+        window.addEventListener('keydown', (event) => {
+            console.log("key down");
             if(event.code == "KeyD") {
                 console.log("Key D is pressed");
             }
