@@ -1,6 +1,9 @@
 // T: this will become the synced list
 let listLines = []
-// T: this will become the forward list
+// T: this is something similar to the forward list,
+// in that we can cache the current operation.
+// This is useful when a user is drawing a line during
+// an update.
 let currentLine = []
 
 const canvas = document.getElementById("canvas");
@@ -10,30 +13,13 @@ const data = {
     username: '',
     userId: '',
     groupId: '',
-    newMessage: '',
-    messages: [],
-    ready: false,
 }
 
 
 
 
 
-// // T: make the prompt to retrieve the username (START)
-// data.username = prompt('Enter your username')
-// if (!data.username) {
-//     alert('No username entered. Reload page and try again.')
-//     throw 'No username entered'
-// } else {
-//     console.log("im setting username");
-//     document.getElementById("username").textContent = data.username;
-// }
-// // T: make the prompt to retrieve the username (END)
-
-
-
-
-
+// T: This function draw a line
 function drawLine(line, ctx) {
 
     let first = true;
@@ -59,9 +45,14 @@ function drawLine(line, ctx) {
         }
     }
 
+    // T: is important for performance reason to put a single stroke for line
+    // T: probably the stroke is used to create vertex information, so if we
+    // abuse this function, we don't batch data correctly.
     ctx.stroke();
 }
 
+// T: This function is used to update the screen
+// when a new command is received
 function update() {
 
     const ctx = canvas.getContext("2d")
@@ -91,6 +82,7 @@ function draw() {
         ctx.canvas.height = window.innerHeight;
   
         let isDrawing = false;
+
         let lastX = 0;
         let lastY = 0;
 
@@ -123,7 +115,6 @@ function draw() {
                 if(!isDrawing) 
                     return;
 
-                // ctx.beginPath();
                 ctx.moveTo(lastX, lastY);
                 ctx.lineTo(e.offsetX, e.offsetY);
                 ctx.stroke();
@@ -138,6 +129,8 @@ function draw() {
         canvas.addEventListener('mouseup', 
             () => {
                 if (isDrawing) {
+                    // T: commented because we add the line to the listLines
+                    // only when we receive the lines from a newMessage
                     // listLines.push(currentLine);
 
                     axios.post(`/api/messages`, {
@@ -158,6 +151,14 @@ function draw() {
             isDrawing = false;
         });
         // Set EventListener for mouse that goes out of the canvas (END)
+
+        // T: Set EventListener for the keys (START)
+        canvas.addEventListener('keydown', (event) => {
+            if(event.code == "KeyD") {
+                console.log("Key D is pressed");
+            }
+        });
+        // T: Set EventListener for the keys (END)
 
 
     
@@ -191,7 +192,7 @@ function draw() {
             connection.on('newMessage', newMessage)
             
             connection.start()
-            .then(() => data.ready = true)
+            .then(() => console.log("Started connection"))
             .catch(console.error)
         })
     }
@@ -207,6 +208,10 @@ function addToGroup() {
     then((response) => console.log("adding to group: " + response.status))
 }
 
+// T: disabilitate the context menu
+document.addEventListener("contextmenu", function(event) {
+    event.preventDefault();
+});
 window.addEventListener('load', draw)
 
 console.log("You can start to draw")
