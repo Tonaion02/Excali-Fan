@@ -1,10 +1,11 @@
 // T: this will become the synced list
 let listLines = []
+listLines.push({color: "black", points: [{first: 10, second: 10}, {first: 100, second: 100}]})
 // T: this is something similar to the forward list,
 // in that we can cache the current operation.
 // This is useful when a user is drawing a line during
 // an update.
-let currentLine = []
+let currentLine = {color: null,  points: []}
 
 const canvas = document.getElementById("canvas");
 
@@ -25,9 +26,11 @@ function drawLine(line, ctx) {
     let first = true;
     let lx, ly;
 
-    for(point in line) {
+    ctx.strokeStyle = line.color;
 
-        point = line[point]
+    for(point in line.points) {
+
+        point = line.points[point]
 
         if(first) {
             first = false;
@@ -82,6 +85,7 @@ function draw() {
         ctx.canvas.height = window.innerHeight;
   
         let isDrawing = false;
+        let isDeleting = false;
 
         let lastX = 0;
         let lastY = 0;
@@ -95,6 +99,10 @@ function draw() {
         // Set EventListener for mouse down (START)
         canvas.addEventListener('mousedown', 
             (e) => {
+                // T: if you are deleting the contents of the board, ignore the mousedown
+                if(isDeleting)
+                    return;
+
                 isDrawing = true;
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
@@ -112,15 +120,18 @@ function draw() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
-                if(!isDrawing) 
-                    return;
-
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.stroke();
-                [lastX, lastY] = [e.offsetX, e.offsetY];
-
-                currentLine.push({first: e.offsetX, second: e.offsetY});
+                if(isDrawing) {
+                    ctx.moveTo(lastX, lastY);
+                    ctx.lineTo(e.offsetX, e.offsetY);
+                    ctx.stroke();
+                    [lastX, lastY] = [e.offsetX, e.offsetY];
+    
+                    currentLine.points.push({first: e.offsetX, second: e.offsetY});
+                } 
+                else if(isDeleting) {
+                    // T: check if the position of mouse is a point "around" a line
+                    isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                }
             }
         );
         // Set EventListener for mouse move (END)
@@ -149,17 +160,23 @@ function draw() {
         // Set EventListener for mouse that goes out of the canvas (START)
         canvas.addEventListener('mouseleave', () => {
             isDrawing = false;
+            isDeleting = false;
         });
         // Set EventListener for mouse that goes out of the canvas (END)
 
-        // T: Set EventListener for the keys (START)
+        // T: Set EventListeners for the keys (START)
         window.addEventListener('keydown', (event) => {
-            console.log("key down");
             if(event.code == "KeyD") {
-                console.log("Key D is pressed");
+                isDeleting = true;
             }
         });
-        // T: Set EventListener for the keys (END)
+
+        window.addEventListener("keyup", (event) => {
+            if(event.code == "KeyD") {
+                isDeleting = false;
+            }
+        })
+        // T: Set EventListeners for the keys (END)
 
 
     
@@ -196,6 +213,40 @@ function draw() {
             .then(() => console.log("Started connection"))
             .catch(console.error)
         })
+    }
+}
+
+function isPointInLine(point, line, tollerance) {
+    precPoint = line.points[0]
+    for(let indexPoint = 1; indexPoint < line.points.length; indexPoint++) {
+        currentPoint = line.points[indexPoint];
+
+        x1 = precPoint.first;
+        y1 = precPoint.second;
+        x2 = currentPoint.first;
+        y2 = currentPoint.second;
+        
+        const distance = Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) /
+            Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
+        if(distance < tollerance) {
+            console.log("Hello2")
+            return true
+        }
+
+        precPoint = currentPoint;
+    }
+}
+
+function isPointInLines(point, lines, tollerance) {
+
+    for(indexLine in lines) {
+        line = lines[indexLine];
+
+        if(isPointInLine(point, line, tollerance)) {
+            console.log("point in line")
+
+            line.color = "red"
+        }
     }
 }
 
