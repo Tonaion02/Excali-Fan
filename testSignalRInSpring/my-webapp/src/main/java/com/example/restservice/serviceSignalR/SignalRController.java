@@ -42,7 +42,7 @@ public class SignalRController {
         this.boards = boards;
     }
 
-    private String signalRServiceKey = "B0h2tYkhmCEQyw1zbYi5hmJdQs0w6BZOqwBGoHEZs2YvvC7awRa4JQQJ99BAAC5RqLJXJ3w3AAAAASRStVLQ";
+    private String signalRServiceKey = "FENPQqnghCW07n4BUTozd2aVFodUsq6nQPVJ5u05sP63u2p1EY3JJQQJ99BAAC5RqLJXJ3w3AAAAASRSMq3D";
     // https://foo.service.signalr.net
     private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net";
     private String hubName = "board";
@@ -63,6 +63,7 @@ public class SignalRController {
 
     @PostMapping("/api/messages")
     public void sendMessage(@RequestBody Command command) {
+
         Board board = boards.boards.get(command.groupId);
         synchronized (board) {
             board.commands.add(command);

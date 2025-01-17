@@ -182,9 +182,9 @@ function draw() {
     
         function newMessage(message) {
             console.log("newMessage is called");
-            console.log(message.points)
+            console.log(message.line.points)
             
-            listLines.push(message.points)
+            listLines.push(message.line)
             update()            
         }
 
