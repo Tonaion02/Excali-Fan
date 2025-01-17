@@ -17,8 +17,9 @@ public class Command {
 
     public static class Line {
 
-        public Line(String color) {
+        public Line(String color, List<Pair> points) {
             this.color = color;
+            this.points = points;
         }
 
         public String color;
