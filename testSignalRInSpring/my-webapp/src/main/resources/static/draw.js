@@ -112,7 +112,7 @@ function draw() {
                 currentLine = {color: null,  points: []};
                 // currentLine.push([lastX, lastY]);
 
-                currentLine.push({first: e.offsetX, second: e.offsetY});
+                currentLine.points.push({first: e.offsetX, second: e.offsetY});
             }
         );
         // Set EventListener for mouse down (END)
