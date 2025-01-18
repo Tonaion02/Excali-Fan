@@ -56,9 +56,9 @@ function drawLine(line, ctx) {
 
 // T: This function is used to update the screen
 // when a new command is received
-function update() {
+function update(ctx) {
 
-    const ctx = canvas.getContext("2d")
+    // const ctx = canvas.getContext("2d")
 
     // T: clear the canva
     ctx.clearRect(0, 0, canvas.width, canvas.height)    
@@ -71,7 +71,7 @@ function update() {
 
     // T: retrieve the current state of the line drawn until now from the forward
     drawLine(currentLine, ctx)
-    isDrawing = true
+    // isDrawing = true
 }
 
 
@@ -132,7 +132,7 @@ function draw() {
                 else if(isDeleting) {
                     // T: check if the position of mouse is a point "around" a line
                     isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
-                    update();
+                    update(ctx);
                 }
             }
         );
@@ -187,7 +187,7 @@ function draw() {
             console.log(message.line.points)
             
             listLines.push(message.line)
-            update()            
+            update(ctx)            
         }
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
@@ -237,9 +237,9 @@ function isPointInLines(point, lines, tollerance) {
         line = lines[indexLine];
 
         if(isPointInLine(point, line, tollerance)) {
-            console.log("point in line")
+            console.log("point in line: " + line);
 
-            line.color = "red"
+            line.color = "red";
         }
     }
 }
