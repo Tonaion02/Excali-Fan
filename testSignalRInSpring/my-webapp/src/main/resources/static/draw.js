@@ -220,11 +220,6 @@ function isPointInLine(point, line, tollerance) {
     precPoint = line.points[0]
     for(let indexPoint = 1; indexPoint < line.points.length; indexPoint++) {
         currentPoint = line.points[indexPoint];
-
-        x1 = precPoint.first;
-        y1 = precPoint.second;
-        x2 = currentPoint.first;
-        y2 = currentPoint.second;
         
         distance = pointToSegmentDistance(point, precPoint, currentPoint);
         if(distance < tollerance) {
@@ -236,6 +231,8 @@ function isPointInLine(point, line, tollerance) {
 }
 
 function isPointInLines(point, lines, tollerance) {
+    console.log("hello");
+
     for(indexLine in lines) {
         line = lines[indexLine];
 
