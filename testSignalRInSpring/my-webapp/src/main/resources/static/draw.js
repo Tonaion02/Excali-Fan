@@ -5,7 +5,7 @@ listLines.push({color: "black", points: [{first: 10, second: 10}, {first: 100, s
 // in that we can cache the current operation.
 // This is useful when a user is drawing a line during
 // an update.
-let currentLine = {color: null,  points: []}
+let currentLine = {color: "black",  points: []}
 
 const canvas = document.getElementById("canvas");
 
@@ -107,9 +107,10 @@ function draw() {
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
                 ctx.beginPath();
+                ctx.strokeStyle = "black";
 
                 // Clear the current line and add the first point of the line
-                currentLine = {color: null,  points: []};
+                currentLine = {color: "black",  points: []};
                 // currentLine.push([lastX, lastY]);
 
                 currentLine.points.push({first: e.offsetX, second: e.offsetY});
@@ -131,6 +132,7 @@ function draw() {
                 else if(isDeleting) {
                     // T: check if the position of mouse is a point "around" a line
                     isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    update();
                 }
             }
         );
