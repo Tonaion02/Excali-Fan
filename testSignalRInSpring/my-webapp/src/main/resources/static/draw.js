@@ -226,8 +226,7 @@ function isPointInLine(point, line, tollerance) {
         x2 = currentPoint.first;
         y2 = currentPoint.second;
         
-        const distance = Math.abs((y2 - y1) * point.x - (x2 - x1) * point.y + x2 * y1 - y2 * x1) /
-            Math.sqrt((y2 - y1) ** 2 + (x2 - x1) ** 2);
+        distance = pointToSegmentDistance(point, precPoint, currentPoint);
         if(distance < tollerance) {
             return true
         }
@@ -237,7 +236,6 @@ function isPointInLine(point, line, tollerance) {
 }
 
 function isPointInLines(point, lines, tollerance) {
-
     for(indexLine in lines) {
         line = lines[indexLine];
 
@@ -248,6 +246,32 @@ function isPointInLines(point, lines, tollerance) {
         }
     }
 }
+
+// Funzione per verificare se un punto è vicino a una forma
+// function isPointNearShape(point, path) {
+//     const threshold = 5; // Distanza massima per considerare il punto vicino
+//     for (let i = 0; i < path.length - 1; i++) {
+//         const dist = pointToSegmentDistance(point, path[i], path[i + 1]);
+//         if (dist < threshold) {
+//             return true;
+//         }
+//     }
+//     return false;
+// }
+
+// T: function to compute the distance beetween a point:p and the segment between two points
+// v and w
+function pointToSegmentDistance(p, v, w) {
+    const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
+    if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
+    let t = ((p.x - v.x) * (w.x - v.x) + (p.y - v.y) * (w.y - v.y)) / l2;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
+}
+
+
+
+
 
 function addToGroup() {
     let groupId = document.getElementById("groupToAdd").value
