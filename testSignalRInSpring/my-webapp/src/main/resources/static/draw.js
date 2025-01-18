@@ -234,13 +234,19 @@ function isPointInLine(point, line, tollerance) {
 
 function isPointInLines(point, lines, tollerance) {
     for(indexLine in lines) {
-        line = lines[indexLine];
+        let line = lines[indexLine];
 
         if(isPointInLine(point, line, tollerance)) {
             console.log("point in line: " + line);
 
             line.color = "red";
         }
+    }
+
+    if(isPointInLine(point, currentLine, tollerance)) {
+        console.log("point in currentline: " + currentLine);
+
+        currentLine.color = "red";
     }
 }
 
