@@ -221,7 +221,7 @@ function isPointInLine(point, line, tollerance) {
     for(let indexPoint = 1; indexPoint < line.points.length; indexPoint++) {
         currentPoint = line.points[indexPoint];
         
-        distance = pointToSegmentDistance(point, precPoint, currentPoint);
+        distance = pointToSegmentDistance(point, {x: precPoint.first, y: precPoint.second}, {x: currentPoint.first, y: precPoint.second});
         if(distance < tollerance) {
             return true
         }
@@ -231,8 +231,6 @@ function isPointInLine(point, line, tollerance) {
 }
 
 function isPointInLines(point, lines, tollerance) {
-    console.log("hello");
-
     for(indexLine in lines) {
         line = lines[indexLine];
 
@@ -256,8 +254,8 @@ function isPointInLines(point, lines, tollerance) {
 //     return false;
 // }
 
-// T: function to compute the distance beetween a point:p and the segment between two points
-// v and w
+// T: function to compute the distance beetween a point:p and the segment 
+// between two points v and w
 function pointToSegmentDistance(p, v, w) {
     const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
     if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
