@@ -68,7 +68,7 @@ function drawLine(line, ctx) {
 // when a new command is received
 function update(ctx) {
 
-    // T: clear the canva
+    // T: clear the canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height)    
     
     // T: redraw every lines from the synced list
@@ -77,10 +77,14 @@ function update(ctx) {
         drawLine(line, ctx)
     }
 
-    // T: retrieve the current state of the line drawn until now from the forward
-    drawLine(currentLine, ctx)
-    // isDrawing = true
+    // T: redraw the current line that you are drawing, toretrieve the current state 
+    // of the line drawn until now from the forward
+    // T: we redraw the currentLine only in the case we aren't deleting a line
+    if(!isDeleting)
+        drawLine(currentLine, ctx)
 }
+
+
 
 
 
@@ -89,9 +93,11 @@ function draw() {
     if (canvas.getContext) {
         const ctx = canvas.getContext("2d");
 
+        // Settings of canvas (START)
         ctx.canvas.width  = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
-  
+        // Settings of canvas (END)
+
         let lastX = 0;
         let lastY = 0;
 
@@ -135,22 +141,23 @@ function draw() {
                     currentLine.points.push({first: e.offsetX, second: e.offsetY});
                 } 
                 else if(isDeleting) {
-
-                    // console.log("position: " + e.offsetX + " " + e.offsetY);
                     
                     // T: check if the position of mouse is a point "around" a line
-                    lineToDelete = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
-                    let lineToReturn = lineToDelete[0];
-                    let indexLineToReturn = lineToDelete[1];
-
-                    console.log(lineToReturn);
-                    console.log(indexLineToReturn);
+                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    let lineToDelete = result.lineToReturn;
+                    let indexLineToDelete = result.indexLineToReturn;
+                    let isOnCurrentLine = result.isPointOnCurrentLine;
                     
                     if(lineToReturn != null) {
-                        // T: TODO local deleting
-                        deleteLineFromListWithIndex(listLines, indexLineToReturn);
-                        
-                        sendDeleteLine(lineToReturn);
+                        // T: local deleting (START)
+                        deleteLineFromListWithIndex(listLines, indexLineToDelete);
+
+                        if(isOnCurrentLine)
+                            currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+                        // T: local deleting (END)
+
+                        // T: remote deleting
+                        sendDeleteLine(lineToDelete);
 
                         update(ctx);
                     }
@@ -208,13 +215,7 @@ function draw() {
 
 
     
-        // function newMessage(message) {
-        //     console.log("newMessage is called");
-        //     console.log(message.line.points)
-            
-        //     listLines.push(message.line)
-        //     update(ctx)            
-        // }
+
 
         function receiveCreateLine(command) {
             console.log("receiveCreateLine is called");
@@ -251,8 +252,10 @@ function draw() {
             for(let indexLine in lines) {
                 let line = lines[indexLine];
 
-                if(line.userId == userIdLineToDelete && line.timestamp == timestampLineToDelete)
+                if(line.userId == userIdLineToDelete && line.timestamp == timestampLineToDelete) {
                     indexLineToDelete = indexLine;
+                    break;
+                }
             }
 
             if(indexLineToDelete >= 0) {
@@ -310,11 +313,13 @@ function isPointInLine(point, line, tollerance) {
         
         distance = pointToSegmentDistance(point, {x: precPoint.first, y: precPoint.second}, {x: currentPoint.first, y: precPoint.second});
         if(distance < tollerance) {
-            return true
+            return true;
         }
 
         precPoint = currentPoint;
     }
+
+    return false;
 }
 
 function isPointInLines(point, lines, tollerance) {
@@ -336,15 +341,17 @@ function isPointInLines(point, lines, tollerance) {
         }
     }
 
+    let isPointOnCurrentLine = false;
     if(isPointInLine(point, currentLine, tollerance)) {
         console.log("point in currentline: " + currentLine);
 
         currentLine.color = "red";
 
+        isPointInLine = true;
         // T: find a way to delete the currentLine
     }
 
-    return [lineToReturn, indexLineToReturn];
+    return {lineToReturn: lineToReturn, indexLineToReturn: indexLineToReturn, isPointOnCurrentLine: isPointOnCurrentLine};
 }
 
 
