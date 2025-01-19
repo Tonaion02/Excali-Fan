@@ -7,6 +7,6 @@ public class CreateLineCommand extends Command {
 
         this.line = line;
     }
-w
+
     public Line line;
 }
