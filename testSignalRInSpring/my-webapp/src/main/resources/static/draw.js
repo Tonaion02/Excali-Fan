@@ -28,6 +28,7 @@ let isDeleting = false;
 
 
 
+const tollerance = 5;
 
 // T: This function draw a line
 function drawLine(line, ctx) {
@@ -91,12 +92,26 @@ function update(ctx) {
 
 function draw() {    
 
+    // T: retrieve the HTML element that represent the cursor in canvas
+    const cursor = document.getElementById("circleCursor");
+
+    // T: set some properties of the cursor (START)
+    cursor.style.width = `${tollerance}px`;
+    cursor.style.height = `${tollerance}px`
+
+    // T: retrieve the HTML element that represent the header
+    let header = document.getElementById("header");
+    header.addEventListener("mouseenter", () => {
+        cursor.style.visibility = "hidden";
+    });
+    canvas.addEventListener("mouseenter", () => {
+        cursor.style.visibility = "visible";
+    });
+    // T: set some properties of the cursor (END)
+
+    
+
     if (canvas.getContext) {
-
-        // T: retrieve the HTML element that reppresent the cursor in canvas
-        const cursor = document.getElementById("circleCursor");
-
-
 
         const ctx = canvas.getContext("2d");
 
@@ -153,7 +168,7 @@ function draw() {
                 else if(isDeleting) {
                     
                     // T: check if the position of mouse is a point "around" a line
-                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
                     let lineToDelete = result.lineToReturn;
                     let indexLineToDelete = result.indexLineToReturn;
                     let isOnCurrentLine = result.isPointOnCurrentLine;
@@ -407,6 +422,7 @@ function addToGroup() {
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
+
 window.addEventListener('load', draw)
 
 console.log("You can start to draw")
