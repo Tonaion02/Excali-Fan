@@ -29,7 +29,6 @@ let isDeleting = false;
 
 
 
-
 // T: This function draw a line
 function drawLine(line, ctx) {
 
@@ -148,7 +147,7 @@ function draw() {
                     let indexLineToDelete = result.indexLineToReturn;
                     let isOnCurrentLine = result.isPointOnCurrentLine;
                     
-                    if(lineToReturn != null) {
+                    if(lineToDelete != null) {
                         // T: local deleting (START)
                         deleteLineFromListWithIndex(listLines, indexLineToDelete);
 
@@ -225,13 +224,13 @@ function draw() {
             update(ctx)
         }
 
+        // T: we don't perform update in this function, because is performed in deleteLineFromList
+        // and we don't want to make multiple update contemporary (this can lead to some bugs) 
         function receiveDeleteLine(command) {
             console.log("receiveDeleteLine is called");
             
             // T: remove the line from the listLines
             deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
-            
-            update(ctx);
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -347,7 +346,7 @@ function isPointInLines(point, lines, tollerance) {
 
         currentLine.color = "red";
 
-        isPointInLine = true;
+        isPointOnCurrentLine = true;
         // T: find a way to delete the currentLine
     }
 
