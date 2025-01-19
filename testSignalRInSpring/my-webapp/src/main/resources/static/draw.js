@@ -1,11 +1,10 @@
 // T: this will become the synced list
 let listLines = []
-listLines.push({color: "black", points: [{first: 10, second: 10}, {first: 100, second: 100}]})
 // T: this is something similar to the forward list,
 // in that we can cache the current operation.
 // This is useful when a user is drawing a line during
 // an update.
-let currentLine = {color: "black",  points: []}
+let currentLine = {color: "black",  userId: null, timestamp: null, points: []}
 
 const canvas = document.getElementById("canvas");
 
@@ -15,6 +14,11 @@ const data = {
     userId: '',
     groupId: '',
 }
+
+
+
+const endPointForCreateLine = `/api/createLine`;
+const endPointForDeleteLine = `/api/deleteLine`;
 
 
 
@@ -57,8 +61,6 @@ function drawLine(line, ctx) {
 // T: This function is used to update the screen
 // when a new command is received
 function update(ctx) {
-
-    // const ctx = canvas.getContext("2d")
 
     // T: clear the canva
     ctx.clearRect(0, 0, canvas.width, canvas.height)    
@@ -110,8 +112,7 @@ function draw() {
                 ctx.strokeStyle = "black";
 
                 // Clear the current line and add the first point of the line
-                currentLine = {color: "black",  points: []};
-                // currentLine.push([lastX, lastY]);
+                currentLine = {color: "black", userId: data.userId, timestamp: null, points: []};
 
                 currentLine.points.push({first: e.offsetX, second: e.offsetY});
             }
@@ -121,6 +122,7 @@ function draw() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
+                                
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
                     ctx.lineTo(e.offsetX, e.offsetY);
@@ -130,9 +132,25 @@ function draw() {
                     currentLine.points.push({first: e.offsetX, second: e.offsetY});
                 } 
                 else if(isDeleting) {
+
+                    // console.log("position: " + e.offsetX + " " + e.offsetY);
+                    
                     // T: check if the position of mouse is a point "around" a line
-                    isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 1);
-                    update(ctx);
+                    lineToDelete = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    let lineToReturn = lineToDelete[0];
+                    let indexLineToReturn = lineToDelete[1];
+
+                    console.log(lineToReturn);
+                    console.log(indexLineToReturn);
+                    
+                    if(lineToReturn != null) {
+                        // T: TODO local deleting
+                        deleteLineFromListWithIndex(listLines, indexLineToReturn);
+                        
+                        sendDeleteLine(lineToReturn);
+
+                        update(ctx);
+                    }
                 }
             }
         );
@@ -146,10 +164,15 @@ function draw() {
                     // only when we receive the lines from a newMessage
                     // listLines.push(currentLine);
 
-                    axios.post(`/api/messages`, {
+                    let timestamp = Date.now();
+
+                    currentLine.timestamp = timestamp;
+                    console.log(currentLine.timestamp);
+
+                    axios.post(endPointForCreateLine, {
                       userId: data.userId,
                       groupId: data.groupId,
-                      timestamp: Date.now(),
+                      timestamp: timestamp,
                       line: currentLine,
                     }).then(resp => resp.data)
                 }
@@ -182,13 +205,68 @@ function draw() {
 
 
     
-        function newMessage(message) {
-            console.log("newMessage is called");
-            console.log(message.line.points)
+        // function newMessage(message) {
+        //     console.log("newMessage is called");
+        //     console.log(message.line.points)
             
-            listLines.push(message.line)
-            update(ctx)            
+        //     listLines.push(message.line)
+        //     update(ctx)            
+        // }
+
+        function receiveCreateLine(command) {
+            console.log("receiveCreateLine is called");
+            console.log(command.line.points)
+            
+            listLines.push(command.line)
+            update(ctx)
         }
+
+        function receiveDeleteLine(command) {
+            console.log("receiveDeleteLine is called");
+            
+            // T: remove the line from the listLines
+            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+            
+            update(ctx);
+        }
+
+        function sendDeleteLine(lineToDelete) {
+            let timestamp = Date.now();
+            
+            axios.post(endPointForDeleteLine, {
+                userId: data.userId,
+                groupId: data.groupId,
+                timestamp: timestamp,
+                userIdOfLine: lineToDelete.userId,
+                timestampOfLine: lineToDelete.timestamp,
+            }).then(resp => resp.data)
+        }
+
+        function deleteLineFromList(lines, userIdLineToDelete, timestampLineToDelete) {
+            let indexLineToDelete = -1;
+            
+            for(let indexLine in lines) {
+                let line = lines[indexLine];
+
+                if(line.userId == userIdLineToDelete && line.timestamp == timestampLineToDelete)
+                    indexLineToDelete = indexLine;
+            }
+
+            if(indexLineToDelete >= 0) {
+                lines.splice(indexLineToDelete, 1);
+                update(ctx);
+            }
+            
+        }
+
+        function deleteLineFromListWithIndex(lines, indexLine) {
+            if(indexLine >= 0) {
+                lines.splice(indexLine, 1);
+                update(ctx);
+            }
+        }
+
+
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
         .then((response) => response.json())
@@ -209,8 +287,12 @@ function draw() {
             .configureLogging(signalR.LogLevel.Information)
             .build()
             
-            connection.on('newMessage', newMessage)
-            
+            // T: Set the listener to the receiveing message (START)
+            // connection.on('newMessage', newMessage)
+            connection.on('receiveCreateLine', receiveCreateLine);
+            connection.on('receiveDeleteLine', receiveDeleteLine);
+            // T: Set the listener to the receiveing message (END)
+
             connection.start()
             .then(() => console.log("Started connection"))
             .catch(console.error)
@@ -233,6 +315,10 @@ function isPointInLine(point, line, tollerance) {
 }
 
 function isPointInLines(point, lines, tollerance) {
+
+    let lineToReturn = null;
+    let indexLineToReturn = -1;
+
     for(indexLine in lines) {
         let line = lines[indexLine];
 
@@ -240,6 +326,10 @@ function isPointInLines(point, lines, tollerance) {
             console.log("point in line: " + line);
 
             line.color = "red";
+
+            lineToReturn = line;
+            indexLineToReturn = indexLine;
+            break;
         }
     }
 
@@ -247,20 +337,14 @@ function isPointInLines(point, lines, tollerance) {
         console.log("point in currentline: " + currentLine);
 
         currentLine.color = "red";
+
+        // T: find a way to delete the currentLine
     }
+
+    return [lineToReturn, indexLineToReturn];
 }
 
-// Funzione per verificare se un punto è vicino a una forma
-// function isPointNearShape(point, path) {
-//     const threshold = 5; // Distanza massima per considerare il punto vicino
-//     for (let i = 0; i < path.length - 1; i++) {
-//         const dist = pointToSegmentDistance(point, path[i], path[i + 1]);
-//         if (dist < threshold) {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+
 
 // T: function to compute the distance beetween a point:p and the segment 
 // between two points v and w
