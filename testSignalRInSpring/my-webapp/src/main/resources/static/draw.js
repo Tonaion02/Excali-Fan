@@ -305,7 +305,8 @@ function isPointInLines(point, lines, tollerance) {
 
             line.color = "red";
 
-            lineToReturn = line; 
+            lineToReturn = line;
+            break; 
         }
     }
 
