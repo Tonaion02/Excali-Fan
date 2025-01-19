@@ -242,8 +242,11 @@ function draw() {
                     indexLineToDelete = indexLine;
             }
 
-            if(indexLineToDelete >= 0)
+            if(indexLineToDelete >= 0) {
                 lines.splice(indexLineToDelete, 1);
+                update(ctx);
+            }
+            
         }
 
 
