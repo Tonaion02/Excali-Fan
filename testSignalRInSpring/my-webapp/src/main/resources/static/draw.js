@@ -87,9 +87,17 @@ function update(ctx) {
 
 
 
-function draw() {
+
+
+function draw() {    
 
     if (canvas.getContext) {
+
+        // T: retrieve the HTML element that reppresent the cursor in canvas
+        const cursor = document.getElementById("circleCursor");
+
+
+
         const ctx = canvas.getContext("2d");
 
         // Settings of canvas (START)
@@ -130,6 +138,9 @@ function draw() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
+
+                // T: move the cursor when the mouse is moved
+                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
@@ -372,6 +383,12 @@ function pointToSegmentDistance(p, v, w) {
     return Math.hypot(p.x - (v.x + t * (w.x - v.x)), p.y - (v.y + t * (w.y - v.y)));
 }
 
+
+
+function moveCursor(position, cursor) {
+    cursor.style.left = `${position.x}px`;
+    cursor.style.top = `${position.y}px`;
+}
 
 
 
