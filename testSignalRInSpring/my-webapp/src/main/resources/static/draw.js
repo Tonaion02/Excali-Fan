@@ -231,15 +231,15 @@ function draw() {
             }).then(resp => resp.data)
         }
 
-        function deleteLineFromList(lines, userIdLineToDelete, timestampLineToDelete) {
+        function deleteLineFromList(lines, indexLineToDelete) {
             let indexLineToDelete = -1;
             
-            for(let indexLine in lines) {
-                let line = lines[indexLine];
+            // for(let indexLine in lines) {
+            //     let line = lines[indexLine];
 
-                if(line.userId == userIdLineToDelete && line.timestamp == timestampLineToDelete)
-                    indexLineToDelete = indexLine;
-            }
+            //     if(line.userId == userIdLineToDelete && line.timestamp == timestampLineToDelete)
+            //         indexLineToDelete = indexLine;
+            // }
 
             if(indexLineToDelete >= 0)
                 lines.splice(indexLineToDelete, 1);
@@ -295,7 +295,7 @@ function isPointInLine(point, line, tollerance) {
 
 function isPointInLines(point, lines, tollerance) {
 
-    let lineToReturn = null;
+    let indexLineToReturn = -1;
 
     for(indexLine in lines) {
         let line = lines[indexLine];
@@ -305,8 +305,7 @@ function isPointInLines(point, lines, tollerance) {
 
             line.color = "red";
 
-            lineToReturn = line;
-            break; 
+            indexLineToReturn = indexLine;
         }
     }
 
@@ -318,7 +317,7 @@ function isPointInLines(point, lines, tollerance) {
         // T: find a way to delete the currentLine
     }
 
-    return lineToReturn;
+    return indexLineToReturn;
 }
 
 
