@@ -22,6 +22,12 @@ const endPointForDeleteLine = `/api/deleteLine`;
 
 
 
+let isDrawing = false;
+let isDeleting = false;
+
+
+
+
 
 
 // T: This function draw a line
@@ -86,9 +92,6 @@ function draw() {
         ctx.canvas.width  = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
   
-        let isDrawing = false;
-        let isDeleting = false;
-
         let lastX = 0;
         let lastY = 0;
 
