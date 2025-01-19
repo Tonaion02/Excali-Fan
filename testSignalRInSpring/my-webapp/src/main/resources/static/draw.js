@@ -224,13 +224,18 @@ function draw() {
             update(ctx)
         }
 
+        // T: we don't perform update in this function, because is performed in deleteLineFromList
+        // and we don't want to make multiple update contemporary (this can lead to some bugs) 
         function receiveDeleteLine(command) {
             console.log("receiveDeleteLine is called");
             
             // T: remove the line from the listLines
             deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
-            
-            update(ctx);
+
+            // T: check if the line to delete is equal to the currentLine, in that case delete it
+            if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
+                currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+            }
         }
 
         function sendDeleteLine(lineToDelete) {
