@@ -12,6 +12,22 @@
       margin: 0;
     }
 
+    canvas {
+      cursor: none;
+    }
+
+    .circle-cursor {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red; /* Circle color */
+      border-radius: 50%;
+      pointer-events: none; /* Prevent blocking clicks */
+      transform: translate(-50%, -50%);
+      z-index: 9999;
+    }
+
+
     p {
       display: inline;
       padding-right: 10px;
@@ -30,6 +46,8 @@
     <input type="text" id="groupToAdd"/>
     <button id="addGroup" onclick="addToGroup()">join group</button>  
   </div>
+
+  <div class="circle-cursor" id="circleCursor"></div>
 
   <canvas id="canvas"></canvas>
 
