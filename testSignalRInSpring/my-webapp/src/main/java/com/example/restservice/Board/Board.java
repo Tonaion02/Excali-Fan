@@ -6,8 +6,8 @@ import java.util.ArrayList;
 public class Board {
 
     public Board() {
-        this.commands = new ArrayList<>();
+        this.lines = new ArrayList<>();
     }
 
-    public List<Command> commands;
+    public List<Line> lines;
 }

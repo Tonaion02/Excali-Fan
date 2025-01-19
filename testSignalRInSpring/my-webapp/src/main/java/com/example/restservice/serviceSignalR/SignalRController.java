@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.example.restservice.Board.BoardsRuntimeStorage;
 import com.example.restservice.Board.Board;
 import com.example.restservice.Board.Command;
+import com.example.restservice.Board.*;
 
 /**
  * SignalRController
@@ -61,13 +62,38 @@ public class SignalRController {
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
 
-    @PostMapping("/api/messages")
-    public void sendMessage(@RequestBody Command command) {
+    @PostMapping("/api/deleteLine")
+    public void deleteLine(@RequestBody DeleteLineCommand command) {
 
         Board board = boards.boards.get(command.groupId);
+        synchronized(board) {
+            Line fakeLine = new Line("null", null, command.userIdOfLine, command.timestampOfLine);
+            board.lines.remove(fakeLine);    
+        }
+
+
+
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String accessKey = generateJwt(hubUrl, command.userId);
+
+
+
+        HttpResponse<String> response =  Unirest.post(hubUrl)
+        .header("Content-Type", "application/json")
+        .header("Authorization", "Bearer " + accessKey)
+        .body(new SignalRMessage("receiveDeleteLine", new Object[] { command }))
+        .asString();
+
+        System.out.println("sendMessage: " + response.getStatus());
+        System.out.println("sendMessage: " + response.getBody());
+    }
+
+    @PostMapping("/api/createLine")
+    public void createLine(@RequestBody CreateLineCommand command) {
+        Board board = boards.boards.get(command.groupId);
         synchronized (board) {
-            board.commands.add(command);
-            System.out.println("number of lines: " + board.commands.size());        
+            board.lines.add(command.line);
+            System.out.println("number of lines: " + board.lines.size());        
         }
         
 
@@ -77,23 +103,51 @@ public class SignalRController {
 
 
 
-        // System.out.print("List: ");
-        // for(var point : command.points) {
-        //     System.out.print("(" + point.first + "," + point.second +")");
-        // }
-        // System.out.println("");
-
-
-
         HttpResponse<String> response =  Unirest.post(hubUrl)
             .header("Content-Type", "application/json")
             .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("newMessage", new Object[] { command }))
+            .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
             .asString();
 
         System.out.println("sendMessage: " + response.getStatus());
         System.out.println("sendMessage: " + response.getBody());
     }
+
+
+
+    // @PostMapping("/api/messages")
+    // public void sendMessage(@RequestBody Command command) {
+
+    //     Board board = boards.boards.get(command.groupId);
+    //     synchronized (board) {
+    //         board.commands.add(command);
+    //         System.out.println("number of lines: " + board.commands.size());        
+    //     }
+        
+
+        
+    //     String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+    //     String accessKey = generateJwt(hubUrl, command.userId);
+
+
+
+    //     // System.out.print("List: ");
+    //     // for(var point : command.points) {
+    //     //     System.out.print("(" + point.first + "," + point.second +")");
+    //     // }
+    //     // System.out.println("");
+
+
+
+    //     HttpResponse<String> response =  Unirest.post(hubUrl)
+    //         .header("Content-Type", "application/json")
+    //         .header("Authorization", "Bearer " + accessKey)
+    //         .body(new SignalRMessage("newMessage", new Object[] { command }))
+    //         .asString();
+
+    //     System.out.println("sendMessage: " + response.getStatus());
+    //     System.out.println("sendMessage: " + response.getBody());
+    // }
 
     
 
@@ -148,7 +202,6 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getStatus());
         System.out.println("userInGroup: " + response.getBody());
     }
-
 
 
 
