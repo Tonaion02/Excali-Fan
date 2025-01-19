@@ -206,7 +206,7 @@ function draw() {
             console.log("receiveCreateLine is called");
             console.log(command.line.points)
             
-            listLines.push(message.line)
+            listLines.push(command.line)
             update(ctx)
         }
 
