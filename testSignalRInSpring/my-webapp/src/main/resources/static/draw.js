@@ -232,7 +232,7 @@ function draw() {
         }
 
         function deleteLineFromList(lines, indexLineToDelete) {
-            let indexLineToDelete = -1;
+            // let indexLineToDelete = -1;
             
             // for(let indexLine in lines) {
             //     let line = lines[indexLine];
