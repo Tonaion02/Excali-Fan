@@ -229,13 +229,15 @@ function draw() {
         function receiveDeleteLine(command) {
             console.log("receiveDeleteLine is called");
             
-            // T: remove the line from the listLines
-            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
-
             // T: check if the line to delete is equal to the currentLine, in that case delete it
+            // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
+            // deleteLineFromList
             if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
                 currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
             }
+
+            // T: remove the line from the listLines
+            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
         }
 
         function sendDeleteLine(lineToDelete) {
