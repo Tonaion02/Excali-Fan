@@ -18,7 +18,7 @@ const data = {
 
 
 const endPointForCreateLine = `/api/createLine`;
-const endPointFroDeleteLine = `/api/deleteLine`;
+const endPointForDeleteLine = `/api/deleteLine`;
 
 
 
