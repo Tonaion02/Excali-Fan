@@ -346,7 +346,7 @@ function isPointInLines(point, lines, tollerance) {
 
         currentLine.color = "red";
 
-        isPointInLine = true;
+        isPointOnCurrentLine = true;
         // T: find a way to delete the currentLine
     }
 
