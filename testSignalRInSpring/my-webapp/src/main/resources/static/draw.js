@@ -29,7 +29,6 @@ let isDeleting = false;
 
 
 
-
 // T: This function draw a line
 function drawLine(line, ctx) {
 
@@ -148,7 +147,7 @@ function draw() {
                     let indexLineToDelete = result.indexLineToReturn;
                     let isOnCurrentLine = result.isPointOnCurrentLine;
                     
-                    if(lineToReturn != null) {
+                    if(lineToDelete != null) {
                         // T: local deleting (START)
                         deleteLineFromListWithIndex(listLines, indexLineToDelete);
 
