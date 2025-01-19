@@ -97,7 +97,7 @@ public class SignalRController {
         }
         
 
-        
+        System.out.println("timestamp of last line: " + command.line.timestamp);
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 

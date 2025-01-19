@@ -22,6 +22,8 @@ public class Line {
     public Line(String color, List<Pair> points, String userId, long timestamp) {
         this.color = color;
         this.points = points;
+        this.userId = userId;
+        this.timestamp = timestamp;
     }
 
     @Override
