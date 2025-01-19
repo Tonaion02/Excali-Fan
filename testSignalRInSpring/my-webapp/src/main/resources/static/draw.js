@@ -157,6 +157,7 @@ function draw() {
                     let timestamp = Date.now();
 
                     currentLine.timestamp = timestamp;
+                    console.log(timestamp);
 
                     axios.post(endPointForCreateLine, {
                       userId: data.userId,
