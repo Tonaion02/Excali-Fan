@@ -122,6 +122,7 @@ function draw() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
+                                
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
                     ctx.lineTo(e.offsetX, e.offsetY);
@@ -131,11 +132,20 @@ function draw() {
                     currentLine.points.push({first: e.offsetX, second: e.offsetY});
                 } 
                 else if(isDeleting) {
-                    // T: check if the position of mouse is a point "around" a line
-                    let lineToReturn = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 1);
-                    if(lineToReturn != null) {
 
+                    // console.log("position: " + e.offsetX + " " + e.offsetY);
+                    
+                    // T: check if the position of mouse is a point "around" a line
+                    lineToDelete = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    let lineToReturn = lineToDelete[0];
+                    let indexLineToReturn = lineToDelete[1];
+
+                    console.log(lineToReturn);
+                    console.log(indexLineToReturn);
+                    
+                    if(lineToReturn != null) {
                         // T: TODO local deleting
+                        deleteLineFromListWithIndex(listLines, indexLineToReturn);
                         
                         sendDeleteLine(lineToReturn);
 
@@ -249,6 +259,13 @@ function draw() {
             
         }
 
+        function deleteLineFromListWithIndex(lines, indexLine) {
+            if(indexLine >= 0) {
+                lines.splice(indexLine, 1);
+                update(ctx);
+            }
+        }
+
 
 
         fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
@@ -300,6 +317,7 @@ function isPointInLine(point, line, tollerance) {
 function isPointInLines(point, lines, tollerance) {
 
     let lineToReturn = null;
+    let indexLineToReturn = -1;
 
     for(indexLine in lines) {
         let line = lines[indexLine];
@@ -310,6 +328,8 @@ function isPointInLines(point, lines, tollerance) {
             line.color = "red";
 
             lineToReturn = line;
+            indexLineToReturn = indexLine;
+            break;
         }
     }
 
@@ -321,7 +341,7 @@ function isPointInLines(point, lines, tollerance) {
         // T: find a way to delete the currentLine
     }
 
-    return lineToReturn;
+    return [lineToReturn, indexLineToReturn];
 }
 
 
