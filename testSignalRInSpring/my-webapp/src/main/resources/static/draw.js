@@ -96,8 +96,8 @@ function draw() {
     const cursor = document.getElementById("circleCursor");
 
     // T: set some properties of the cursor (START)
-    cursor.style.width = `${tollerance}px`;
-    cursor.style.height = `${tollerance}px`
+    cursor.style.width = `${tollerance * 2}px`;
+    cursor.style.height = `${tollerance * 2}px`
 
     // T: retrieve the HTML element that represent the header
     let header = document.getElementById("header");
@@ -109,7 +109,7 @@ function draw() {
     });
     // T: set some properties of the cursor (END)
 
-    
+
 
     if (canvas.getContext) {
 
@@ -401,8 +401,12 @@ function pointToSegmentDistance(p, v, w) {
 
 
 function moveCursor(position, cursor) {
-    cursor.style.left = `${position.x}px`;
-    cursor.style.top = `${position.y}px`;
+
+    let x = position.x - parseInt(cursor.style.width) / 2;
+    let y = position.y + parseInt(cursor.style.height) / 2;
+
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
 }
 
 
