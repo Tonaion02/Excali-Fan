@@ -28,6 +28,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.example.restservice.Board.BoardsRuntimeStorage;
 import com.example.restservice.Board.Board;
 import com.example.restservice.Board.Command;
+import com.example.restservice.Keys;
 import com.example.restservice.Board.*;
 
 /**
@@ -43,7 +44,7 @@ public class SignalRController {
         this.boards = boards;
     }
 
-    private String signalRServiceKey = "FENPQqnghCW07n4BUTozd2aVFodUsq6nQPVJ5u05sP63u2p1EY3JJQQJ99BAAC5RqLJXJ3w3AAAAASRSMq3D";
+    // private String signalRServiceKey = "FENPQqnghCW07n4BUTozd2aVFodUsq6nQPVJ5u05sP63u2p1EY3JJQQJ99BAAC5RqLJXJ3w3AAAAASRSMq3D";
     // https://foo.service.signalr.net
     private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net";
     private String hubName = "board";
@@ -216,7 +217,7 @@ public class SignalRController {
         long expMillis = nowMillis + (30 * 30 * 1000);
         Date exp = new Date(expMillis);
 
-        byte[] apiKeySecretBytes = signalRServiceKey.getBytes(StandardCharsets.UTF_8);
+        byte[] apiKeySecretBytes = Keys.keySignalR.getBytes(StandardCharsets.UTF_8);
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
 
         JwtBuilder builder = Jwts.builder()
