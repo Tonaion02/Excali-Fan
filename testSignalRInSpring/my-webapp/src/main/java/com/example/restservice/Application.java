@@ -22,8 +22,7 @@ public class Application {
                 .buildClient();
 
         // T: Retrieve the key for Azure SignalR
-        String secretForSignalR = "secretForSignalR";
-        String secretValueForSignalR = secretClient.getSecret(secretForSignalR).getValue();
+        String secretValueForSignalR = secretClient.getSecret(Keys.secretNameKeySignalR).getValue();
         Keys.keySignalR = secretValueForSignalR;
 
         System.out.println("Azure SignalR Key: " + secretValueForSignalR);
