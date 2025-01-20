@@ -292,9 +292,8 @@ function setup() {
 
             if(indexLineToDelete >= 0) {
                 lines.splice(indexLineToDelete, 1);
-                update(ctx);
             }
-            
+            update(ctx);            
         }
 
         function deleteLineFromListWithIndex(lines, indexLine) {
