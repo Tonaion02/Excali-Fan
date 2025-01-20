@@ -73,6 +73,21 @@
 			<version>3.1.00</version>
 		</dependency>
 
+
+
+		<!-- Azure Key Vault dependency -->
+		<dependency>
+    		<groupId>com.azure</groupId>
+    		<artifactId>azure-security-keyvault-secrets</artifactId>
+    		<version>4.9.1</version>
+		</dependency>
+
+		<!-- Azure Managed Identity dependency -->
+		<dependency>
+    		<groupId>com.azure</groupId>
+    		<artifactId>azure-identity</artifactId>
+    		<version>1.6.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
