@@ -90,7 +90,7 @@ function update(ctx) {
 
 
 
-function draw() {    
+function setup() {    
 
     // T: retrieve the HTML element that represent the cursor in canvas
     const cursor = document.getElementById("circleCursor");
@@ -427,6 +427,6 @@ document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
 
-window.addEventListener('load', draw)
+window.addEventListener('load', setup)
 
 console.log("You can start to draw")
