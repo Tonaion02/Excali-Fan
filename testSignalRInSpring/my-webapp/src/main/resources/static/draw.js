@@ -28,6 +28,7 @@ let isDeleting = false;
 
 
 
+const tollerance = 5;
 
 // T: This function draw a line
 function drawLine(line, ctx) {
@@ -87,9 +88,31 @@ function update(ctx) {
 
 
 
-function draw() {
+
+
+function draw() {    
+
+    // T: retrieve the HTML element that represent the cursor in canvas
+    const cursor = document.getElementById("circleCursor");
+
+    // T: set some properties of the cursor (START)
+    cursor.style.width = `${tollerance * 2}px`;
+    cursor.style.height = `${tollerance * 2}px`
+
+    // T: retrieve the HTML element that represent the header
+    let header = document.getElementById("header");
+    header.addEventListener("mouseenter", () => {
+        cursor.style.visibility = "hidden";
+    });
+    canvas.addEventListener("mouseenter", () => {
+        cursor.style.visibility = "visible";
+    });
+    // T: set some properties of the cursor (END)
+
+
 
     if (canvas.getContext) {
+
         const ctx = canvas.getContext("2d");
 
         // Settings of canvas (START)
@@ -130,6 +153,9 @@ function draw() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
+
+                // T: move the cursor when the mouse is moved
+                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
@@ -142,7 +168,7 @@ function draw() {
                 else if(isDeleting) {
                     
                     // T: check if the position of mouse is a point "around" a line
-                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, 5);
+                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
                     let lineToDelete = result.lineToReturn;
                     let indexLineToDelete = result.indexLineToReturn;
                     let isOnCurrentLine = result.isPointOnCurrentLine;
@@ -374,6 +400,16 @@ function pointToSegmentDistance(p, v, w) {
 
 
 
+function moveCursor(position, cursor) {
+
+    let x = position.x - parseInt(cursor.style.width) / 2;
+    let y = position.y + parseInt(cursor.style.height) / 2;
+
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
+}
+
+
 
 
 function addToGroup() {
@@ -390,6 +426,7 @@ function addToGroup() {
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
+
 window.addEventListener('load', draw)
 
 console.log("You can start to draw")
