@@ -44,7 +44,6 @@ public class SignalRController {
         this.boards = boards;
     }
 
-    // private String signalRServiceKey = "FENPQqnghCW07n4BUTozd2aVFodUsq6nQPVJ5u05sP63u2p1EY3JJQQJ99BAAC5RqLJXJ3w3AAAAASRSMq3D";
     // https://foo.service.signalr.net
     private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net";
     private String hubName = "board";
@@ -112,6 +111,14 @@ public class SignalRController {
 
         System.out.println("sendMessage: " + response.getStatus());
         System.out.println("sendMessage: " + response.getBody());
+    }
+
+    @PostMapping("/api/testEntraId")
+    public void testEntraId() {
+
+        System.out.println("This api has been called");
+
+
     }
 
 
