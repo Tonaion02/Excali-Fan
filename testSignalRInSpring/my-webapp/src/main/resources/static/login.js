@@ -1,5 +1,3 @@
-import * as msal from "https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js";
-
 const msalConfig = {
   auth: {
     clientId: "c751136e-e609-4363-ab87-32206c7674ec",
