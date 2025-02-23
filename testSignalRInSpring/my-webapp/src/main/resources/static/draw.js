@@ -1,7 +1,7 @@
 import {login} from './login.js'
 
 
-
+login()
 
 // T: this will become the synced list
 let listLines = []
