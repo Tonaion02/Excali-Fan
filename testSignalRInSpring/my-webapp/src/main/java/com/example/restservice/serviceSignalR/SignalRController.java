@@ -114,11 +114,10 @@ public class SignalRController {
     }
 
     @GetMapping("/api/testEntraId")
-    public void testEntraId() {
+    public void testEntraId(@RequestBody Object request) {
 
+        System.out.println("Effective type: " + request.getClass());
         System.out.println("This api has been called");
-
-
     }
 
 
