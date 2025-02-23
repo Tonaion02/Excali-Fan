@@ -436,6 +436,6 @@ document.addEventListener("contextmenu", function(event) {
 window.addEventListener('load', setup)
 
 let loginButton = document.getElementById("login")
-loginButton.addEventListener('onclick', login)
+loginButton.addEventListener('click', login)
 
 console.log("You can start to draw")
