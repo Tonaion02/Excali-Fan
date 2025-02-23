@@ -20,6 +20,7 @@ export function login() {
 
   const loginRequest = {
     scopes: ["openid", "profile", "email"],
+    prompt: 'select_account',
   };
 
   try {
