@@ -12,11 +12,14 @@ console.log(msal);
 
 let msalInstance = null
 import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(() => {
+    console.log("hey");
     msalInstance = new msal.PublicClientApplication(msalConfig)
 });
  
 
 export function login() {
+    console.log("hey2");
+
   const loginRequest = {
     scopes: ["openid", "profile", "email"],
   };
