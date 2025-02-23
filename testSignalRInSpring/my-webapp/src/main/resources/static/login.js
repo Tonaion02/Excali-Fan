@@ -9,7 +9,12 @@ const msalConfig = {
 };
 
 console.log(msal);
-const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+let msalInstance = null
+import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(() => {
+    msalInstance = new msal.PublicClientApplication(msalConfig)
+});
+ 
 
 export function login() {
   const loginRequest = {
