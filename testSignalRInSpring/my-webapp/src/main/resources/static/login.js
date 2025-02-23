@@ -8,6 +8,7 @@ const msalConfig = {
   },
 };
 
+console.log(msal);
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
 export function login() {
