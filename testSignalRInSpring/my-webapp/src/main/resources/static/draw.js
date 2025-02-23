@@ -81,7 +81,7 @@ function update(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)    
     
     // T: redraw every lines from the synced list
-    for(lineIndex in listLines) {
+    for(let lineIndex in listLines) {
         let line = listLines[lineIndex]
         drawLine(line, ctx)
     }
