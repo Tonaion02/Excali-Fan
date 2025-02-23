@@ -439,4 +439,7 @@ window.addEventListener('load', setup)
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
 
+let joinGroupButton = document.getElementById("addGroup")
+joinGroupButton.addEventListener('click', addToGroup)
+
 console.log("You can start to draw")

@@ -2,7 +2,8 @@ const msalConfig = {
   auth: {
     clientId: "c751136e-e609-4363-ab87-32206c7674ec",
     authority: "https://login.microsoftonline.com/d5364e8d-9d78-49f0-9636-be777bbe9507",
-    redirectUri: "https://rest-service-1735827345127.azurewebsites.net/api/testEntraId",
+    //redirectUri: "https://rest-service-1735827345127.azurewebsites.net/api/testEntraId",
+    redirectUri: "https://rest-service-1735827345127.azurewebsites.net/",
   },
 };
 
@@ -14,6 +15,7 @@ import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(()
     msalInstance = new msal.PublicClientApplication(msalConfig)
 });
  
+
 
 export function login() {
     console.log("hey2");
