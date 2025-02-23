@@ -21,7 +21,7 @@ function login() {
     console.log("hey2");
 
   const loginRequest = {
-    scopes: ["openid", "profile", "email"],
+    scopes: ["User.Read"],
     prompt: 'select_account',
   };
 
