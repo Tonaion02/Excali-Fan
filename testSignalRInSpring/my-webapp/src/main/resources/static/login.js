@@ -17,7 +17,7 @@ import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(()
  
 
 
-export function login() {
+function login() {
     console.log("hey2");
 
   const loginRequest = {
