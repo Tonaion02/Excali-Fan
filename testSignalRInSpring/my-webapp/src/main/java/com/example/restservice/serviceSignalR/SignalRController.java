@@ -113,6 +113,14 @@ public class SignalRController {
         System.out.println("sendMessage: " + response.getBody());
     }
 
+    @GetMapping("/api/testEntraId")
+    public void testEntraId() {
+
+        System.out.println("This api has been called");
+
+
+    }
+
 
 
     // @PostMapping("/api/messages")

@@ -75,7 +75,7 @@ function update(ctx) {
     ctx.clearRect(0, 0, canvas.width, canvas.height)    
     
     // T: redraw every lines from the synced list
-    for(lineIndex in listLines) {
+    for(let lineIndex in listLines) {
         let line = listLines[lineIndex]
         drawLine(line, ctx)
     }
@@ -429,5 +429,11 @@ document.addEventListener("contextmenu", function(event) {
 });
 
 window.addEventListener('load', setup)
+
+let loginButton = document.getElementById("login")
+loginButton.addEventListener('click', login)
+
+let joinGroupButton = document.getElementById("addGroup")
+joinGroupButton.addEventListener('click', addToGroup)
 
 console.log("You can start to draw")

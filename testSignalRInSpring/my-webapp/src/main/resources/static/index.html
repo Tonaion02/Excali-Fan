@@ -36,6 +36,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.0.0/dist/browser/signalr.min.js"></script>  
   <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
+  <script src="https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js"></script>
 </head>
 
 <body>  
@@ -43,13 +44,15 @@
     <p id="username"></p>
     <p id="groupId"></p>
     <input type="text" id="groupToAdd"/>
-    <button id="addGroup" onclick="addToGroup()">join group</button>  
+    <button id="addGroup">join group</button>
+    <button id="login" >login</button>  
   </div>
 
   <div class="circle-cursor" id="circleCursor"></div>
 
   <canvas id="canvas"></canvas>
 
+  <script src="login.js"></script>
   <script src="draw.js"></script>
 
 </body>
