@@ -10,20 +10,15 @@ const msalConfig = {
 
 const msalInstance = new msal.PublicClientApplication(msalConfig);
 
-async function login() {
+export function login() {
   const loginRequest = {
     scopes: ["openid", "profile", "email"],
   };
 
   try {
-    const loginResponse = await msalInstance.loginPopup(loginRequest);
+    const loginResponse = msalInstance.loginPopup(loginRequest);
     console.log("Access Token:", loginResponse.accessToken);
   } catch (error) {
     console.error(error);
   }
-}
-
-
-export function login() {
-    console.log("Successfull login");
 }
