@@ -1,6 +1,6 @@
 const msalConfig = {
   auth: {
-    clientId: "c751136e-e609-4363-ab87-32206c7674ec",
+    clientId: "b1453203-8719-4a2a-8cc6-96bf883a7e65",
     authority: "https://login.microsoftonline.com/d5364e8d-9d78-49f0-9636-be777bbe9507",
     //redirectUri: "https://rest-service-1735827345127.azurewebsites.net/api/testEntraId",
     redirectUri: "https://rest-service-1735827345127.azurewebsites.net/",
@@ -27,7 +27,7 @@ function login() {
 
   try {
     const loginResponse = msalInstance.loginPopup(loginRequest);
-    console.log("Access Token:", loginResponse.accessToken);
+    loginResponse.then((response) => {console.log("Access Token:", response.accessToken)});
   } catch (error) {
     console.error(error);
   }
