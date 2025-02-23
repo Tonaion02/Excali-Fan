@@ -1,4 +1,4 @@
-import * as msal from "@azure/msal-browser";
+import * as msal from "https://alcdn.msauth.net/browser/2.36.0/js/msal-browser.min.js";
 
 const msalConfig = {
   auth: {
