@@ -23,6 +23,7 @@ function login() {
   const loginRequest = {
     scopes: ["User.Read"],
     prompt: 'select_account',
+    forceRefresh: true,
   };
 
   try {
