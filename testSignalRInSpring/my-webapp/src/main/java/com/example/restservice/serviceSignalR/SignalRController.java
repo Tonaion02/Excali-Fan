@@ -121,7 +121,7 @@ public class SignalRController {
     // T: This api is called from clients to send the token(loginToken) to the server
     @PostMapping("/api/sendLoginToken")
     public void sendLoginToken(HttpServletRequest request) {
-        String loginToken = request.getHeader("loginToken");
+        String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
             System.out.println("Invalid token");
         } else {
