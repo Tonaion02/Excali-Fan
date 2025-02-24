@@ -1,0 +1,223 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #121212;
+    color: #e0e0e0;
+    overflow: hidden; /* Evita lo scrolling */
+}
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #121212;
+    position: absolute;
+    width: 100%;
+    top: 5px;
+    z-index: 1; /* Assicura che la toolbar sia sopra il canvas */
+}
+
+.menu-wrapper {
+    background-color: #232329;
+    padding: 8px;
+    border-radius: 5px;
+    margin-left: 10px;
+    margin-top: 5px;
+    margin-right: 56px;
+}
+
+.menu-wrapper:hover {
+    background-color: #37373e;
+}
+
+.menu-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 12px; 
+    height: 12px; 
+    cursor: pointer;
+}
+
+#menu-button {
+    cursor: pointer;
+}
+
+.line {
+    width: 100%;
+    height: 2px; /* Altezza molto ridotta */
+    background-color: #dfdfe3; /* Colore delle linee */
+}
+
+.toolbar {
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    background-color: #121212;
+    margin-top: 10px;
+}
+
+.tools-wrapper {
+    display: flex;
+    gap: 5px;
+    background-color: #232329;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.tool-container {
+    background-color: #232329;
+    border-radius: 10px; /* Angoli stondati */
+    padding: 2px;
+    position: relative; /* Necessario per posizionare la tendina */
+}
+
+.tool-container:hover {
+    background-color: #37373e;
+}
+
+.tool {
+    padding: 2px;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    border-radius: 10px; /* Angoli stondati */
+}
+
+.tool img {
+    height: 20px;
+}
+
+.color-dropdown {
+    display: none;
+    position: absolute;
+    top: 38px; /* Posiziona la tendina 5px più in basso */
+    left: 0;
+    background-color: #232329;
+    border-radius: 5px;
+    padding: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    display: flex; /* Imposta la disposizione orizzontale */
+    gap: 5px; /* Spazio tra i riquadri dei colori */
+}
+
+.color-wrapper {
+    border: 2px solid transparent; /* Bordo trasparente di default */
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.color-wrapper.selected {
+    border: 2px solid #ffffff; /* Bordo bianco per indicare il colore selezionato */
+}
+
+.color-option {
+    width: 18px;
+    height: 18px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.color-option[data-color="#ffffff"] {
+    background-color: #ffffff; /* Bianco */
+}
+
+.color-option[data-color="#ff69b4"] {
+    background-color: #ff69b4; /* Rosa scuro */
+}
+
+.color-option[data-color="#006400"] {
+    background-color: #006400; /* Verde scuro */
+}
+
+.color-option[data-color="#00008b"] {
+    background-color: #00008b; /* Blu scuro */
+}
+
+.color-option:hover {
+    opacity: 0.8;
+}
+
+.share-button {
+    padding: 7px 20px; /* Aumentato il padding per rendere il pulsante più grande */
+    border: none;
+    background-color: #a8a5ff;
+    color: black; /* Colore del testo nero */
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 10px; /* Spostato il pulsante più a sinistra rispetto al bordo */
+    margin-top: 5px;
+    font-family: 'Roboto', sans-serif; /* Font più squadrato e formale */
+    font-weight: 700; /* Aumenta lo spessore del testo */
+    transition: background-color 0.2s ease, color 0.5s ease; /* Aggiunge la transizione graduale */
+}
+
+.share-button:hover {
+    background-color: #8a87ff;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    top: 52px; /* Posiziona il menu più in basso */
+    left: 15px;
+    background-color: #232329;
+    border-radius: 5px;
+    padding: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.menu button {
+    display: flex;
+    align-items: center;
+    background-color: #232329;
+    color: #e0e0e0;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    width: 100%;
+    text-align: left;
+    font-family: 'Roboto', sans-serif; /* Font più squadrato e formale */
+    font-weight: 700; /* Aumenta lo spessore del testo */
+    font-size: 12px; /* Riduce la dimensione del testo */
+}
+
+.menu button:hover {
+    background-color: #37373e;
+}
+
+.menu-icon {
+    margin-right: 10px;
+    height: 20px;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #121212;
+}
+
+canvas {
+    border: 1px solid #333;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 0; /* Assicura che il canvas sia sotto la toolbar */
+}
+
+
+@media (max-width: 450px){
+	
+	.login-form{
+	    width: 100%;
+	}
+
+}
