@@ -21,9 +21,6 @@ import com.auth0.jwk.JwkProviderBuilder;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.jwk.source.RemoteJWKSet;
-import com.nimbusds.jose.proc.BadJOSEException;
-import com.nimbusds.jose.proc.JWSKeySelector;
-import com.nimbusds.jose.proc.JWSVerificationKeySelector;
 import com.nimbusds.jwt.SignedJWT;
 import com.nimbusds.jwt.proc.ConfigurableJWTProcessor;
 import com.nimbusds.jwt.proc.DefaultJWTProcessor;
@@ -60,7 +57,7 @@ public class TokenValidatorEntraId {
      * @param token Il token JWT da validare.
      * @return true se il token è valido, false altrimenti.
      */
-    public static boolean isValidToken(String token) {
+    public static boolean validateToken(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
             String issuer = signedJWT.getJWTClaimsSet().getIssuer();
