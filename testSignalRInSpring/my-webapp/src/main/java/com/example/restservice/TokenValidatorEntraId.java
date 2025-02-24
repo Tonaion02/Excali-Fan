@@ -62,8 +62,10 @@ public class TokenValidatorEntraId {
             SignedJWT signedJWT = SignedJWT.parse(token);
             String issuer = signedJWT.getJWTClaimsSet().getIssuer();
 
+            System.out.println("issuer: " + issuer);
             // Controlla che il token sia emesso dal tenant /common
             if (!"https://login.microsoftonline.com/common/v2.0".equals(issuer)) {
+                System.out.println("errore in sta merda");
                 return false;
             }
 
