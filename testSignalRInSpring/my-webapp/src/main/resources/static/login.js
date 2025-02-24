@@ -2,8 +2,8 @@ const msalConfig = {
   auth: {
     clientId: "b1453203-8719-4a2a-8cc6-96bf883a7e65",
     authority: "https://login.microsoftonline.com/common",
-    // redirectUri: "https://rest-service-1735827345127.azurewebsites.net/",
-    redirectUri: "https://rest-service-1735827345127.azurewebsites.net/api/testEntraId",
+    redirectUri: "https://rest-service-1735827345127.azurewebsites.net/",
+    // redirectUri: "https://rest-service-1735827345127.azurewebsites.net/api/testEntraId",
   },
 };
 

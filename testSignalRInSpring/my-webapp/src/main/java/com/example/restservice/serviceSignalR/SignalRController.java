@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
+import org.apache.http.impl.bootstrap.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.jsonwebtoken.JwtBuilder;
@@ -29,7 +30,9 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.example.restservice.Board.BoardsRuntimeStorage;
 import com.example.restservice.Board.Board;
 import com.example.restservice.Board.Command;
+import com.azure.core.annotation.Post;
 import com.example.restservice.Keys;
+import com.example.restservice.TokenValidatorEntraId;
 import com.example.restservice.Board.*;
 
 /**
@@ -114,18 +117,17 @@ public class SignalRController {
         System.out.println("sendMessage: " + response.getBody());
     }
 
-    @GetMapping("/api/testEntraId")
-    public void testEntraId(HttpServletRequest request) {
 
-        System.out.println("Effective type: " + request.getClass());
-        String p = request.getHeaderNames().nextElement();
-        while(p != null) {
-            System.out.println("p: " + p);
-            p = request.getParameterNames().nextElement();
+    // T: This api is called from clients to send the token(loginToken) to the server
+    @PostMapping("/api/sendLoginToken")
+    public void sendLoginToken(HttpServletRequest request) {
+        String loginToken = request.getHeader("loginToken");
+        if(!TokenValidatorEntraId.validateToken(loginToken)) {
+            System.out.println("Invalid token");
+        } else {
+            System.out.println("Valid token");
         }
-        System.out.println("This api has been called");
     }
-
 
 
     // @PostMapping("/api/messages")
