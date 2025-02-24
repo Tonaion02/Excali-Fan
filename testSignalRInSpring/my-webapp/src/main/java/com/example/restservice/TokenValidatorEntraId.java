@@ -78,6 +78,7 @@ public class TokenValidatorEntraId {
             return true; // Token valido
 
         } catch (ParseException | BadJOSEException | JOSEException e) {
+            System.out.println("error message: " + e.getMessage());
             return false; // Token non valido
         }
     }
