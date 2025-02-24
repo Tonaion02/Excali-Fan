@@ -41,6 +41,7 @@ function debugDrawPointsOfLine(line, ctx) {
     // T: TODO substitute with current color
     let precColor = ctx.strokeStyle;
     console.log("precColor: " + precColor);
+    ctx.strokeStyle = "red";
 
     for(point in line.points) {
         point = line.points[point];
@@ -50,7 +51,7 @@ function debugDrawPointsOfLine(line, ctx) {
         ctx.stroke();    
     }
 
-    ctx.strokeStyle = "red";
+    ctx.strokeStyle = "black";
 }
 
 // T: This function draw a line
