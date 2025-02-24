@@ -118,7 +118,7 @@ public class SignalRController {
     public void testEntraId(HttpServletRequest request) {
 
         System.out.println("Effective type: " + request.getClass());
-        String p = request.getParameterNames().nextElement();
+        String p = request.getHeaderNames().nextElement();
         while(p != null) {
             System.out.println("p: " + p);
             p = request.getParameterNames().nextElement();

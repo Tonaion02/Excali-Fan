@@ -1,15 +1,12 @@
 package com.example.restservice;
 
 import java.security.interfaces.RSAPublicKey;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
-
 import com.auth0.jwk.*;
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkProvider;
-
 import java.net.URL;
 
 
