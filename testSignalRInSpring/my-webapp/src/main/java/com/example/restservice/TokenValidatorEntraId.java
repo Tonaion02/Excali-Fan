@@ -64,7 +64,9 @@ public class TokenValidatorEntraId {
 
             System.out.println("issuer: " + issuer);
             // Controlla che il token sia emesso dal tenant /common
-            if (!"https://login.microsoftonline.com/common/v2.0".equals(issuer)) {
+            if (issuer != null &&
+            issuer.startsWith("https://login.microsoftonline.com/") && issuer.endsWith("/v2.0") ||
+             issuer.startsWith("https://sts.windows.net/")) {
                 System.out.println("errore in sta merda");
                 return false;
             }
