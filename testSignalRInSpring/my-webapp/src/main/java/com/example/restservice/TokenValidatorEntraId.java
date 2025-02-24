@@ -1,13 +1,26 @@
 package com.example.restservice;
 
+import java.security.PublicKey;
 import java.security.interfaces.RSAPublicKey;
+import java.util.concurrent.TimeUnit;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import com.auth0.jwk.*;
+
+import java.net.URL;
+
+
+
 import com.auth0.jwk.Jwk;
 import com.auth0.jwk.JwkProvider;
-import java.net.URL;
+import com.auth0.jwk.JwkProviderBuilder;
+import io.jsonwebtoken.*;
+import io.jsonwebtoken.security.SignatureException;
+
+
 
 
 
@@ -22,6 +35,8 @@ public class TokenValidatorEntraId {
             JwkProvider provider = new UrlJwkProvider(new URL(JWKS_URL));
             String kid = Jwts.parser().parseClaimsJws(token).getHeader().getKeyId();
             Jwk jwk = provider.get(kid);
+
+            System.out.println("kid: " + kid);
             
             RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
             
