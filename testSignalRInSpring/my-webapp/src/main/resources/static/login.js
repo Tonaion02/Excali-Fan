@@ -22,7 +22,7 @@ async function login() {
   console.log("Starting login");
 
   const loginRequest = {
-    scopes: ["User.Read"],
+    scopes: ["user.read"],
     prompt: "select_account",
   };
 

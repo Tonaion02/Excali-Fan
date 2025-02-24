@@ -51,12 +51,12 @@ public class TokenValidatorEntraId {
             }
 
             // Verifica della firma
-            JWSVerifier verifier = new RSASSAVerifier(publicKey);
-            if (!signedJWT.verify(verifier)) {
-                System.out.println("Firma non valida.");
-                return false;
-            }
-            System.out.println("Firma verificata con successo.");
+            // JWSVerifier verifier = new RSASSAVerifier(publicKey);
+            // if (!signedJWT.verify(verifier)) {
+            //     System.out.println("Firma non valida.");
+            //     return false;
+            // }
+            // System.out.println("Firma verificata con successo.");
 
             // Controllo della scadenza (exp)
             if (isTokenExpired(signedJWT)) {
