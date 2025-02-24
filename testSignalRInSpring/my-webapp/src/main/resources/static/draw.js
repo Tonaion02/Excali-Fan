@@ -30,6 +30,29 @@ let isDeleting = false;
 
 const tollerance = 5;
 
+
+// T: Debug visualization to display points of 
+let debugVisualizePointsOfLine = false;
+function debugDrawPointsOfLine(line, ctx) {
+
+    if(!debugVisualizePointsOfLine)
+        return;
+
+    // T: TODO substitute with current color
+    let precColor = ctx.strokeStyle;
+    console.log("precColor: " + precColor);
+
+    for(point in line.points) {
+        point = line.points[point];
+
+        ctx.beginPath();
+        ctx.arc(point.first, point.second, 2, 0, 2*Math.PI);
+        ctx.stroke();    
+    }
+
+    ctx.strokeStyle = "red";
+}
+
 // T: This function draw a line
 function drawLine(line, ctx) {
 
@@ -65,6 +88,9 @@ function drawLine(line, ctx) {
     // path in cache and try to draw it even if the line is empty.
     if(line.points.length > 0)
         ctx.stroke();
+
+
+    debugDrawPointsOfLine(line, ctx);
 }
 
 // T: This function is used to update the screen
