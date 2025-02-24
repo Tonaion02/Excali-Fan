@@ -40,6 +40,9 @@ public class TokenValidatorEntraId {
             SignedJWT signedJWT = SignedJWT.parse(token);
             System.out.println("Token parsato con successo.");
 
+
+            System.out.println("Algoritmo del token: " + signedJWT.getHeader().getAlgorithm());
+
             // Recupero della chiave pubblica corretta
             RSAPublicKey publicKey = getPublicKey(signedJWT.getHeader().getKeyID());
             if (publicKey == null) {
