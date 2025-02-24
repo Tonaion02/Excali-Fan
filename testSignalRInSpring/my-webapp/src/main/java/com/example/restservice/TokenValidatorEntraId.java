@@ -34,9 +34,12 @@ public class TokenValidatorEntraId {
         try {
             JwkProvider provider = new UrlJwkProvider(new URL(JWKS_URL));
             String kid = Jwts.parser().parseClaimsJws(token).getHeader().getKeyId();
+            
+            System.out.println("kid: " + kid);
+
             Jwk jwk = provider.get(kid);
 
-            System.out.println("kid: " + kid);
+            
             
             RSAPublicKey publicKey = (RSAPublicKey) jwk.getPublicKey();
             
