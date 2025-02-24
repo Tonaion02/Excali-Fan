@@ -115,14 +115,14 @@ public class SignalRController {
     }
 
     @GetMapping("/api/testEntraId")
-    public void testEntraId(HttpServletRequest request) {
+    public void testEntraId(/* HttpServletRequest request*/) {
 
         // System.out.println("Effective type: " + request.getClass());
-        String p = request.getParameterNames().nextElement();
-        while(p != null) {
-            System.out.println("p: " + p);
-            p = request.getParameterNames().nextElement();
-        }
+        // String p = request.getParameterNames().nextElement();
+        // while(p != null) {
+        //     System.out.println("p: " + p);
+        //     p = request.getParameterNames().nextElement();
+        // }
         System.out.println("This api has been called");
     }
 
