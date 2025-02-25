@@ -79,7 +79,7 @@ async function login() {
 
 
     // T: verify if the token is valid (START)
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/verifyLoginToken", {}, {
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/verifyLoginToken", {}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"
