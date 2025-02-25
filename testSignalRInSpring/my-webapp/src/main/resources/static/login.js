@@ -109,8 +109,15 @@ async function login() {
     })
       .then(response => {
         console.log("Status verification token:", response.status);
+
         // T: TODO remove overlay of login and call setup function
 
+        // T: TODO set boardSessionId correctly
+        if(response.status == 200) {
+          let boardSessionid = response.text();
+          console.log("BoardSessionId: " + boardSessionid);
+          
+        }
       })
       .catch(error => {
         console.error("Error during verification of token:", error);
@@ -119,6 +126,5 @@ async function login() {
   } catch (error) {
     console.error("Login or token retrieval failed:", error);
     // T: TODO add error message for unsucess login
-    
   }
 }
