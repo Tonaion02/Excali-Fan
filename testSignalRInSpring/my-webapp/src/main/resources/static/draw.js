@@ -147,6 +147,8 @@ function setup() {
 
 
 
+
+
     if (canvas.getContext) {
 
         const ctx = canvas.getContext("2d");
@@ -187,7 +189,7 @@ function setup() {
             (e) => {
 
                 // T: move the cursor when the mouse is moved
-                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
+                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
@@ -439,9 +441,6 @@ function pointToSegmentDistance(p, v, w) {
 
 
 function moveCursor(position, cursor) {
-
-    // let x = position.x - parseInt(cursor.style.width) / 2;
-    // let y = position.y + parseInt(cursor.style.height) / 2;
 
     let x = position.x - parseInt(tollerance) / 2;
     let y = position.y + parseInt(tollerance) / 2;
