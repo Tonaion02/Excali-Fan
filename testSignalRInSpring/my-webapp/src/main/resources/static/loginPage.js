@@ -22,12 +22,6 @@ function loadLoginPage() {
     document.body.classList.add('login-active');
 }
 
-// // Funzione per gestire l'accesso con Microsoft
-// function loginWithMicrosoft() {
-//     // Implementa il flusso di autenticazione di Microsoft qui
-//     window.location.href = 'https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id=YOUR_CLIENT_ID&response_type=code&redirect_uri=https://yourapp.com/auth/callback&response_mode=query&scope=openid%20profile%20email&state=12345';
-// }
-
 // Funzione per chiudere la scheda di login
 function closeLogin() {
     document.getElementById('login-overlay').style.display = 'none';

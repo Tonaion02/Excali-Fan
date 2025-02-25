@@ -128,23 +128,14 @@ function setup() {
     const cursor = document.getElementById("circleCursor");
 
     // T: set some properties of the cursor (START)
-    cursor.style.removeProperty("display");
+    cursor.style.display = "block";
     cursor.style.width = `${tollerance * 2}px`;
     cursor.style.height = `${tollerance * 2}px`;
 
     // T: set the content of GroupLabel
     const currentGroupLabel = document.getElementById('current-group-label');
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-
-    // // T: retrieve the HTML element that represent the header
-    // let header = document.getElementById("header");
-    // header.addEventListener("mouseenter", () => {
-    //     cursor.style.visibility = "hidden";
-    // });
-    // canvas.addEventListener("mouseenter", () => {
-    //     cursor.style.visibility = "visible";
-    // });
-    // // T: set some properties of the cursor (END)
+    // T: set some properties of the cursor (END)
 
 
 
@@ -361,37 +352,6 @@ function setup() {
 
 
 
-        // fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
-        // .then((response) => response.json())
-        // .then((json) => { 
-        //     console.log(json); 
-        //     data.userId = json.userId;
-
-        //     // T: set the temporary userId
-        //     document.getElementById("username").textContent = "User" + data.userId
-
-        //     // T: write the code of the current groupId
-        //     document.getElementById("groupId").textContent = data.userId
-            
-        //     const connection = new signalR.HubConnectionBuilder()
-        //     // .withUrl(`${apiBaseUrl}/signalr`)
-        //     .withUrl(`/signalr?userId=` + data.userId)
-        //     .withAutomaticReconnect()
-        //     .configureLogging(signalR.LogLevel.Information)
-        //     .build()
-            
-        //     // T: Set the listener to the receiveing message (START)
-        //     // connection.on('newMessage', newMessage)
-        //     connection.on('receiveCreateLine', receiveCreateLine);
-        //     connection.on('receiveDeleteLine', receiveDeleteLine);
-        //     // T: Set the listener to the receiveing message (END)
-
-        //     connection.start()
-        //     .then(() => console.log("Started connection"))
-        //     .catch(console.error)
-        // })
-
-
 
 
         // T: Create connection to signalR (START)
@@ -478,8 +438,11 @@ function pointToSegmentDistance(p, v, w) {
 
 function moveCursor(position, cursor) {
 
-    let x = position.x - parseInt(cursor.style.width) / 2;
-    let y = position.y + parseInt(cursor.style.height) / 2;
+    // let x = position.x - parseInt(cursor.style.width) / 2;
+    // let y = position.y + parseInt(cursor.style.height) / 2;
+
+    let x = position.x - parseInt(tollerance) / 2;
+    let y = position.y + parseInt(tollerance) / 2;
 
     cursor.style.left = `${x}px`;
     cursor.style.top = `${y}px`;
@@ -494,8 +457,10 @@ function addToGroup() {
     const groupId = document.getElementById('group-name').value;
     
     data.groupId = groupId
-    currentGroupLabel.textContent = `Current Group: ${groupId}`;
-    
+    currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
+
+    let accessToken = retrieveToken();
+
     fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
             method: "GET",
@@ -512,8 +477,6 @@ function addToGroup() {
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
-
-// window.addEventListener('load', setup)
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
