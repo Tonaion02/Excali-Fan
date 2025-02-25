@@ -130,7 +130,11 @@ function setup() {
     // T: set some properties of the cursor (START)
     cursor.style.removeProperty("display");
     cursor.style.width = `${tollerance * 2}px`;
-    cursor.style.height = `${tollerance * 2}px`
+    cursor.style.height = `${tollerance * 2}px`;
+
+    // T: set the content of GroupLabel
+    const currentGroupLabel = document.getElementById('current-group-label');
+    currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
     // // T: retrieve the HTML element that represent the header
     // let header = document.getElementById("header");
@@ -488,13 +492,10 @@ function addToGroup() {
 
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
-    currentGroupLabel.textContent = `Current Group: ${groupId}`;
-
-    // let groupId = document.getElementById("groupToAdd").value
     
     data.groupId = groupId
-    // document.getElementById("groupId").textContent = groupId
-
+    currentGroupLabel.textContent = `Current Group: ${groupId}`;
+    
     fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
             method: "GET",
