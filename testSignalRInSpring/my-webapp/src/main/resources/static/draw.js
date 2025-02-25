@@ -148,6 +148,7 @@ function setup() {
         // canvas
         ctx.canvas.width  = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
+        ctx.canvas.style.backgroundColor = "#121212";
         // Settings of canvas (END)
 
         let lastX = 0;
