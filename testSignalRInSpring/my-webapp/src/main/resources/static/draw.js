@@ -494,8 +494,10 @@ function addToGroup() {
     const groupId = document.getElementById('group-name').value;
     
     data.groupId = groupId
-    currentGroupLabel.textContent = `Current Group: ${groupId}`;
-    
+    currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
+
+    let accessToken = retrieveToken();
+
     fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
             method: "GET",
