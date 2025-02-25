@@ -128,7 +128,7 @@ function setup() {
     const cursor = document.getElementById("circleCursor");
 
     // T: set some properties of the cursor (START)
-    cursor.style.removeProperty("display");
+    cursor.style.display = "block";
     cursor.style.width = `${tollerance * 2}px`;
     cursor.style.height = `${tollerance * 2}px`;
 
