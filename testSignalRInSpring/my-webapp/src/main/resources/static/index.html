@@ -8,17 +8,16 @@
     <link rel="stylesheet" href="login.css"> <!-- Importa lo stile della pagina di login -->
 
     <style>
-    .circle-cursor {
-      position: relative;
-      display: none; 
-      width: 5px;
-      height: 5px;
-      background-color: red; /* Circle color */
-      border-radius: 50%;
-      pointer-events: none; /* Prevent blocking clicks */ 
-      /* transform: translate(-50%, -50%); */
-      z-index: 9999;
-    } 
+    #custom-cursor {
+        width: 16px;
+        height: 16px;
+        background-color: purple;
+        border-radius: 50%;
+        position: absolute;
+        pointer-events: none; 
+        z-index: 1000; 
+        transform: translate(-50%, -50%);
+    }
     </style>
 
     
@@ -28,53 +27,51 @@
     
 </head>
 <body>
-    <header>
-        <div class="menu-wrapper" id="menu-button">
-            <div class="menu-button">
-                <div class="line"></div>
-                <div class="line"></div>
-                <div class="line"></div>
-            </div>
+    <div class="menu-wrapper" id="menu-button">
+        <div class="menu-button">
+            <div class="line"></div>
+            <div class="line"></div>
+            <div class="line"></div>
         </div>
-        <div class="toolbar">
-            <div class="tools-wrapper">
-                <div class="tool-container" id="pencil-container">
-                    <button class="tool" id="pencil-tool">
-                        <img src="logo-matita.png" alt="Matita">
-                    </button>
-                    <div class="color-dropdown" id="color-dropdown">
-                        <!-- Le opzioni di colore saranno aggiunte dinamicamente tramite JavaScript -->
-                    </div>
-                </div>
-                <div class="tool-container" id="eraser-container">
-                    <button class="tool" id="eraser-tool">
-                        <img src="logo-gomma.png" alt="Gomma">
-                    </button>
+    </div>
+    <div class="toolbar">
+        <div class="tools-wrapper">
+            <div class="tool-container" id="pencil-container">
+                <button class="tool" id="pencil-tool">
+                    <img src="logo-matita.png" alt="Matita">
+                </button>
+                <div class="color-dropdown" id="color-dropdown">
+                    <!-- Le opzioni di colore saranno aggiunte dinamicamente tramite JavaScript -->
                 </div>
             </div>
+            <div class="tool-container" id="eraser-container">
+                <button class="tool" id="eraser-tool">
+                    <img src="logo-gomma.png" alt="Gomma">
+                </button>
+            </div>
         </div>
-        <button class="share-button">Condividi</button>
-        <div id="share-box" class="share-box">
-            <label id="current-group-label">GroupID corrente: None</label>
-            <input type="text" id="group-name" placeholder="Enter group name">
-            <button id="add-group-button">Join Group</button>
-        </div>
-        <div class="menu" id="menu">
-            <button id="export-image">
-                <img src="logo-dw.png" alt="Esporta" class="menu-icon">
-                Esporta immagine
-            </button>
-            <button id="save">
-                <img src="logo-ex.png" alt="Salva" class="menu-icon">
-                Salva
-            </button>
-        </div>
-    </header>
+    </div>
+    <button class="share-button">Condividi</button>
+    <div id="share-box" class="share-box">
+        <label id="current-group-label">GroupID corrente: None</label>
+        <input type="text" id="group-name" placeholder="Enter group name">
+        <button id="add-group-button">Join Group</button>
+    </div>
+    <div class="menu" id="menu">
+        <button id="export-image">
+            <img src="logo-dw.png" alt="Esporta" class="menu-icon">
+            Esporta immagine
+        </button>
+        <button id="save">
+            <img src="logo-ex.png" alt="Salva" class="menu-icon">
+            Salva
+        </button>
+    </div>
 
-    <div class="circle-cursor" id="circleCursor"></div>
-    <canvas id="drawingCanvas"></canvas>
-    
-    
+    <div class="canvas-container">
+        <div class="circle-cursor" id="custom-cursor"></div>
+        <canvas id="drawingCanvas"></canvas>    
+    </div>
     
     <div id="login-container"></div> 
     <script src="menu.js"></script> 
