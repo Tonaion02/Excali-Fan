@@ -6,9 +6,24 @@
     <title>Excali-Fun</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="login.css"> <!-- Importa lo stile della pagina di login -->
+
+    <style>
+    .circle-cursor {
+      position: relative; 
+      width: 5px;
+      height: 5px;
+      background-color: red; /* Circle color */
+      border-radius: 50%;
+      pointer-events: none; /* Prevent blocking clicks */ 
+      /* transform: translate(-50%, -50%); */
+      z-index: 9999;
+    } 
+    </style>
 </head>
 <body>
     <header>
+        <div class="circle-cursor" id="circleCursor"></div>
+
         <div class="menu-wrapper" id="menu-button">
             <div class="menu-button">
                 <div class="line"></div>

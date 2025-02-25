@@ -120,8 +120,10 @@ async function login() {
 
 
           data.groupId = boardSessionid;
-
-          // T: TODO call setup and advance in the application
+          
+          const loginContainer = document.getElementById("login-container");
+          loginContainer.style.display = "none";
+          setup();
         }
       })
       .catch(error => {
@@ -130,6 +132,7 @@ async function login() {
     // T: verify if the token is valid (END)
   } catch (error) {
     console.error("Login or token retrieval failed:", error);
-    // T: TODO add error message for unsucess login
+
+    showError();
   }
 }

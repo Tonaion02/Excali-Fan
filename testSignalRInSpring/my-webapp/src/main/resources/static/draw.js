@@ -462,7 +462,7 @@ document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
 
-window.addEventListener('load', setup)
+// window.addEventListener('load', setup)
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
