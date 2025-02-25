@@ -39,16 +39,17 @@ public class Application {
 
 
 
-        // T: Create interceptor to test if the user is logged (START)
-        HandlerInterceptor customInterceptor = new TokenValidatorInterceptor();
-        WebMvcConfigurer configurer = new WebMvcConfigurer() {
-            @Override
-            public void addInterceptors(InterceptorRegistry registry) {
-                registry.addInterceptor(customInterceptor).addPathPatterns("/**");
-            }
-        };
+        // // T: Create interceptor to test if the user is logged (START)
+        // HandlerInterceptor customInterceptor = new TokenValidatorInterceptor();
+        // WebMvcConfigurer configurer = new WebMvcConfigurer() {
+        //     @Override
+        //     public void addInterceptors(InterceptorRegistry registry) {
+        //         registry.addInterceptor(customInterceptor).addPathPatterns("/**");
+        //     }
+        // };
         
-        context.getBeanFactory().registerSingleton("customWebConfig", configurer);
-        // T: Create interceptor to test if the user is logged (END)
+        // context.getBeanFactory().registerSingleton("customWebConfig", configurer);
+        
+        // // T: Create interceptor to test if the user is logged (END)
     }
 }
