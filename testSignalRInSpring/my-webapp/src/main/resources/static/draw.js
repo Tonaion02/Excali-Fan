@@ -9,6 +9,14 @@ let currentLine = {color: defaultColor,  userId: null, timestamp: null, points: 
 let currentColor = defaultColor;
 
 const canvas = document.getElementById("drawingCanvas");
+const canvasContext = canvas.getContext("2d");
+// Settings of canvas (START)
+// T: WARNING remember to set a fixed size for the
+// canvas
+canvasContext.canvas.width  = window.innerWidth;
+canvasContext.canvas.height = window.innerHeight;
+canvasContext.canvas.style.backgroundColor = "#121212";
+// Settings of canvas (END)
 
 // T: data that must be stored
 const data = {
@@ -143,12 +151,6 @@ function setup() {
 
         const ctx = canvas.getContext("2d");
 
-        // Settings of canvas (START)
-        // T: WARNING remember to set a fixed size for the
-        // canvas
-        ctx.canvas.width  = window.innerWidth;
-        ctx.canvas.height = window.innerHeight;
-        // Settings of canvas (END)
 
         let lastX = 0;
         let lastY = 0;
