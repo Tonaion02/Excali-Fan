@@ -147,18 +147,6 @@ function setup() {
 
 
 
-    window.addEventListener("scroll", () => {
-        console.log("scrolling");
-
-        // cursor.style.display = "none";  
-        // cursor.offsetHeight;  // T: force recomputation
-        // cursor.style.display = "block";
-        const parentCursor = cursor.parentNode;
-        parentCursor.removeChild(cursor);
-        requestAnimationFrame(() => {
-            parentCursor.appendChild(cursor);
-        });
-    });
 
 
     if (canvas.getContext) {
@@ -201,7 +189,7 @@ function setup() {
             (e) => {
 
                 // T: move the cursor when the mouse is moved
-                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
+                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
