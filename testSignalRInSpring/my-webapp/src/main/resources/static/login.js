@@ -112,7 +112,7 @@ async function login() {
 
         // T: TODO set boardSessionId correctly
         if(response.status == 200) {
-          let boardSessionid = response.text();
+          let boardSessionid = response.data;
           console.log("BoardSessionId: " + boardSessionid);
           
 
