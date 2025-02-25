@@ -4,7 +4,9 @@ let listLines = []
 // in that we can cache the current operation.
 // This is useful when a user is drawing a line during
 // an update.
-let currentLine = {color: "black",  userId: null, timestamp: null, points: []}
+let defaultColor = "white";
+let currentLine = {color: defaultColor,  userId: null, timestamp: null, points: []}
+let currentColor = defaultColor;
 
 const canvas = document.getElementById("drawingCanvas");
 
@@ -51,7 +53,7 @@ function debugDrawPointsOfLine(line, ctx) {
         ctx.stroke();    
     }
 
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = currentColor;
 }
 
 // T: This function draw a line
@@ -159,7 +161,7 @@ function setup() {
         // Settings of the pen (START)
         ctx.lineWidth = 2;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'black';
+        ctx.strokeStyle = currentColor;
         // Settings of the pen (END)
 
         // Set EventListener for mouse down (START)
@@ -173,10 +175,10 @@ function setup() {
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
                 ctx.beginPath();
-                ctx.strokeStyle = "black";
+                ctx.strokeStyle = currentColor;
 
                 // Clear the current line and add the first point of the line
-                currentLine = {color: "black", userId: data.userId, timestamp: null, points: []};
+                currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
                 currentLine.points.push({first: e.offsetX, second: e.offsetY});
             }
@@ -211,7 +213,7 @@ function setup() {
                         deleteLineFromListWithIndex(listLines, indexLineToDelete);
 
                         if(isOnCurrentLine)
-                            currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+                            currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
                         // T: local deleting (END)
 
                         // T: remote deleting
@@ -292,7 +294,7 @@ function setup() {
             // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
             // deleteLineFromList
             if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
-                currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
             }
 
             // T: remove the line from the listLines
@@ -446,13 +448,13 @@ function moveCursor(position, cursor) {
 function addToGroup() {
 
     const currentGroupLabel = document.getElementById('current-group-label');
-    const groupName = document.getElementById('group-name').value;
-    currentGroupLabel.textContent = `Current Group: ${groupName}`;
+    const groupId = document.getElementById('group-name').value;
+    currentGroupLabel.textContent = `Current Group: ${groupId}`;
 
-    let groupId = document.getElementById("groupToAdd").value
+    // let groupId = document.getElementById("groupToAdd").value
     
     data.groupId = groupId
-    document.getElementById("groupId").textContent = groupId
+    // document.getElementById("groupId").textContent = groupId
 
     fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId).
     then((response) => console.log("adding to group: " + response.status))
