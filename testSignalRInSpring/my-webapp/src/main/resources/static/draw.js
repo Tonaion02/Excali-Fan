@@ -135,16 +135,7 @@ function setup() {
     // T: set the content of GroupLabel
     const currentGroupLabel = document.getElementById('current-group-label');
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-
-    // // T: retrieve the HTML element that represent the header
-    // let header = document.getElementById("header");
-    // header.addEventListener("mouseenter", () => {
-    //     cursor.style.visibility = "hidden";
-    // });
-    // canvas.addEventListener("mouseenter", () => {
-    //     cursor.style.visibility = "visible";
-    // });
-    // // T: set some properties of the cursor (END)
+    // T: set some properties of the cursor (END)
 
 
 
@@ -361,37 +352,6 @@ function setup() {
 
 
 
-        // fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
-        // .then((response) => response.json())
-        // .then((json) => { 
-        //     console.log(json); 
-        //     data.userId = json.userId;
-
-        //     // T: set the temporary userId
-        //     document.getElementById("username").textContent = "User" + data.userId
-
-        //     // T: write the code of the current groupId
-        //     document.getElementById("groupId").textContent = data.userId
-            
-        //     const connection = new signalR.HubConnectionBuilder()
-        //     // .withUrl(`${apiBaseUrl}/signalr`)
-        //     .withUrl(`/signalr?userId=` + data.userId)
-        //     .withAutomaticReconnect()
-        //     .configureLogging(signalR.LogLevel.Information)
-        //     .build()
-            
-        //     // T: Set the listener to the receiveing message (START)
-        //     // connection.on('newMessage', newMessage)
-        //     connection.on('receiveCreateLine', receiveCreateLine);
-        //     connection.on('receiveDeleteLine', receiveDeleteLine);
-        //     // T: Set the listener to the receiveing message (END)
-
-        //     connection.start()
-        //     .then(() => console.log("Started connection"))
-        //     .catch(console.error)
-        // })
-
-
 
 
         // T: Create connection to signalR (START)
@@ -514,8 +474,6 @@ function addToGroup() {
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
-
-// window.addEventListener('load', setup)
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
