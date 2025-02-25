@@ -14,12 +14,14 @@ public class TokenValidatorInterceptor implements HandlerInterceptor {
     public static final String patternToApply = "/api/**";
 
     @Override
+    // T: This function is called among every https request that respect the patterns
+    // specified above. This function check if there is a valid Access Token in 
+    // the https request.
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         System.out.println("Interceptor: Request URI - " + request.getRequestURI());
 
-
         String loginToken = request.getHeader("Authorization");
-        if(!TokenValidatorEntraId.validateToken(loginToken)) {
+        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken)) {
             System.out.println("Invalid token");
             return false;
         } else {

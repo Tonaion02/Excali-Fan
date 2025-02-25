@@ -36,22 +36,23 @@ import com.example.restservice.Keys;
 import com.example.restservice.TokenValidatorEntraId;
 import com.example.restservice.Board.*;
 
-/**
- * SignalRController
- */
+
+
+
+
 @RestController
 public class SignalRController {
 
     private final BoardsRuntimeStorage boards;
+    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // example: https://foo.service.signalr.net
+    private String hubName = "board";
+
+
 
     @Autowired
     public SignalRController(BoardsRuntimeStorage boards) {
         this.boards = boards;
     }
-
-    // https://foo.service.signalr.net
-    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net";
-    private String hubName = "board";
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
@@ -117,7 +118,6 @@ public class SignalRController {
         System.out.println("sendMessage: " + response.getBody());
     }
 
-
     // T: This api is used to test if the validation of the Token works
     // T: The status of the HTTP response is:
     // - 200 if the token is valid
@@ -133,6 +133,47 @@ public class SignalRController {
             response.setStatus(200);
         }
     }
+
+    // T: This api permits to make the login the first time during
+    // a session of using the application.
+    @PostMapping("/publicApi/login")
+    public String Login(HttpServletRequest request, HttpServletResponse response) {
+        // T: WARNING in future retrieve the email directly from the AccessToken
+        String email = request.getParameter("email");
+        String provider = request.getParameter("provider");
+        
+        // T: verify if the token is valid (START)
+        String loginToken = request.getHeader("Authorization");
+        if(!TokenValidatorEntraId.validateToken(loginToken)) {
+            System.out.println("Invalid token used to try login");
+            response.setStatus(201);
+            return "#ERROR";
+        } else {
+            System.out.println("Valid token used to try login");
+            response.setStatus(200);
+        }
+        // T: verify if the token is valid (END)
+
+
+
+        // T: generate a randomic number to identify the board
+        // T: NOTE: we use this number to identify the board in persistence and like session
+        // to exchange messages from clients
+        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+        String boardId = Integer.toString(randomNumericBoardId);
+
+
+        // T: TODO autojoin the group
+
+
+        // T: TODO check if the user is already "registered" in the database
+        // T: TODO in the case is not already registered, register him
+
+        // T: TODO add the id of user to the session
+
+        return boardId;
+    }
+    
 
 
     // @PostMapping("/api/messages")
@@ -181,9 +222,13 @@ public class SignalRController {
         public String userId;
     }
 
+
+
+
+
     // T: WARNING temporary, for now returns a temporary userId
     @GetMapping("/publicApi/templogin")
-    public Login Login() {
+    public Login TempLogin() {
         int randomUserId = Math.abs(ThreadLocalRandom.current().nextInt());
         String userId = Integer.toString(randomUserId);
 

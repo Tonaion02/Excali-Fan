@@ -85,7 +85,7 @@ function drawLine(line, ctx) {
     // T: is important for performance reason to put a single stroke for line
     // T: probably the stroke is used to create vertex information, so if we
     // abuse this function, we don't batch data correctly.
-    // T: WARNING we need this warning because otherwise the ctx mantain the last
+    // T: WARNING we need this check because otherwise the ctx mantain the last
     // path in cache and try to draw it even if the line is empty.
     if(line.points.length > 0)
         ctx.stroke();
