@@ -265,6 +265,7 @@ function setup() {
         // T: Set EventListeners for the keys (START)
         window.addEventListener('keydown', (event) => {
             if(event.code == "KeyD") {
+                console.log("D");
                 isDeleting = true;
             }
         });
