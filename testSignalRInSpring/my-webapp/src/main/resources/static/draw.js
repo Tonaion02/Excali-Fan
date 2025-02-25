@@ -130,15 +130,15 @@ function setup() {
     cursor.style.width = `${tollerance * 2}px`;
     cursor.style.height = `${tollerance * 2}px`
 
-    // T: retrieve the HTML element that represent the header
-    let header = document.getElementById("header");
-    header.addEventListener("mouseenter", () => {
-        cursor.style.visibility = "hidden";
-    });
-    canvas.addEventListener("mouseenter", () => {
-        cursor.style.visibility = "visible";
-    });
-    // T: set some properties of the cursor (END)
+    // // T: retrieve the HTML element that represent the header
+    // let header = document.getElementById("header");
+    // header.addEventListener("mouseenter", () => {
+    //     cursor.style.visibility = "hidden";
+    // });
+    // canvas.addEventListener("mouseenter", () => {
+    //     cursor.style.visibility = "visible";
+    // });
+    // // T: set some properties of the cursor (END)
 
 
 
