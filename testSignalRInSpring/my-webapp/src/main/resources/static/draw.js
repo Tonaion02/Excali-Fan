@@ -13,8 +13,8 @@ const canvasContext = canvas.getContext("2d");
 // Settings of canvas (START)
 // T: WARNING remember to set a fixed size for the
 // canvas
-canvasContext.canvas.width  = window.innerWidth;
-canvasContext.canvas.height = window.innerHeight;
+canvasContext.canvas.width  = 2000;
+canvasContext.canvas.height = 2000;
 canvasContext.canvas.style.backgroundColor = "#121212";
 // Settings of canvas (END)
 
