@@ -146,13 +146,18 @@ function setup() {
     // T: set some properties of the cursor (END)
 
 
-    
+
     window.addEventListener("scroll", () => {
         console.log("scrolling");
 
-        cursor.style.display = "none";  
-        cursor.offsetHeight;  // T: force recomputation
-        cursor.style.display = "block";
+        // cursor.style.display = "none";  
+        // cursor.offsetHeight;  // T: force recomputation
+        // cursor.style.display = "block";
+        const parentCursor = cursor.parentNode;
+        parentCursor.removeChild(cursor);
+        requestAnimationFrame(() => {
+            parentCursor.appendChild(cursor);
+        });
     });
 
 
