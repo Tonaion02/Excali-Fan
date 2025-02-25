@@ -83,6 +83,7 @@ public class TokenValidatorEntraId {
             return true;
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println("Errore durante la validazione del token: " + e.getMessage());
             return false;
         }
