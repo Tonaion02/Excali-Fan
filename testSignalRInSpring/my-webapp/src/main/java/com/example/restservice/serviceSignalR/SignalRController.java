@@ -122,7 +122,7 @@ public class SignalRController {
     // T: The status of the HTTP response is:
     // - 200 if the token is valid
     // - 201 if the token is not valid
-    @PostMapping("/api/verifyLoginToken")
+    @PostMapping("/publicApi/verifyLoginToken")
     public void verifyLoginToken(HttpServletRequest request, HttpServletResponse response) {
         String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
@@ -182,7 +182,7 @@ public class SignalRController {
     }
 
     // T: WARNING temporary, for now returns a temporary userId
-    @GetMapping("/api/templogin")
+    @GetMapping("/publicApi/templogin")
     public Login Login() {
         int randomUserId = Math.abs(ThreadLocalRandom.current().nextInt());
         String userId = Integer.toString(randomUserId);
@@ -208,7 +208,7 @@ public class SignalRController {
         System.out.println("addgroup: " + response.getBody());
     }
 
-    @GetMapping("/api/isingroup")
+    @GetMapping("/publicApi/isingroup")
     public void isUserInGroup(@RequestParam String groupId, @RequestParam String userId) {
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
         String accessKey = generateJwt(hubUrl, userId);
