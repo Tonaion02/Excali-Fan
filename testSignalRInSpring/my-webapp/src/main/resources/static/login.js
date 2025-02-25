@@ -64,6 +64,16 @@ function extractEmailFromToken(accessToken) {
   return userEmail;
 }
 
+function retrieveToken() {
+  const tokenKey = Object.keys(sessionStorage).find(key => key.includes("accesstoken"));
+  const info = sessionStorage.getItem(tokenKey);
+  const accessToken = JSON.parse(info).secret;
+
+  console.log("Token found:", accessToken);
+
+  return accessToken;
+}
+
 
 
 async function login() {
@@ -110,18 +120,18 @@ async function login() {
       .then(response => {
         console.log("Status verification token:", response.status);
 
-        // T: TODO set boardSessionId correctly
         if(response.status == 200) {
           let boardSessionid = response.data;
           console.log("BoardSessionId: " + boardSessionid);
           
-
-          // T: TODO remove overlay of login and call setup function
-
-
           data.groupId = boardSessionid;
-
-          // T: TODO call setup and advance in the application
+          // T: WARNING for now we don't have a different UserId for each user
+          // so we simply copy the groupId
+          data.userId = data.groupId;
+          
+          const loginContainer = document.getElementById("login-container");
+          loginContainer.style.display = "none";
+          setup();
         }
       })
       .catch(error => {
@@ -130,6 +140,7 @@ async function login() {
     // T: verify if the token is valid (END)
   } catch (error) {
     console.error("Login or token retrieval failed:", error);
-    // T: TODO add error message for unsucess login
+
+    showError();
   }
 }

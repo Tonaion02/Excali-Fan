@@ -4,9 +4,11 @@ let listLines = []
 // in that we can cache the current operation.
 // This is useful when a user is drawing a line during
 // an update.
-let currentLine = {color: "black",  userId: null, timestamp: null, points: []}
+let defaultColor = "white";
+let currentLine = {color: defaultColor,  userId: null, timestamp: null, points: []}
+let currentColor = defaultColor;
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("drawingCanvas");
 
 // T: data that must be stored
 const data = {
@@ -51,7 +53,7 @@ function debugDrawPointsOfLine(line, ctx) {
         ctx.stroke();    
     }
 
-    ctx.strokeStyle = "black";
+    ctx.strokeStyle = currentColor;
 }
 
 // T: This function draw a line
@@ -126,17 +128,13 @@ function setup() {
     const cursor = document.getElementById("circleCursor");
 
     // T: set some properties of the cursor (START)
+    cursor.style.display = "block";
     cursor.style.width = `${tollerance * 2}px`;
-    cursor.style.height = `${tollerance * 2}px`
+    cursor.style.height = `${tollerance * 2}px`;
 
-    // T: retrieve the HTML element that represent the header
-    let header = document.getElementById("header");
-    header.addEventListener("mouseenter", () => {
-        cursor.style.visibility = "hidden";
-    });
-    canvas.addEventListener("mouseenter", () => {
-        cursor.style.visibility = "visible";
-    });
+    // T: set the content of GroupLabel
+    const currentGroupLabel = document.getElementById('current-group-label');
+    currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
     // T: set some properties of the cursor (END)
 
 
@@ -146,6 +144,8 @@ function setup() {
         const ctx = canvas.getContext("2d");
 
         // Settings of canvas (START)
+        // T: WARNING remember to set a fixed size for the
+        // canvas
         ctx.canvas.width  = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         // Settings of canvas (END)
@@ -156,7 +156,7 @@ function setup() {
         // Settings of the pen (START)
         ctx.lineWidth = 2;
         ctx.lineCap = 'round';
-        ctx.strokeStyle = 'black';
+        ctx.strokeStyle = currentColor;
         // Settings of the pen (END)
 
         // Set EventListener for mouse down (START)
@@ -170,10 +170,10 @@ function setup() {
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
                 ctx.beginPath();
-                ctx.strokeStyle = "black";
+                ctx.strokeStyle = currentColor;
 
                 // Clear the current line and add the first point of the line
-                currentLine = {color: "black", userId: data.userId, timestamp: null, points: []};
+                currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
                 currentLine.points.push({first: e.offsetX, second: e.offsetY});
             }
@@ -208,7 +208,7 @@ function setup() {
                         deleteLineFromListWithIndex(listLines, indexLineToDelete);
 
                         if(isOnCurrentLine)
-                            currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+                            currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
                         // T: local deleting (END)
 
                         // T: remote deleting
@@ -234,11 +234,19 @@ function setup() {
                     currentLine.timestamp = timestamp;
                     console.log(currentLine.timestamp);
 
+                    let accessToken = retrieveToken();
+
                     axios.post(endPointForCreateLine, {
                       userId: data.userId,
                       groupId: data.groupId,
                       timestamp: timestamp,
                       line: currentLine,
+                    },
+                    {
+                        headers: {
+                            "Authorization": accessToken,
+                            "Content-Type": "application/json",
+                        }
                     }).then(resp => resp.data)
                 }
 
@@ -289,7 +297,7 @@ function setup() {
             // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
             // deleteLineFromList
             if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
-                currentLine = {color: "black",  userId: data.userId, timestamp: null, points: []};
+                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
             }
 
             // T: remove the line from the listLines
@@ -299,13 +307,23 @@ function setup() {
         function sendDeleteLine(lineToDelete) {
             let timestamp = Date.now();
             
-            axios.post(endPointForDeleteLine, {
+            let accessToken = retrieveToken();
+
+            axios.post(endPointForDeleteLine, 
+            {
                 userId: data.userId,
                 groupId: data.groupId,
                 timestamp: timestamp,
                 userIdOfLine: lineToDelete.userId,
                 timestampOfLine: lineToDelete.timestamp,
-            }).then(resp => resp.data)
+            },
+            {
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json",
+                }
+            }
+            ).then(resp => resp.data)
         }
 
         function deleteLineFromList(lines, userIdLineToDelete, timestampLineToDelete) {
@@ -334,35 +352,25 @@ function setup() {
 
 
 
-        fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
-        .then((response) => response.json())
-        .then((json) => { 
-            console.log(json); 
-            data.userId = json.userId;
 
-            // T: set the temporary userId
-            document.getElementById("username").textContent = "User" + data.userId
 
-            // T: write the code of the current groupId
-            document.getElementById("groupId").textContent = data.userId
-            
-            const connection = new signalR.HubConnectionBuilder()
-            // .withUrl(`${apiBaseUrl}/signalr`)
-            .withUrl(`/signalr?userId=` + data.userId)
-            .withAutomaticReconnect()
-            .configureLogging(signalR.LogLevel.Information)
-            .build()
-            
-            // T: Set the listener to the receiveing message (START)
-            // connection.on('newMessage', newMessage)
-            connection.on('receiveCreateLine', receiveCreateLine);
-            connection.on('receiveDeleteLine', receiveDeleteLine);
-            // T: Set the listener to the receiveing message (END)
+        // T: Create connection to signalR (START)
+        const connection = new signalR.HubConnectionBuilder()
+        // .withUrl(`${apiBaseUrl}/signalr`)
+        .withUrl(`/signalr?userId=` + data.userId)
+        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Information)
+        .build()
+        // T: Create connection to signalR (END)
 
-            connection.start()
-            .then(() => console.log("Started connection"))
-            .catch(console.error)
-        })
+        // T: Set the listener to the receiveing message (START)
+        connection.on('receiveCreateLine', receiveCreateLine);
+        connection.on('receiveDeleteLine', receiveDeleteLine);
+        // T: Set the listener to the receiveing message (END)
+
+        connection.start()
+        .then(() => console.log("Started connection"))
+        .catch(console.error)
     }
 }
 
@@ -430,8 +438,11 @@ function pointToSegmentDistance(p, v, w) {
 
 function moveCursor(position, cursor) {
 
-    let x = position.x - parseInt(cursor.style.width) / 2;
-    let y = position.y + parseInt(cursor.style.height) / 2;
+    // let x = position.x - parseInt(cursor.style.width) / 2;
+    // let y = position.y + parseInt(cursor.style.height) / 2;
+
+    let x = position.x - parseInt(tollerance) / 2;
+    let y = position.y + parseInt(tollerance) / 2;
 
     cursor.style.left = `${x}px`;
     cursor.style.top = `${y}px`;
@@ -441,12 +452,24 @@ function moveCursor(position, cursor) {
 
 
 function addToGroup() {
-    let groupId = document.getElementById("groupToAdd").value
+
+    const currentGroupLabel = document.getElementById('current-group-label');
+    const groupId = document.getElementById('group-name').value;
     
     data.groupId = groupId
-    document.getElementById("groupId").textContent = groupId
+    currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
-    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId).
+    let accessToken = retrieveToken();
+
+    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
+        {
+            method: "GET",
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": "application/json",
+            }
+        }        
+    ).
     then((response) => console.log("adding to group: " + response.status))
 }
 
@@ -455,12 +478,10 @@ document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
 
-window.addEventListener('load', setup)
-
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
 
-let joinGroupButton = document.getElementById("addGroup")
+let joinGroupButton = document.getElementById("add-group-button")
 joinGroupButton.addEventListener('click', addToGroup)
 
 console.log("You can start to draw")
