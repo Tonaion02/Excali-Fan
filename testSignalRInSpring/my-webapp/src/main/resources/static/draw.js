@@ -125,10 +125,10 @@ function update(ctx) {
 function setup() {    
 
     // T: retrieve the HTML element that represent the cursor in canvas
-    const cursor = document.getElementById("custom-cursor");
+    const cursor = document.getElementById("circleCursor");
 
     // T: set some properties of the cursor (START)
-    // cursor.style.display = "block";
+    cursor.style.display = "block";
     cursor.style.width = `${tollerance * 2}px`;
     cursor.style.height = `${tollerance * 2}px`;
 
@@ -185,7 +185,7 @@ function setup() {
             (e) => {
 
                 // T: move the cursor when the mouse is moved
-                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
+                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
@@ -436,24 +436,14 @@ function pointToSegmentDistance(p, v, w) {
 
 
 
-const customCursor = document.getElementById('custom-cursor');
+function moveCursor(position, cursor) {
 
-document.addEventListener('mousemove', (e) => {
-    customCursor.style.left = `${e.clientX}px`;
-    customCursor.style.top = `${e.clientY}px`;
-});
+    let x = position.x - parseInt(cursor.style.width) / 2;
+    let y = position.y + parseInt(cursor.style.height) / 2;
 
-// function moveCursor(position, cursor) {
-
-//     // let x = position.x - parseInt(cursor.style.width) / 2;
-//     // let y = position.y + parseInt(cursor.style.height) / 2;
-
-//     let x = position.x;
-//     let y = position.y;
-
-//     cursor.style.left = `${x}px`;
-//     cursor.style.top = `${y}px`;
-// }
+    cursor.style.left = `${x}px`;
+    cursor.style.top = `${y}px`;
+}
 
 
 
