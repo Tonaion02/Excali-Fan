@@ -145,7 +145,15 @@ function setup() {
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
     // T: set some properties of the cursor (END)
 
-    window.addEventListener('mousemove', (e) => { moveCursor({x: e.offsetX, y: e.offsetY}, cursor) });
+
+    
+    window.addEventListener("scroll", () => {
+        console.log("scrolling");
+
+        cursor.style.display = "none";  
+        cursor.offsetHeight;  // T: force recomputation
+        cursor.style.display = "block";
+    });
 
 
     if (canvas.getContext) {
@@ -188,7 +196,7 @@ function setup() {
             (e) => {
 
                 // T: move the cursor when the mouse is moved
-                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
+                moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
                                 
                 if(isDrawing) {
                     ctx.moveTo(lastX, lastY);
