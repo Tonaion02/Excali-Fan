@@ -441,8 +441,8 @@ function moveCursor(position, cursor) {
     // let x = position.x - parseInt(cursor.style.width) / 2;
     // let y = position.y + parseInt(cursor.style.height) / 2;
 
-    let x = position.x - parseInt(tollerance) / 2;
-    let y = position.y + parseInt(tollerance) / 2;
+    // let x = position.x - parseInt(tollerance) / 2;
+    // let y = position.y + parseInt(tollerance) / 2;
 
     cursor.style.left = `${x}px`;
     cursor.style.top = `${y}px`;
