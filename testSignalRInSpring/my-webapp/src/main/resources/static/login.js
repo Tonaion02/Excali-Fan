@@ -64,6 +64,12 @@ function extractEmailFromToken(accessToken) {
   return userEmail;
 }
 
+function retrieveToken() {
+  const tokenKey = Object.keys(sessionStorage).find(key => key.includes("accesstoken"));
+  const accessToken = sessionStorage.getItem(tokenKey);
+  console.log("Token found:", accessToken);
+}
+
 
 
 async function login() {

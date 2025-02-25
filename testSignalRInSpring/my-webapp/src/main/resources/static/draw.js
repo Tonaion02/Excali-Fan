@@ -239,11 +239,19 @@ function setup() {
                     currentLine.timestamp = timestamp;
                     console.log(currentLine.timestamp);
 
+                    let accessToken = retrieveToken();
+
                     axios.post(endPointForCreateLine, {
                       userId: data.userId,
                       groupId: data.groupId,
                       timestamp: timestamp,
                       line: currentLine,
+                    },
+                    {
+                        headers: {
+                            "Authorization": accessToken,
+                            "Content-Type": "application/json",
+                        }
                     }).then(resp => resp.data)
                 }
 
@@ -304,13 +312,23 @@ function setup() {
         function sendDeleteLine(lineToDelete) {
             let timestamp = Date.now();
             
-            axios.post(endPointForDeleteLine, {
+            let accessToken = retrieveToken();
+
+            axios.post(endPointForDeleteLine, 
+            {
                 userId: data.userId,
                 groupId: data.groupId,
                 timestamp: timestamp,
                 userIdOfLine: lineToDelete.userId,
                 timestampOfLine: lineToDelete.timestamp,
-            }).then(resp => resp.data)
+            },
+            {
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json",
+                }
+            }
+            ).then(resp => resp.data)
         }
 
         function deleteLineFromList(lines, userIdLineToDelete, timestampLineToDelete) {
@@ -477,7 +495,15 @@ function addToGroup() {
     data.groupId = groupId
     // document.getElementById("groupId").textContent = groupId
 
-    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId).
+    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
+        {
+            method: "GET",
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": "application/json",
+            }
+        }        
+    ).
     then((response) => console.log("adding to group: " + response.status))
 }
 
