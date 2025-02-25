@@ -136,8 +136,8 @@ public class TokenValidatorEntraId {
     private static boolean isIssuerValid(SignedJWT signedJWT) throws ParseException {
         String issuer = signedJWT.getJWTClaimsSet().getIssuer();
         return issuer != null &&
-               issuer.startsWith("https://sts.windows.net/") &&
-               issuer.endsWith("/");
+               issuer.startsWith("https://login.microsoftonline.com/") &&
+               issuer.endsWith("/v2.0");
     }
 
     /**

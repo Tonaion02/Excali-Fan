@@ -40,12 +40,12 @@ import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(()
 
 const loginRequest = {
   scopes: ["openid", "profile", "email", "api://b1453203-8719-4a2a-8cc6-96bf883a7e65/loginScope"],
-prompt: "select_account",
+  prompt: "select_account",
 };
 
 const tokenRequest = {
   scopes: ["openid", "profile", "email", "api://b1453203-8719-4a2a-8cc6-96bf883a7e65/loginScope"],
-prompt: "select_account",
+  prompt: "select_account",
 };
 
 async function login() {
