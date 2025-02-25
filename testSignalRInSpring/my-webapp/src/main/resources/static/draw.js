@@ -339,35 +339,56 @@ function setup() {
 
 
 
-        fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
-        .then((response) => response.json())
-        .then((json) => { 
-            console.log(json); 
-            data.userId = json.userId;
+        // fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
+        // .then((response) => response.json())
+        // .then((json) => { 
+        //     console.log(json); 
+        //     data.userId = json.userId;
 
-            // T: set the temporary userId
-            document.getElementById("username").textContent = "User" + data.userId
+        //     // T: set the temporary userId
+        //     document.getElementById("username").textContent = "User" + data.userId
 
-            // T: write the code of the current groupId
-            document.getElementById("groupId").textContent = data.userId
+        //     // T: write the code of the current groupId
+        //     document.getElementById("groupId").textContent = data.userId
             
-            const connection = new signalR.HubConnectionBuilder()
-            // .withUrl(`${apiBaseUrl}/signalr`)
-            .withUrl(`/signalr?userId=` + data.userId)
-            .withAutomaticReconnect()
-            .configureLogging(signalR.LogLevel.Information)
-            .build()
+        //     const connection = new signalR.HubConnectionBuilder()
+        //     // .withUrl(`${apiBaseUrl}/signalr`)
+        //     .withUrl(`/signalr?userId=` + data.userId)
+        //     .withAutomaticReconnect()
+        //     .configureLogging(signalR.LogLevel.Information)
+        //     .build()
             
-            // T: Set the listener to the receiveing message (START)
-            // connection.on('newMessage', newMessage)
-            connection.on('receiveCreateLine', receiveCreateLine);
-            connection.on('receiveDeleteLine', receiveDeleteLine);
-            // T: Set the listener to the receiveing message (END)
+        //     // T: Set the listener to the receiveing message (START)
+        //     // connection.on('newMessage', newMessage)
+        //     connection.on('receiveCreateLine', receiveCreateLine);
+        //     connection.on('receiveDeleteLine', receiveDeleteLine);
+        //     // T: Set the listener to the receiveing message (END)
 
-            connection.start()
-            .then(() => console.log("Started connection"))
-            .catch(console.error)
-        })
+        //     connection.start()
+        //     .then(() => console.log("Started connection"))
+        //     .catch(console.error)
+        // })
+
+
+
+
+        // T: Create connection to signalR (START)
+        const connection = new signalR.HubConnectionBuilder()
+        // .withUrl(`${apiBaseUrl}/signalr`)
+        .withUrl(`/signalr?userId=` + data.userId)
+        .withAutomaticReconnect()
+        .configureLogging(signalR.LogLevel.Information)
+        .build()
+        // T: Create connection to signalR (END)
+
+        // T: Set the listener to the receiveing message (START)
+        connection.on('receiveCreateLine', receiveCreateLine);
+        connection.on('receiveDeleteLine', receiveDeleteLine);
+        // T: Set the listener to the receiveing message (END)
+
+        connection.start()
+        .then(() => console.log("Started connection"))
+        .catch(console.error)
     }
 }
 

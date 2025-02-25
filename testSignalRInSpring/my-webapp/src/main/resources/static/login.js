@@ -110,16 +110,14 @@ async function login() {
       .then(response => {
         console.log("Status verification token:", response.status);
 
-        // T: TODO set boardSessionId correctly
         if(response.status == 200) {
           let boardSessionid = response.data;
           console.log("BoardSessionId: " + boardSessionid);
           
-
-          // T: TODO remove overlay of login and call setup function
-
-
           data.groupId = boardSessionid;
+          // T: WARNING for now we don't have a different UserId for each user
+          // so we simply copy the groupId
+          data.userId = data.groupId;
           
           const loginContainer = document.getElementById("login-container");
           loginContainer.style.display = "none";
