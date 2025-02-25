@@ -72,6 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
         alert('Funzione di salvataggio non implementata');
     });
 
+    // Gestione delle dimensioni del canvas
+    // canvas.width = window.innerWidth;
+    // canvas.height = window.innerHeight;
+    // window.addEventListener('resize', () => {
+    //     canvas.width = window.innerWidth;
+    //     canvas.height = window.innerHeight;
+    // });
+
     // Gestione del box di condivisione
     const shareButton = document.querySelector('.share-button');
     const shareBox = document.getElementById('share-box');
