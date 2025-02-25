@@ -48,6 +48,24 @@ const tokenRequest = {
   prompt: "select_account",
 };
 
+
+
+
+
+function extractEmailFromToken(accessToken) {
+  // T: Decrypt the token and get the payload
+  const payloadBase64 = accessToken.split(".")[1];
+  const payloadDecoded = JSON.parse(atob(payloadBase64));
+
+  // T: extrac email from payload(can be in email or in upn)
+  const userEmail = payloadDecoded.email || payloadDecoded.upn;
+  console.log("Email of user:", userEmail);
+
+  return userEmail;
+}
+
+
+
 async function login() {
   try {
     if (!msalInstance) {
@@ -76,10 +94,14 @@ async function login() {
 
     console.log("Access Token:", tokenResponse.accessToken);
 
+    // T: extract email from token
+    let email = extractEmailFromToken(tokenResponse.accessToken);
 
 
     // T: verify if the token is valid (START)
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/verifyLoginToken", {}, {
+    // T: TODO remove the email from the request, bad practice for the security
+    // T: NOTE: we use mic to say microsoft
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email, "provider" : "mic"}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"
