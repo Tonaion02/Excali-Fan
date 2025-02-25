@@ -110,13 +110,18 @@ async function login() {
       .then(response => {
         console.log("Status verification token:", response.status);
 
-        // T: TODO remove overlay of login and call setup function
-
         // T: TODO set boardSessionId correctly
         if(response.status == 200) {
           let boardSessionid = response.text();
           console.log("BoardSessionId: " + boardSessionid);
           
+
+          // T: TODO remove overlay of login and call setup function
+
+
+          data.groupId = boardSessionid;
+
+          // T: TODO call setup and advance in the application
         }
       })
       .catch(error => {
