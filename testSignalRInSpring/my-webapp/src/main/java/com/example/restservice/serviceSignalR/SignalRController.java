@@ -19,6 +19,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -54,6 +55,8 @@ public class SignalRController {
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
+
+
 
         String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserID: " + userId);
@@ -118,14 +121,19 @@ public class SignalRController {
     }
 
 
-    // T: This api is called from clients to send the token(loginToken) to the server
-    @PostMapping("/api/sendLoginToken")
-    public void sendLoginToken(HttpServletRequest request) {
+    // T: This api is used to test if the validation of the Token works
+    // T: The status of the HTTP response is:
+    // - 200 if the token is valid
+    // - 201 if the token is not valid
+    @PostMapping("/api/verifyLoginToken")
+    public void verifyLoginToken(HttpServletRequest request, HttpServletResponse response) {
         String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
             System.out.println("Invalid token");
+            response.setStatus(200);
         } else {
             System.out.println("Valid token");
+            response.setStatus(201);
         }
     }
 
