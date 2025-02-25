@@ -55,9 +55,6 @@ public class SignalRController {
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
-
-
-
         String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserID: " + userId);
         String accessKey = generateJwt(hubUrl, userId);

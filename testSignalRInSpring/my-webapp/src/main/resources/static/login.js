@@ -88,15 +88,15 @@ async function login() {
       .then(response => {
         console.log("Status verification token:", response.status);
         // T: TODO remove overlay of login and call setup function
-        
+
       })
       .catch(error => {
         console.error("Error during verification of token:", error);
-        // T: TODO add error message
-
       });
     // T: verify if the token is valid (END)
   } catch (error) {
     console.error("Login or token retrieval failed:", error);
+    // T: TODO add error message for unsucess login
+    
   }
 }
