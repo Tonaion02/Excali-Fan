@@ -9,6 +9,6 @@ public class InterceptorConfigurator implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(new TokenValidatorInterceptor());
+		registry.addInterceptor(new TokenValidatorInterceptor()).addPathPatterns(TokenValidatorInterceptor.patternToApply);
 	}
 }
