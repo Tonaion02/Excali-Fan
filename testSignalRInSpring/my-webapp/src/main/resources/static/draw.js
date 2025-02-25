@@ -334,7 +334,7 @@ function setup() {
 
 
 
-        fetch("https://rest-service-1735827345127.azurewebsites.net/api/templogin")
+        fetch("https://rest-service-1735827345127.azurewebsites.net/publicApi/templogin")
         .then((response) => response.json())
         .then((json) => { 
             console.log(json); 
