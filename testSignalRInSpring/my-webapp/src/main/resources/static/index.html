@@ -1,60 +1,63 @@
-<html>
-
+<!DOCTYPE html>
+<html lang="it">
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>Excali-Fan</title>
-
-  <style>
-    html, body {
-      width:  100%;
-      height: 100%;
-      margin: 0;
-    }
-
-    canvas {
-      cursor: none;
-    }
-
-    .circle-cursor {
-      position: relative; 
-      width: 5px;
-      height: 5px;
-      background-color: red; /* Circle color */
-      border-radius: 50%;
-      pointer-events: none; /* Prevent blocking clicks */ 
-      /* transform: translate(-50%, -50%); */
-      z-index: 9999;
-    } 
-
-    p {
-      display: inline;
-      padding-right: 10px;
-      padding-left: 10px;
-    }
-  </style>
-
-  <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@3.0.0/dist/browser/signalr.min.js"></script>  
-  <script src="https://cdn.jsdelivr.net/npm/axios@0.18.0/dist/axios.min.js"></script>
-  <script src="https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excali-Fun</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="login.css"> <!-- Importa lo stile della pagina di login -->
 </head>
-
-<body>  
-  <div id="header">
-    <p id="username"></p>
-    <p id="groupId"></p>
-    <input type="text" id="groupToAdd"/>
-    <button id="addGroup">join group</button>
-    <button id="login" >login</button>  
-  </div>
-
-  <div class="circle-cursor" id="circleCursor"></div>
-
-  <canvas id="canvas"></canvas>
-
-  <script src="login.js"></script>
-  <script src="draw.js"></script>
-
+<body>
+    <header>
+        <div class="menu-wrapper" id="menu-button">
+            <div class="menu-button">
+                <div class="line"></div>
+                <div class="line"></div>
+                <div class="line"></div>
+            </div>
+        </div>
+        <div class="toolbar">
+            <div class="tools-wrapper">
+                <div class="tool-container" id="pencil-container">
+                    <button class="tool" id="pencil-tool">
+                        <img src="logo-matita.png" alt="Matita">
+                    </button>
+                    <div class="color-dropdown" id="color-dropdown">
+                        <!-- Le opzioni di colore saranno aggiunte dinamicamente tramite JavaScript -->
+                    </div>
+                </div>
+                <div class="tool-container" id="eraser-container">
+                    <button class="tool" id="eraser-tool">
+                        <img src="logo-gomma.png" alt="Gomma">
+                    </button>
+                </div>
+            </div>
+        </div>
+        <button class="share-button">Condividi</button>
+        <div id="share-box" class="share-box">
+            <label id="current-group-label">GroupID corrente: None</label>
+            <input type="text" id="group-name" placeholder="Enter group name">
+            <button id="add-group-button">Join Group</button>
+        </div>
+        <div class="menu" id="menu">
+            <button id="export-image">
+                <img src="logo-dw.png" alt="Esporta" class="menu-icon">
+                Esporta immagine
+            </button>
+            <button id="save">
+                <img src="logo-ex.png" alt="Salva" class="menu-icon">
+                Salva
+            </button>
+        </div>
+    </header>
+    <main>
+        <canvas id="drawingCanvas"></canvas>
+    </main>
+    
+    <div id="login-container"></div> 
+    <script src="menu.js"></script> 
+    <script src="loginPage.js"></script>
+    <script src="login.js"></script>
+    <script src="draw.js"></script>
 </body>
-
 </html>

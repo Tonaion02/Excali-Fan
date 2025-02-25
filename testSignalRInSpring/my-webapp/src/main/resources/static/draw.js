@@ -146,6 +146,8 @@ function setup() {
         const ctx = canvas.getContext("2d");
 
         // Settings of canvas (START)
+        // T: WARNING remember to set a fixed size for the
+        // canvas
         ctx.canvas.width  = window.innerWidth;
         ctx.canvas.height = window.innerHeight;
         // Settings of canvas (END)
@@ -441,6 +443,11 @@ function moveCursor(position, cursor) {
 
 
 function addToGroup() {
+
+    const currentGroupLabel = document.getElementById('current-group-label');
+    const groupName = document.getElementById('group-name').value;
+    currentGroupLabel.textContent = `Current Group: ${groupName}`;
+
     let groupId = document.getElementById("groupToAdd").value
     
     data.groupId = groupId
@@ -460,7 +467,7 @@ window.addEventListener('load', setup)
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
 
-let joinGroupButton = document.getElementById("addGroup")
+let joinGroupButton = document.getElementById("add-group-button")
 joinGroupButton.addEventListener('click', addToGroup)
 
 console.log("You can start to draw")
