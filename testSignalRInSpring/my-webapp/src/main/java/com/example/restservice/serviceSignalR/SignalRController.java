@@ -130,10 +130,10 @@ public class SignalRController {
         String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
             System.out.println("Invalid token");
-            response.setStatus(200);
+            response.setStatus(201);
         } else {
             System.out.println("Valid token");
-            response.setStatus(201);
+            response.setStatus(200);
         }
     }
 
