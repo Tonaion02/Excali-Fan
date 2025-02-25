@@ -6,7 +6,7 @@ let listLines = []
 // an update.
 let currentLine = {color: "black",  userId: null, timestamp: null, points: []}
 
-const canvas = document.getElementById("canvas");
+const canvas = document.getElementById("drawingCanvas");
 
 // T: data that must be stored
 const data = {
