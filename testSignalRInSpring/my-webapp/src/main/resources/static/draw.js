@@ -172,11 +172,13 @@ function setup() {
         const colorDropdown = document.getElementById('color-dropdown');
 
         pencilContainer.addEventListener("click", () => {
+            console.log("eraser clicked");
             isDrawing = true;
             isDeleting = false;
         });
 
         eraserContainer.addEventListener("click", () => {
+            console.log("eraser clicked");
             isDeleting = true;
             isDrawing = false;
         });
@@ -251,7 +253,7 @@ function setup() {
         // Set EventListener for mouse up (START)
         canvas.addEventListener('mouseup', 
             () => {
-                if (isDrawing) {
+                if (isDrawing && isDoingAction) {
                     // T: commented because we add the line to the listLines
                     // only when we receive the lines from a newMessage
                     // listLines.push(currentLine);
@@ -277,7 +279,6 @@ function setup() {
                     }).then(resp => resp.data)
                 }
 
-                isDrawing = false;
                 isDoingAction = false;
             }
 
