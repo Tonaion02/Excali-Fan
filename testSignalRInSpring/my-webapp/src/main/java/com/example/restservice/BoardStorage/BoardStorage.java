@@ -42,13 +42,18 @@ public class BoardStorage {
         }
         
         this.objectMapper = new ObjectMapper();
+        System.out.println("Ended building BoardStorage");
     }
 
     public String loadBlob(String blobName) {
+        System.out.println("Starting loading blob from BoardStorage");
+
         BlobClient blobClient = containerClient.getBlobClient(blobName);
         if (!blobClient.exists()) {
             throw new RuntimeException("The blob with name: " + blobName + " doesn't exist");
         }
+
+        System.out.println("Starting with json");
 
         String json = new String(blobClient.downloadContent().toBytes(), StandardCharsets.UTF_8);
         String result = null;
