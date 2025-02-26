@@ -43,6 +43,8 @@ public class BoardStorage {
         if (!this.containerClient.exists()) {
             this.containerClient.create();
         }
+
+        System.out.println("PORCODIO2!!!!!!!!!!!!!!");
         
         this.objectMapper = new ObjectMapper();
         System.out.println("Ended building BoardStorage");
