@@ -172,7 +172,7 @@ function setup() {
         const colorDropdown = document.getElementById('color-dropdown');
 
         pencilContainer.addEventListener("click", () => {
-            console.log("eraser clicked");
+            console.log("pencil clicked");
             isDrawing = true;
             isDeleting = false;
         });
@@ -287,24 +287,24 @@ function setup() {
         // Set EventListener for mouse up (END)
 
         // Set EventListener for mouse that goes out of the canvas (START)
-        canvas.addEventListener('mouseleave', () => {
-            isDrawing = false;
-            isDeleting = false;
-        });
+        // canvas.addEventListener('mouseleave', () => {
+        //     isDrawing = false;
+        //     isDeleting = false;
+        // });
         // Set EventListener for mouse that goes out of the canvas (END)
 
         // T: Set EventListeners for the keys (START)
-        window.addEventListener('keydown', (event) => {
-            if(event.code == "KeyD") {
-                isDeleting = true;
-            }
-        });
+        // window.addEventListener('keydown', (event) => {
+        //     if(event.code == "KeyD") {
+        //         isDeleting = true;
+        //     }
+        // });
 
-        window.addEventListener("keyup", (event) => {
-            if(event.code == "KeyD") {
-                isDeleting = false;
-            }
-        })
+        // window.addEventListener("keyup", (event) => {
+        //     if(event.code == "KeyD") {
+        //         isDeleting = false;
+        //     }
+        // })
         // T: Set EventListeners for the keys (END)
 
 
