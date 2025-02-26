@@ -271,9 +271,16 @@ public class SignalRController {
 
     @PostMapping("/publicApi/testBlobStorage")
     public void testBlobStorage() {
+        try {
         BoardStorage boardStorage = new BoardStorage();
         System.out.println("Starting to extract bloab");
         boardStorage.loadBlob("t.json");
+        } catch(RuntimeException e) {
+            System.out.println("error:" + e.getMessage());
+        }
+        catch(Exception e) {
+            System.out.println("error:" + e.getMessage());
+        }
     }
 
 

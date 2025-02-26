@@ -40,8 +40,9 @@ public class BoardStorage {
         System.out.println("PORCODIO!!!!!!!!!!!!!!");
 
         this.containerClient = serviceClient.getBlobContainerClient(containerName);
-        System.out.println("PORCODIO2!!!!!!!!!!!!!!");
+        
         if (!this.containerClient.exists()) {
+            System.out.println("PORCODIO2!!!!!!!!!!!!!!");
             this.containerClient.create();
         }
         System.out.println("PORCODIO3!!!!!!!!!!!!!!");
