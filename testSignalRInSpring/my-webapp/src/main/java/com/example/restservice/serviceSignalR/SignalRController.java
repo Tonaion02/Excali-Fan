@@ -31,6 +31,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import com.example.restservice.Board.BoardsRuntimeStorage;
 import com.example.restservice.Board.Board;
 import com.example.restservice.Board.Command;
+import com.example.restservice.BoardStorage.BoardStorage;
 import com.azure.core.annotation.Post;
 import com.example.restservice.Keys;
 import com.example.restservice.TokenValidatorEntraId;
@@ -266,6 +267,12 @@ public class SignalRController {
 
         System.out.println("userInGroup: " + response.getStatus());
         System.out.println("userInGroup: " + response.getBody());
+    }
+
+    @PostMapping("/publicApi/testBlobStorage")
+    public void testBlobStorage() {
+        BoardStorage boardStorage = new BoardStorage();
+        boardStorage.loadBlob("t.json");
     }
 
 
