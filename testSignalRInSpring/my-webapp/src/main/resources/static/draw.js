@@ -190,11 +190,6 @@ function setup() {
         canvas.addEventListener('mousedown', 
             (e) => {
                 // T: if you are deleting the contents of the board, ignore the mousedown
-                // if(isDeleting)
-                //     return;
-
-                // isDrawing = true;
-
                 isDoingAction = true;
 
                 [lastX, lastY] = [e.offsetX, e.offsetY];
@@ -287,25 +282,11 @@ function setup() {
         // Set EventListener for mouse up (END)
 
         // Set EventListener for mouse that goes out of the canvas (START)
-        // canvas.addEventListener('mouseleave', () => {
-        //     isDrawing = false;
-        //     isDeleting = false;
-        // });
+        // T: TODO to handle the cursor out of the window, send the line and put isDointAction to false
+        canvas.addEventListener('mouseleave', () => {
+
+        });
         // Set EventListener for mouse that goes out of the canvas (END)
-
-        // T: Set EventListeners for the keys (START)
-        // window.addEventListener('keydown', (event) => {
-        //     if(event.code == "KeyD") {
-        //         isDeleting = true;
-        //     }
-        // });
-
-        // window.addEventListener("keyup", (event) => {
-        //     if(event.code == "KeyD") {
-        //         isDeleting = false;
-        //     }
-        // })
-        // T: Set EventListeners for the keys (END)
 
 
     
