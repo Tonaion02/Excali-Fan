@@ -34,6 +34,7 @@ const endPointForDeleteLine = `/api/deleteLine`;
 
 let isDrawing = false;
 let isDeleting = false;
+let isDoingAction = false;
 
 
 
@@ -163,14 +164,37 @@ function setup() {
         ctx.strokeStyle = currentColor;
         // Settings of the pen (END)
 
+
+
+        // Set EventListener for toolbar (START)
+        const pencilContainer = document.getElementById('pencil-container');
+        const eraserContainer = document.getElementById('eraser-container');
+        const colorDropdown = document.getElementById('color-dropdown');
+
+        pencilContainer.addEventListener("click", () => {
+            isDrawing = true;
+            isDeleting = false;
+        });
+
+        eraserContainer.addEventListener("click", () => {
+            isDeleting = true;
+            isDrawing = false;
+        });
+        // Set EventListener for toolbar (END)
+
+
+
         // Set EventListener for mouse down (START)
         canvas.addEventListener('mousedown', 
             (e) => {
                 // T: if you are deleting the contents of the board, ignore the mousedown
-                if(isDeleting)
-                    return;
+                // if(isDeleting)
+                //     return;
 
-                isDrawing = true;
+                // isDrawing = true;
+
+                isDoingAction = true;
+
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
                 ctx.beginPath();
@@ -187,38 +211,37 @@ function setup() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
-
-                // T: move the cursor when the mouse is moved
-                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
-                                
-                if(isDrawing) {
-                    ctx.moveTo(lastX, lastY);
-                    ctx.lineTo(e.offsetX, e.offsetY);
-                    ctx.stroke();
-                    [lastX, lastY] = [e.offsetX, e.offsetY];
+                
+                if(isDoingAction) {
+                    if(isDrawing) {
+                        ctx.moveTo(lastX, lastY);
+                        ctx.lineTo(e.offsetX, e.offsetY);
+                        ctx.stroke();
+                        [lastX, lastY] = [e.offsetX, e.offsetY];
+        
+                        currentLine.points.push({first: e.offsetX, second: e.offsetY});
+                    } 
+                    else if(isDeleting) {
+                        
+                        // T: check if the position of mouse is a point "around" a line
+                        let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
+                        let lineToDelete = result.lineToReturn;
+                        let indexLineToDelete = result.indexLineToReturn;
+                        let isOnCurrentLine = result.isPointOnCurrentLine;
+                        
+                        if(lineToDelete != null) {
+                            // T: local deleting (START)
+                            deleteLineFromListWithIndex(listLines, indexLineToDelete);
     
-                    currentLine.points.push({first: e.offsetX, second: e.offsetY});
-                } 
-                else if(isDeleting) {
-                    
-                    // T: check if the position of mouse is a point "around" a line
-                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
-                    let lineToDelete = result.lineToReturn;
-                    let indexLineToDelete = result.indexLineToReturn;
-                    let isOnCurrentLine = result.isPointOnCurrentLine;
-                    
-                    if(lineToDelete != null) {
-                        // T: local deleting (START)
-                        deleteLineFromListWithIndex(listLines, indexLineToDelete);
-
-                        if(isOnCurrentLine)
-                            currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
-                        // T: local deleting (END)
-
-                        // T: remote deleting
-                        sendDeleteLine(lineToDelete);
-
-                        update(ctx);
+                            if(isOnCurrentLine)
+                                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
+                            // T: local deleting (END)
+    
+                            // T: remote deleting
+                            sendDeleteLine(lineToDelete);
+    
+                            update(ctx);
+                        }
                     }
                 }
             }
@@ -255,7 +278,10 @@ function setup() {
                 }
 
                 isDrawing = false;
+                isDoingAction = false;
             }
+
+            
         );
         // Set EventListener for mouse up (END)
 
