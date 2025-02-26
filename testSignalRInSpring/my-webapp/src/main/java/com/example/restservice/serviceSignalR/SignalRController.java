@@ -272,6 +272,7 @@ public class SignalRController {
     @PostMapping("/publicApi/testBlobStorage")
     public void testBlobStorage() {
         BoardStorage boardStorage = new BoardStorage();
+        System.out.println("Starting to extract bloab");
         boardStorage.loadBlob("t.json");
     }
 
