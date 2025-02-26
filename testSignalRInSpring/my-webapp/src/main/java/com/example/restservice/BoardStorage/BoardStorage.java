@@ -19,7 +19,7 @@ import java.util.List;
 public class BoardStorage {
 
     private static String connectionString = null;
-    private static final String containerName = "board-storage";
+    private static final String containerName = "boardstorage";
 
     // T: These objects can't be static shared in the classes, it is
     // more useful to create a different object each time.
