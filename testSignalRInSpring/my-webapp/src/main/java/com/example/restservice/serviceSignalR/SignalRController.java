@@ -276,6 +276,7 @@ public class SignalRController {
         System.out.println("Starting to extract bloab");
         boardStorage.loadBlob("t.json");
         } catch(RuntimeException e) {
+            e.printStackTrace();
             System.out.println("error:" + e.getMessage());
         }
         catch(Exception e) {
