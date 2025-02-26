@@ -90,7 +90,7 @@
 		</dependency>
 
 
-		<!-- Azure Entra Id dependencie -->
+		<!-- Azure Entra Id dependencies -->
 		<dependency>
     		<groupId>com.nimbusds</groupId>
     		<artifactId>nimbus-jose-jwt</artifactId>
@@ -110,8 +110,17 @@
     		<version>0.21.2</version>
 		</dependency>
 
-
-
+		<!-- Azure Blob Storage dependencies -->
+		<dependency>
+		    <groupId>com.azure</groupId>
+		    <artifactId>azure-storage-blob</artifactId>
+		    <version>12.19.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>2.16.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
