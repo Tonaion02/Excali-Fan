@@ -34,6 +34,7 @@ const endPointForDeleteLine = `/api/deleteLine`;
 
 let isDrawing = false;
 let isDeleting = false;
+let isDoingAction = false;
 
 
 
@@ -163,14 +164,34 @@ function setup() {
         ctx.strokeStyle = currentColor;
         // Settings of the pen (END)
 
+
+
+        // Set EventListener for toolbar (START)
+        const pencilContainer = document.getElementById('pencil-container');
+        const eraserContainer = document.getElementById('eraser-container');
+        const colorDropdown = document.getElementById('color-dropdown');
+
+        pencilContainer.addEventListener("click", () => {
+            console.log("pencil clicked");
+            isDrawing = true;
+            isDeleting = false;
+        });
+
+        eraserContainer.addEventListener("click", () => {
+            console.log("eraser clicked");
+            isDeleting = true;
+            isDrawing = false;
+        });
+        // Set EventListener for toolbar (END)
+
+
+
         // Set EventListener for mouse down (START)
         canvas.addEventListener('mousedown', 
             (e) => {
                 // T: if you are deleting the contents of the board, ignore the mousedown
-                if(isDeleting)
-                    return;
+                isDoingAction = true;
 
-                isDrawing = true;
                 [lastX, lastY] = [e.offsetX, e.offsetY];
                 
                 ctx.beginPath();
@@ -187,38 +208,37 @@ function setup() {
         // Set EventListener for mouse move (START)        
         canvas.addEventListener('mousemove',
             (e) => {
-
-                // T: move the cursor when the mouse is moved
-                // moveCursor({x: e.offsetX, y: e.offsetY}, cursor);
-                                
-                if(isDrawing) {
-                    ctx.moveTo(lastX, lastY);
-                    ctx.lineTo(e.offsetX, e.offsetY);
-                    ctx.stroke();
-                    [lastX, lastY] = [e.offsetX, e.offsetY];
+                
+                if(isDoingAction) {
+                    if(isDrawing) {
+                        ctx.moveTo(lastX, lastY);
+                        ctx.lineTo(e.offsetX, e.offsetY);
+                        ctx.stroke();
+                        [lastX, lastY] = [e.offsetX, e.offsetY];
+        
+                        currentLine.points.push({first: e.offsetX, second: e.offsetY});
+                    } 
+                    else if(isDeleting) {
+                        
+                        // T: check if the position of mouse is a point "around" a line
+                        let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
+                        let lineToDelete = result.lineToReturn;
+                        let indexLineToDelete = result.indexLineToReturn;
+                        let isOnCurrentLine = result.isPointOnCurrentLine;
+                        
+                        if(lineToDelete != null) {
+                            // T: local deleting (START)
+                            deleteLineFromListWithIndex(listLines, indexLineToDelete);
     
-                    currentLine.points.push({first: e.offsetX, second: e.offsetY});
-                } 
-                else if(isDeleting) {
-                    
-                    // T: check if the position of mouse is a point "around" a line
-                    let result = isPointInLines({x: e.offsetX, y: e.offsetY}, listLines, tollerance);
-                    let lineToDelete = result.lineToReturn;
-                    let indexLineToDelete = result.indexLineToReturn;
-                    let isOnCurrentLine = result.isPointOnCurrentLine;
-                    
-                    if(lineToDelete != null) {
-                        // T: local deleting (START)
-                        deleteLineFromListWithIndex(listLines, indexLineToDelete);
-
-                        if(isOnCurrentLine)
-                            currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
-                        // T: local deleting (END)
-
-                        // T: remote deleting
-                        sendDeleteLine(lineToDelete);
-
-                        update(ctx);
+                            if(isOnCurrentLine)
+                                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
+                            // T: local deleting (END)
+    
+                            // T: remote deleting
+                            sendDeleteLine(lineToDelete);
+    
+                            update(ctx);
+                        }
                     }
                 }
             }
@@ -228,7 +248,7 @@ function setup() {
         // Set EventListener for mouse up (START)
         canvas.addEventListener('mouseup', 
             () => {
-                if (isDrawing) {
+                if (isDrawing && isDoingAction) {
                     // T: commented because we add the line to the listLines
                     // only when we receive the lines from a newMessage
                     // listLines.push(currentLine);
@@ -254,31 +274,19 @@ function setup() {
                     }).then(resp => resp.data)
                 }
 
-                isDrawing = false;
+                isDoingAction = false;
             }
+
+            
         );
         // Set EventListener for mouse up (END)
 
         // Set EventListener for mouse that goes out of the canvas (START)
+        // T: TODO to handle the cursor out of the window, send the line and put isDointAction to false
         canvas.addEventListener('mouseleave', () => {
-            isDrawing = false;
-            isDeleting = false;
+
         });
         // Set EventListener for mouse that goes out of the canvas (END)
-
-        // T: Set EventListeners for the keys (START)
-        window.addEventListener('keydown', (event) => {
-            if(event.code == "KeyD") {
-                isDeleting = true;
-            }
-        });
-
-        window.addEventListener("keyup", (event) => {
-            if(event.code == "KeyD") {
-                isDeleting = false;
-            }
-        })
-        // T: Set EventListeners for the keys (END)
 
 
     
