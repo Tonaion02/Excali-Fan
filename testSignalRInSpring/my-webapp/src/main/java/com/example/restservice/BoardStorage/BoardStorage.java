@@ -27,6 +27,7 @@ public class BoardStorage {
     private final ObjectMapper objectMapper;
 
     public BoardStorage() {
+        System.out.println("Starting building BoardStorage");
 
         // connectionString = "DefaultEndpointsProtocol=https;AccountName=TUO_ACCOUNT;AccountKey=TUO_KEY;EndpointSuffix=core.windows.net";
         // T: Build the connection string from the information of the storage account
@@ -35,6 +36,8 @@ public class BoardStorage {
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
+
+        System.out.println("PORCODIO!!!!!!!!!!!!!!");
 
         this.containerClient = serviceClient.getBlobContainerClient(containerName);
         if (!this.containerClient.exists()) {
