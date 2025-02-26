@@ -14,10 +14,6 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 public class Application {
 
     public static void main(String[] args) {
-        
-        var context = SpringApplication.run(Application.class, args);
-
-
         // T: URL of Azure Key Vault
         String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
 
@@ -36,10 +32,14 @@ public class Application {
 
 
         // T: Retrieve the key for Azure Blob Storage (START)
-        String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.accountKeyBlobStorage).getValue();
+        String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.storageAccountName).getValue();
         Keys.accountKeyBlobStorage = secretValueForAzureBlobStorage;
 
         System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
         // T: Retrieve the key for Azure Blob Storage (END)
+
+
+
+        var context = SpringApplication.run(Application.class, args);
     }
 }

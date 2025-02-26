@@ -30,7 +30,7 @@ public class BoardStorage {
 
         // connectionString = "DefaultEndpointsProtocol=https;AccountName=TUO_ACCOUNT;AccountKey=TUO_KEY;EndpointSuffix=core.windows.net";
         // T: Build the connection string from the information of the storage account
-        connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Keys.storageAccountName + ";AccountKey=" + ";EndpointSuffix=core.windows.net"; 
+        connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Keys.storageAccountName + ";AccountKey=" + Keys.accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
