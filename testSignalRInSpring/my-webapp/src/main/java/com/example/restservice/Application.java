@@ -10,6 +10,10 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
+
+
+
+
 @SpringBootApplication
 public class Application {
 

@@ -52,7 +52,16 @@ public class BoardStorage {
         System.out.println("Ended building BoardStorage");
     }
 
-    public String loadBlob(String blobName) {
+    public static class TestBlob {
+
+        public TestBlob(String content) {
+            this.content = content;
+        }
+
+        private String content;
+    }
+
+    public TestBlob loadBlob(String blobName) {
         System.out.println("Starting loading blob from BoardStorage");
 
         BlobClient blobClient = containerClient.getBlobClient(blobName);
@@ -69,7 +78,7 @@ public class BoardStorage {
         } catch(Exception e) {
             System.out.println("Error in blobstorage: " + e.getMessage());
         }
-        return result;
+        return new TestBlob(result);
     }
 
     // public void saveBoard(Board board, String blobName) throws Exception {
