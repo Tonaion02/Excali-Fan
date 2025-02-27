@@ -2,6 +2,7 @@ package com.example.restservice.serviceSignalR;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.sql.Wrapper;
 import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -284,12 +285,20 @@ public class SignalRController {
         return testBlob;
     }
 
+    public static class WrapperString {
+        public WrapperString(String blobName) {
+            this.blobName = blobName;
+        }
+
+        private String blobName;
+    }
+
     @PostMapping("/api/readFromBlobStorage")
-    public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody String blobName) {
+    public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
         String result = null;
         try {
             BoardStorage boardStorage = new BoardStorage();
-            result = boardStorage.loadBlob(blobName);
+            result = boardStorage.loadBlob(ws.blobName);
         } catch(Exception e) {
             e.printStackTrace();
         }
@@ -297,7 +306,6 @@ public class SignalRController {
     }
 
     public static class RequestBodyBlobToSave {
-
         public RequestBodyBlobToSave(String dataToSave, String blobName) {
             this.dataToSave = dataToSave;
             this.blobName = blobName;
