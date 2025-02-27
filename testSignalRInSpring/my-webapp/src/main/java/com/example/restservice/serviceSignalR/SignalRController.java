@@ -291,6 +291,7 @@ public class SignalRController {
 
 
 
+
     private String generateJwt(String audience, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
