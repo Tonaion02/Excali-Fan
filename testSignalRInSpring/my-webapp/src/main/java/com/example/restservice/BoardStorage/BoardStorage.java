@@ -72,13 +72,13 @@ public class BoardStorage {
         System.out.println("Starting with json");
 
         String json = new String(blobClient.downloadContent().toBytes(), StandardCharsets.UTF_8);
-        String result = null;
+        TestBlob result = null;
         try {
-            result = objectMapper.readValue(json, String.class);
+            result = objectMapper.readValue(json, TestBlob.class);
         } catch(Exception e) {
             System.out.println("Error in blobstorage: " + e.getMessage());
         }
-        return new TestBlob(result);
+        return result;
     }
 
     // public void saveBoard(Board board, String blobName) throws Exception {
