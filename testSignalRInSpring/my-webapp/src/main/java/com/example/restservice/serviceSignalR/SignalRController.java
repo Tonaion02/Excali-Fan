@@ -32,6 +32,7 @@ import com.example.restservice.Board.BoardsRuntimeStorage;
 import com.example.restservice.Board.Board;
 import com.example.restservice.Board.Command;
 import com.example.restservice.BoardStorage.BoardStorage;
+import com.example.restservice.BoardStorage.BoardStorage.TestBlob;
 import com.azure.core.annotation.Post;
 import com.example.restservice.Keys;
 import com.example.restservice.TokenValidatorEntraId;
@@ -270,11 +271,12 @@ public class SignalRController {
     }
 
     @PostMapping("/publicApi/testBlobStorage")
-    public void testBlobStorage() {
+    public TestBlob testBlobStorage() {
+        TestBlob testBlob = null;
         try {
         BoardStorage boardStorage = new BoardStorage();
         System.out.println("Starting to extract bloab");
-        boardStorage.loadBlob("t.json");
+        testBlob = boardStorage.loadBlob("t.json");
         } catch(RuntimeException e) {
             e.printStackTrace();
             System.out.println("error:" + e.getMessage());
@@ -282,6 +284,7 @@ public class SignalRController {
         catch(Exception e) {
             System.out.println("error:" + e.getMessage());
         }
+        return testBlob;
     }
 
 
