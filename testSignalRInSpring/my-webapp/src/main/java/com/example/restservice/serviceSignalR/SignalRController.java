@@ -285,9 +285,15 @@ public class SignalRController {
     }
 
     @PostMapping("/api/readFromBlobStorage")
-    public void readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody String blobName) {
-        BoardStorage boardStorage = new BoardStorage();
-        boardStorage.loadBlob(blobName);
+    public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody String blobName) {
+        String result = null;
+        try {
+            BoardStorage boardStorage = new BoardStorage();
+            result = boardStorage.loadBlob(blobName);
+        } catch(Exception e) {
+            System.out.println("AAAAAAAAAAAAAAA");
+        }
+        return result;
     }
 
     public static class RequestBodyBlobToSave {
