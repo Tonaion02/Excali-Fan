@@ -10,17 +10,14 @@ import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
+
+
+
+
 @SpringBootApplication
 public class Application {
 
     public static void main(String[] args) {
-        
-        var context = SpringApplication.run(Application.class, args);
-
-
-
-        // T: Retrieve the key for Azure SignalR (START)
-
         // T: URL of Azure Key Vault
         String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
 
@@ -30,7 +27,7 @@ public class Application {
                 .credential(new DefaultAzureCredentialBuilder().build())
                 .buildClient();
 
-        // T: Get secret from Key Vault
+        // T: Retrieve the key for Azure SignalR (START)
         String secretValueForSignalR = secretClient.getSecret(Keys.secretNameKeySignalR).getValue();
         Keys.keySignalR = secretValueForSignalR;
 
@@ -38,18 +35,15 @@ public class Application {
         // T: Retrieve the key for Azure SignalR (END)
 
 
+        // T: Retrieve the key for Azure Blob Storage (START)
+        String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.secretNameBlobStorageAccount).getValue();
+        Keys.accountKeyBlobStorage = secretValueForAzureBlobStorage;
 
-        // // T: Create interceptor to test if the user is logged (START)
-        // HandlerInterceptor customInterceptor = new TokenValidatorInterceptor();
-        // WebMvcConfigurer configurer = new WebMvcConfigurer() {
-        //     @Override
-        //     public void addInterceptors(InterceptorRegistry registry) {
-        //         registry.addInterceptor(customInterceptor).addPathPatterns("/**");
-        //     }
-        // };
-        
-        // context.getBeanFactory().registerSingleton("customWebConfig", configurer);
-        
-        // // T: Create interceptor to test if the user is logged (END)
+        System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
+        // T: Retrieve the key for Azure Blob Storage (END)
+
+
+
+        var context = SpringApplication.run(Application.class, args);
     }
 }

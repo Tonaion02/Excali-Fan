@@ -18,7 +18,8 @@ canvasContext.canvas.height = 2000;
 canvasContext.canvas.style.backgroundColor = "#121212";
 // Settings of canvas (END)
 
-// T: data that must be stored
+// T: data that must be maintained
+// T: WARNING probably name and this data are OUTDATED, review this part and the use of this data
 const data = {
     username: '',
     userId: '',
