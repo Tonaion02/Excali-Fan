@@ -52,6 +52,7 @@ public class BoardStorage {
         System.out.println("Ended building BoardStorage");
     }
 
+    // T: TEMPORARY to delete (START)
     public static class TestBlob {
 
         public TestBlob() {
@@ -68,7 +69,7 @@ public class BoardStorage {
         private String hello;
     }
 
-    public TestBlob loadBlob(String blobName) {
+    public TestBlob loadTestBlob(String blobName) {
         System.out.println("Starting loading blob from BoardStorage");
 
         BlobClient blobClient = containerClient.getBlobClient(blobName);
@@ -87,39 +88,26 @@ public class BoardStorage {
         }
         return result;
     }
+    // T: TEMPORARY to delete (END)
 
-    // public void saveBoard(Board board, String blobName) throws Exception {
-    //     String json = objectMapper.writeValueAsString(board);
-    //     BlobClient blobClient = containerClient.getBlobClient(blobName);
+    public String loadBlob(String blobName) {
 
-    //     try (ByteArrayInputStream dataStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
-    //         blobClient.upload(dataStream, json.length(), true);
-    //     }
-    // }
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
+        if (!blobClient.exists()) {
+            throw new RuntimeException("The blob with name: " + blobName + " doesn't exist");
+        }
 
-    // public Board loadBoard(String blobName) throws Exception {
-    //     BlobClient blobClient = containerClient.getBlobClient(blobName);
-    //     if (!blobClient.exists()) {
-    //         throw new RuntimeException("Il blob non esiste!");
-    //     }
+        String blob = new String(blobClient.downloadContent().toBytes(), StandardCharsets.UTF_8);
 
-    //     String json = new String(blobClient.downloadContent().toBytes(), StandardCharsets.UTF_8);
-    //     return objectMapper.readValue(json, Board.class);
-    // }
+        return blob;
+    }
 
-    // public static void main(String[] args) throws Exception {
-    //     BoardStorage storage = new BoardStorage();
+    public void saveBlob(String blobName, String dataToSave) throws Exception {
+        String json = objectMapper.writeValueAsString(dataToSave);
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
 
-    //     // Creazione oggetto di test
-    //     List<Pair> points = List.of(new Pair(10, 20), new Pair(30, 40));
-    //     List<Line> lines = List.of(new Line("red", points, "user123", System.currentTimeMillis()));
-    //     Board board = new Board();
-    //     board.lines.addAll(lines);
-
-    //     // Salvataggio e recupero
-    //     storage.saveBoard(board, "board1.json");
-    //     Board loadedBoard = storage.loadBoard("board1.json");
-
-    //     System.out.println("Board caricata: " + loadedBoard.lines.size() + " linee");
-    // }
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))) {
+            blobClient.upload(dataStream, json.length(), true);
+        }
+    }
 }

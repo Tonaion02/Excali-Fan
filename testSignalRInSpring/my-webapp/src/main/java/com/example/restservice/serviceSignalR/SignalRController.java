@@ -2,6 +2,7 @@ package com.example.restservice.serviceSignalR;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.sql.Wrapper;
 import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
@@ -28,9 +29,6 @@ import kong.unirest.Unirest;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.example.restservice.Board.BoardsRuntimeStorage;
-import com.example.restservice.Board.Board;
-import com.example.restservice.Board.Command;
 import com.example.restservice.BoardStorage.BoardStorage;
 import com.example.restservice.BoardStorage.BoardStorage.TestBlob;
 import com.azure.core.annotation.Post;
@@ -270,13 +268,14 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getBody());
     }
 
+    // T: TEMPORARY for testing of blobStorage (START)
     @PostMapping("/publicApi/testBlobStorage")
     public TestBlob testBlobStorage() {
         TestBlob testBlob = null;
         try {
         BoardStorage boardStorage = new BoardStorage();
         System.out.println("Starting to extract bloab");
-        testBlob = boardStorage.loadBlob("t.json");
+        testBlob = boardStorage.loadTestBlob("t.json");
         } catch(RuntimeException e) {
             e.printStackTrace();
             System.out.println("error:" + e.getMessage());
@@ -286,6 +285,65 @@ public class SignalRController {
         }
         return testBlob;
     }
+
+    public static class WrapperString {
+        private String blobName;
+    
+        // Default constructor (needed for deserialization)
+        public WrapperString() {}
+    
+        // Constructor with parameter
+        public WrapperString(String blobName) {
+            this.blobName = blobName;
+        }
+    
+        // Getter
+        public String getBlobName() {
+            return blobName;
+        }
+    
+        // Setter
+        public void setBlobName(String blobName) {
+            this.blobName = blobName;
+        }
+    }
+
+    @PostMapping("/api/readFromBlobStorage")
+    public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
+        String result = null;
+        try {
+            BoardStorage boardStorage = new BoardStorage();
+            result = boardStorage.loadBlob(ws.blobName);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static class RequestBodyBlobToSave {
+        public RequestBodyBlobToSave(String dataToSave, String blobName) {
+            this.dataToSave = dataToSave;
+            this.blobName = blobName;
+        }
+
+        private String dataToSave;
+        private String blobName;
+    }
+
+    @PostMapping("/api/saveToBlobStorage")
+    public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
+        BoardStorage boardStorage = new BoardStorage();
+
+        try {
+            boardStorage.saveBlob(requestBody.blobName, requestBody.dataToSave);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+            response.setStatus(201);
+        }
+    }
+    // T: TEMPORARY for testing of blobStorage (END)
+
 
 
 
