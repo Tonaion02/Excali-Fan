@@ -163,6 +163,9 @@ public class SignalRController {
         String boardId = Integer.toString(randomNumericBoardId);
 
 
+        
+        System.out.println("SessionID: " + request.getRequestedSessionId());
+
         // T: TODO autojoin the group
 
 
@@ -173,47 +176,43 @@ public class SignalRController {
 
         return boardId;
     }
+
+
+
+    public static class RequestBodyBlobToSave {
+        public RequestBodyBlobToSave(String dataToSave, String blobName) {
+            this.dataToSave = dataToSave;
+            this.blobName = blobName;
+        }
+
+        private String dataToSave;
+        private String blobName;
+    }
+
+    // T: This private api is used to retrieve the Blob of a Board
+    // identified by its name. The api return the board formatted
+    // like a json and then load in the "remote boards"(boards stored)
+    // in central memory of the Server the board.
+    @PostMapping("/api/loadBoard")
+    public String loadBoard(@RequestHeader("Authentication") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+        String boardJson = null;
+
+
+        return boardJson;
+    }
     
 
-
-    // @PostMapping("/api/messages")
-    // public void sendMessage(@RequestBody Command command) {
-
-    //     Board board = boards.boards.get(command.groupId);
-    //     synchronized (board) {
-    //         board.commands.add(command);
-    //         System.out.println("number of lines: " + board.commands.size());        
-    //     }
-        
-
-        
-    //     String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-    //     String accessKey = generateJwt(hubUrl, command.userId);
-
-
-
-    //     // System.out.print("List: ");
-    //     // for(var point : command.points) {
-    //     //     System.out.print("(" + point.first + "," + point.second +")");
-    //     // }
-    //     // System.out.println("");
-
-
-
-    //     HttpResponse<String> response =  Unirest.post(hubUrl)
-    //         .header("Content-Type", "application/json")
-    //         .header("Authorization", "Bearer " + accessKey)
-    //         .body(new SignalRMessage("newMessage", new Object[] { command }))
-    //         .asString();
-
-    //     System.out.println("sendMessage: " + response.getStatus());
-    //     System.out.println("sendMessage: " + response.getBody());
-    // }
 
     
 
 
 
+
+
+
+
+
+    // T: WARNING temporary, for now returns a temporary userId
     public static class Login {
         public Login(String userId) {
             this.userId = userId;
@@ -222,11 +221,6 @@ public class SignalRController {
         public String userId;
     }
 
-
-
-
-
-    // T: WARNING temporary, for now returns a temporary userId
     @GetMapping("/publicApi/templogin")
     public Login TempLogin() {
         int randomUserId = Math.abs(ThreadLocalRandom.current().nextInt());
@@ -268,6 +262,7 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getBody());
     }
 
+    // T: TEMPORARY for testing of blobStorage (START)
     @PostMapping("/publicApi/testBlobStorage")
     public TestBlob testBlobStorage() {
         TestBlob testBlob = null;
@@ -288,20 +283,16 @@ public class SignalRController {
     public static class WrapperString {
         private String blobName;
     
-        // Default constructor (needed for deserialization)
         public WrapperString() {}
     
-        // Constructor with parameter
         public WrapperString(String blobName) {
             this.blobName = blobName;
         }
     
-        // Getter
         public String getBlobName() {
             return blobName;
         }
     
-        // Setter
         public void setBlobName(String blobName) {
             this.blobName = blobName;
         }
@@ -319,15 +310,6 @@ public class SignalRController {
         return result;
     }
 
-    public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String dataToSave, String blobName) {
-            this.dataToSave = dataToSave;
-            this.blobName = blobName;
-        }
-
-        private String dataToSave;
-        private String blobName;
-    }
 
     @PostMapping("/api/saveToBlobStorage")
     public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
@@ -341,6 +323,7 @@ public class SignalRController {
             response.setStatus(201);
         }
     }
+    // T: TEMPORARY for testing of blobStorage (END)
 
 
 
