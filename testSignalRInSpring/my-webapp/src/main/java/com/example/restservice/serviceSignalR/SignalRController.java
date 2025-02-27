@@ -286,11 +286,25 @@ public class SignalRController {
     }
 
     public static class WrapperString {
+        private String blobName;
+    
+        // Default constructor (needed for deserialization)
+        public WrapperString() {}
+    
+        // Constructor with parameter
         public WrapperString(String blobName) {
             this.blobName = blobName;
         }
-
-        private String blobName;
+    
+        // Getter
+        public String getBlobName() {
+            return blobName;
+        }
+    
+        // Setter
+        public void setBlobName(String blobName) {
+            this.blobName = blobName;
+        }
     }
 
     @PostMapping("/api/readFromBlobStorage")
