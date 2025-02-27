@@ -291,7 +291,7 @@ public class SignalRController {
             BoardStorage boardStorage = new BoardStorage();
             result = boardStorage.loadBlob(blobName);
         } catch(Exception e) {
-            System.out.println("AAAAAAAAAAAAAAA");
+            e.printStackTrace();
         }
         return result;
     }
