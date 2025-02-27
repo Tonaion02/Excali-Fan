@@ -54,11 +54,11 @@ public class BoardStorage {
 
     public static class TestBlob {
 
-        public TestBlob(String content) {
-            this.content = content;
+        public TestBlob(String hello) {
+            this.hello = hello;
         }
 
-        private String content;
+        private String hello;
     }
 
     public TestBlob loadBlob(String blobName) {
