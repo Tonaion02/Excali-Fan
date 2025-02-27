@@ -28,9 +28,6 @@ import kong.unirest.Unirest;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-import com.example.restservice.Board.BoardsRuntimeStorage;
-import com.example.restservice.Board.Board;
-import com.example.restservice.Board.Command;
 import com.example.restservice.BoardStorage.BoardStorage;
 import com.example.restservice.BoardStorage.BoardStorage.TestBlob;
 import com.azure.core.annotation.Post;
@@ -276,7 +273,7 @@ public class SignalRController {
         try {
         BoardStorage boardStorage = new BoardStorage();
         System.out.println("Starting to extract bloab");
-        testBlob = boardStorage.loadBlob("t.json");
+        testBlob = boardStorage.loadTestBlob("t.json");
         } catch(RuntimeException e) {
             e.printStackTrace();
             System.out.println("error:" + e.getMessage());
@@ -286,6 +283,26 @@ public class SignalRController {
         }
         return testBlob;
     }
+
+    @PostMapping("/api/readFromBlobStorage")
+    public void readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody String blobName) {
+        BoardStorage boardStorage = new BoardStorage();
+        boardStorage.loadBlob(blobName);
+    }
+
+    @PostMapping("/api/saveToBlobStorage")
+    public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody String blobName, @RequestBody String dataToSave, HttpServletResponse response) {
+        BoardStorage boardStorage = new BoardStorage();
+
+        try {
+            boardStorage.saveBlob(blobName, dataToSave);
+        } catch(Exception e)
+        {
+            e.printStackTrace();
+            response.setStatus(201);
+        }
+    }
+
 
 
 
