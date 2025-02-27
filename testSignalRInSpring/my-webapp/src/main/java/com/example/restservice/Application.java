@@ -36,7 +36,7 @@ public class Application {
 
 
         // T: Retrieve the key for Azure Blob Storage (START)
-        String secretValueForAzureBlobStorage = secretClient.getSecret("blobStorage").getValue();
+        String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.secretNameBlobStorageAccount).getValue();
         Keys.accountKeyBlobStorage = secretValueForAzureBlobStorage;
 
         System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
