@@ -54,7 +54,14 @@ public class BoardStorage {
 
     public static class TestBlob {
 
-        public TestBlob(String hello) {
+        public TestBlob() {
+            
+        }
+
+        public String getHello() {
+            return hello;
+        }
+        public void setHello(String hello) {
             this.hello = hello;
         }
 
