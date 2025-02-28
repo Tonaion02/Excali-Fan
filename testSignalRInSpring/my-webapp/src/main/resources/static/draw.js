@@ -387,6 +387,9 @@ function setup() {
                 console.log("Started connection")
                 console.log("data.userId: " + data.userId)
                 console.log("data.groupId: " + data.groupId)
+
+                let accessToken = retrieveToken();
+
                 // T: autojoin the group (START)
                 fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
                     {
