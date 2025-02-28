@@ -111,7 +111,7 @@ async function login() {
     // T: verify if the token is valid (START)
     // T: TODO remove the email from the request, bad practice for the security
     // T: NOTE: we use mic to say microsoft
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email, "provider" : "mic"}, {
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"

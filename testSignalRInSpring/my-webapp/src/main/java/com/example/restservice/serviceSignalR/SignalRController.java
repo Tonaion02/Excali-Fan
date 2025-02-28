@@ -131,13 +131,31 @@ public class SignalRController {
         }
     }
 
+    public static class WrapperString {
+        private String string;
+    
+        public WrapperString() {}
+    
+        public WrapperString(String string) {
+            this.string = string;
+        }
+    
+        public String getString() {
+            return string;
+        }
+    
+        public void setString(String string) {
+            this.string = string;
+        }
+    }
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
-    public String Login(HttpServletRequest request, HttpServletResponse response) {
+    public String Login(@RequestBody WrapperString ws, HttpServletRequest request, HttpServletResponse response) {
         // T: WARNING in future retrieve the email directly from the AccessToken
-        String email = request.getParameter("email");
-        String provider = request.getParameter("provider");
+        String email = ws.string;
+
+        
         
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
@@ -163,11 +181,8 @@ public class SignalRController {
 
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
-        // boards.boards.put(email, new Board());     
-        System.out.println("email in login: " + email);
-        System.out.println(boards);
-        System.out.println(boards.boards);
-        System.out.println(boards.boards);
+        boards.boards.put(email, new Board());     
+
 
 
         // T: autojoin of the group (START)
