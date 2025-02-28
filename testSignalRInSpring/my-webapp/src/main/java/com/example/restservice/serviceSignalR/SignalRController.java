@@ -131,29 +131,29 @@ public class SignalRController {
         }
     }
 
-    public static class WrapperString {
-        private String string;
+    public static class WrapperEmail {
+        private String email;
     
-        public WrapperString() {}
+        public WrapperEmail() {}
     
-        public WrapperString(String string) {
-            this.string = string;
+        public WrapperEmail(String email) {
+            this.email = email;
         }
     
-        public String getString() {
-            return string;
+        public String getEmail() {
+            return email;
         }
     
-        public void setString(String string) {
-            this.string = string;
+        public void setEmail(String email) {
+            this.email = email;
         }
     }
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
-    public String Login(@RequestBody WrapperString ws, HttpServletRequest request, HttpServletResponse response) {
+    public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
         // T: WARNING in future retrieve the email directly from the AccessToken
-        String email = ws.string;
+        String email = we.email;
 
 
         
@@ -310,36 +310,35 @@ public class SignalRController {
         return testBlob;
     }
 
-    // public static class WrapperString {
-    //     private String blobName;
+    public static class WrapperString {
+        private String blobName;
     
-    //     public WrapperString() {}
+        public WrapperString() {}
     
-    //     public WrapperString(String blobName) {
-    //         this.blobName = blobName;
-    //     }
+        public WrapperString(String blobName) {
+            this.blobName = blobName;
+        }
     
-    //     public String getBlobName() {
-    //         return blobName;
-    //     }
+        public String getBlobName() {
+            return blobName;
+        }
     
-    //     public void setBlobName(String blobName) {
-    //         this.blobName = blobName;
-    //     }
-    // }
+        public void setBlobName(String blobName) {
+            this.blobName = blobName;
+        }
+    }
 
     @PostMapping("/api/readFromBlobStorage")
     public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
         String result = null;
         try {
             BoardStorage boardStorage = new BoardStorage();
-            result = boardStorage.loadBlob(ws.string);
+            result = boardStorage.loadBlob(ws.blobName);
         } catch(Exception e) {
             e.printStackTrace();
         }
         return result;
     }
-
 
     @PostMapping("/api/saveToBlobStorage")
     public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
