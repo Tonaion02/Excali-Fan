@@ -381,6 +381,7 @@ function setup() {
         connection.on('receiveDeleteLine', receiveDeleteLine);
         // T: Set the listener to the receiveing message (END)
 
+        // T: Started connection with Azure SignalR(START)
         connection.start()
         .then(() => 
             {
@@ -404,13 +405,23 @@ function setup() {
                 // T: autojoin the group (END)
             })
         .catch(console.error)
-
-
-
+        // T: Started connection with Azure SignalR(END)
     }
 }
 
 function isPointInLine(point, line, tollerance) {
+
+    // T: Handle special case in which we have a single point (START)
+    if(line.points.length == 1)
+    {
+        let distance = sqrt((line.points[0].first - point.first) ** 2 + (line.potins[0].second - point.second) ** 2);
+        if(distance < tollerance)
+            return true
+    }
+    // T: Handle special case in which we have a single point (END)
+
+
+
     precPoint = line.points[0]
     for(let indexPoint = 1; indexPoint < line.points.length; indexPoint++) {
         currentPoint = line.points[indexPoint];
