@@ -52,6 +52,7 @@ public class SignalRController {
     @Autowired
     public SignalRController(BoardsRuntimeStorage boards) {
         this.boards = boards;
+        System.out.println("boards: " + boards);
     }
 
     @PostMapping("/signalr/negotiate")
