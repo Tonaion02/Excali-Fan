@@ -52,17 +52,14 @@ public class SignalRController {
     @Autowired
     public SignalRController(BoardsRuntimeStorage boards) {
         this.boards = boards;
+        System.out.println("boards: " + boards);
     }
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
         String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
-        System.out.println("UserID: " + userId);
-        String accessKey = generateJwt(hubUrl, userId);
-
-        // T: WARNING temporary, we are adding the new board
-        // to the global hashmap
-        boards.boards.put(userId, new Board());        
+        System.out.println("UserSessionID: " + userId);
+        String accessKey = generateJwt(hubUrl, userId);   
 
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
@@ -134,13 +131,31 @@ public class SignalRController {
         }
     }
 
+    public static class WrapperEmail {
+        private String email;
+    
+        public WrapperEmail() {}
+    
+        public WrapperEmail(String email) {
+            this.email = email;
+        }
+    
+        public String getEmail() {
+            return email;
+        }
+    
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
-    public String Login(HttpServletRequest request, HttpServletResponse response) {
+    public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
         // T: WARNING in future retrieve the email directly from the AccessToken
-        String email = request.getParameter("email");
-        String provider = request.getParameter("provider");
+        String email = we.email;
+
+
         
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
@@ -161,59 +176,73 @@ public class SignalRController {
         // to exchange messages from clients
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = Integer.toString(randomNumericBoardId);
+        
 
 
-        // T: TODO autojoin the group
+        // T: WARNING temporary, we are adding the new board
+        // to the global hashmap
+        boards.boards.put(boardId, new Board());     
+
+
+
+        // // T: autojoin of the group (START)
+        // System.out.println("joining group");
+
+        // String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + randomNumericBoardId + "/users/" + email;
+        // String accessKey = generateJwt(hubUrl, email);
+
+        // HttpResponse<String> responseForAddGroup = Unirest.put(hubUrl)
+        //     .header("Content-Type", "application/json")
+        //     .header("Authorization", "Bearer " + accessKey)
+        //     .asString();
+
+        // System.out.println("addgroup: " + responseForAddGroup.getStatus());
+        // System.out.println("addgroup: " + responseForAddGroup.getBody());
+        // // T: autojoin of the group (END)
 
 
         // T: TODO check if the user is already "registered" in the database
         // T: TODO in the case is not already registered, register him
 
-        // T: TODO add the id of user to the session
-
         return boardId;
+    }
+
+
+
+    public static class RequestBodyBlobToSave {
+        public RequestBodyBlobToSave(String dataToSave, String blobName) {
+            this.dataToSave = dataToSave;
+            this.blobName = blobName;
+        }
+
+        private String dataToSave;
+        private String blobName;
+    }
+
+    // T: This private api is used to retrieve the Blob of a Board
+    // identified by its name. The api return the board formatted
+    // like a json and then load in the "remote boards"(boards stored)
+    // in central memory of the Server the board.
+    @PostMapping("/api/loadBoard")
+    public String loadBoard(@RequestHeader("Authentication") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+        String boardJson = null;
+
+
+        return boardJson;
     }
     
 
 
-    // @PostMapping("/api/messages")
-    // public void sendMessage(@RequestBody Command command) {
-
-    //     Board board = boards.boards.get(command.groupId);
-    //     synchronized (board) {
-    //         board.commands.add(command);
-    //         System.out.println("number of lines: " + board.commands.size());        
-    //     }
-        
-
-        
-    //     String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-    //     String accessKey = generateJwt(hubUrl, command.userId);
-
-
-
-    //     // System.out.print("List: ");
-    //     // for(var point : command.points) {
-    //     //     System.out.print("(" + point.first + "," + point.second +")");
-    //     // }
-    //     // System.out.println("");
-
-
-
-    //     HttpResponse<String> response =  Unirest.post(hubUrl)
-    //         .header("Content-Type", "application/json")
-    //         .header("Authorization", "Bearer " + accessKey)
-    //         .body(new SignalRMessage("newMessage", new Object[] { command }))
-    //         .asString();
-
-    //     System.out.println("sendMessage: " + response.getStatus());
-    //     System.out.println("sendMessage: " + response.getBody());
-    // }
-
     
 
 
 
+
+
+
+
+
+    // T: WARNING temporary, for now returns a temporary userId
     public static class Login {
         public Login(String userId) {
             this.userId = userId;
@@ -222,11 +251,6 @@ public class SignalRController {
         public String userId;
     }
 
-
-
-
-
-    // T: WARNING temporary, for now returns a temporary userId
     @GetMapping("/publicApi/templogin")
     public Login TempLogin() {
         int randomUserId = Math.abs(ThreadLocalRandom.current().nextInt());
@@ -289,20 +313,16 @@ public class SignalRController {
     public static class WrapperString {
         private String blobName;
     
-        // Default constructor (needed for deserialization)
         public WrapperString() {}
     
-        // Constructor with parameter
         public WrapperString(String blobName) {
             this.blobName = blobName;
         }
     
-        // Getter
         public String getBlobName() {
             return blobName;
         }
     
-        // Setter
         public void setBlobName(String blobName) {
             this.blobName = blobName;
         }
@@ -318,16 +338,6 @@ public class SignalRController {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String dataToSave, String blobName) {
-            this.dataToSave = dataToSave;
-            this.blobName = blobName;
-        }
-
-        private String dataToSave;
-        private String blobName;
     }
 
     @PostMapping("/api/saveToBlobStorage")

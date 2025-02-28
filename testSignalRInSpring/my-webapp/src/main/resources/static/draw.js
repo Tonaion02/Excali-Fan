@@ -382,8 +382,31 @@ function setup() {
         // T: Set the listener to the receiveing message (END)
 
         connection.start()
-        .then(() => console.log("Started connection"))
+        .then(() => 
+            {
+                console.log("Started connection")
+                console.log("data.userId: " + data.userId)
+                console.log("data.groupId: " + data.groupId)
+
+                let accessToken = retrieveToken();
+
+                // T: autojoin the group (START)
+                fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
+                    {
+                        method: "GET",
+                        headers: {
+                            "Authorization": accessToken,
+                            "Content-Type": "application/json",
+                        }
+                    }        
+                  ).
+                then((response) => console.log("adding to group during login: " + response.status))
+                // T: autojoin the group (END)
+            })
         .catch(console.error)
+
+
+
     }
 }
 
