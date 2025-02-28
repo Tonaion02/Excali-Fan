@@ -185,7 +185,7 @@ public class SignalRController {
 
         // T: TODO check if the user is already "registered" in the database
         // T: TODO in the case is not already registered, register him
-}catch(RuntimeException re) {re.printStackTrace();}
+}catch(RuntimeException re) {re.printStackTrace(); System.out.println(re.getMessage());}
         return boardId;
     }
 
