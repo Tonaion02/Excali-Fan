@@ -376,20 +376,6 @@ function setup() {
         .build()
         // T: Create connection to signalR (END)
 
-        // T: autojoin the group (START)
-        fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
-          {
-              method: "GET",
-              headers: {
-                  "Authorization": accessToken,
-                  "Content-Type": "application/json",
-              }
-          }        
-        ).
-        then((response) => console.log("adding to group during login: " + response.status))
-        // T: autojoin the group (END)
-
-
         // T: Set the listener to the receiveing message (START)
         connection.on('receiveCreateLine', receiveCreateLine);
         connection.on('receiveDeleteLine', receiveDeleteLine);
@@ -398,6 +384,20 @@ function setup() {
         connection.start()
         .then(() => console.log("Started connection"))
         .catch(console.error)
+
+
+        // T: autojoin the group (START)
+        fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
+            {
+                method: "GET",
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json",
+                }
+            }        
+          ).
+          then((response) => console.log("adding to group during login: " + response.status))
+          // T: autojoin the group (END)
     }
 }
 
