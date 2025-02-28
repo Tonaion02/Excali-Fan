@@ -155,7 +155,7 @@ public class SignalRController {
         // T: WARNING in future retrieve the email directly from the AccessToken
         String email = ws.string;
 
-        
+
         
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
@@ -310,30 +310,30 @@ public class SignalRController {
         return testBlob;
     }
 
-    public static class WrapperString {
-        private String blobName;
+    // public static class WrapperString {
+    //     private String blobName;
     
-        public WrapperString() {}
+    //     public WrapperString() {}
     
-        public WrapperString(String blobName) {
-            this.blobName = blobName;
-        }
+    //     public WrapperString(String blobName) {
+    //         this.blobName = blobName;
+    //     }
     
-        public String getBlobName() {
-            return blobName;
-        }
+    //     public String getBlobName() {
+    //         return blobName;
+    //     }
     
-        public void setBlobName(String blobName) {
-            this.blobName = blobName;
-        }
-    }
+    //     public void setBlobName(String blobName) {
+    //         this.blobName = blobName;
+    //     }
+    // }
 
     @PostMapping("/api/readFromBlobStorage")
     public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
         String result = null;
         try {
             BoardStorage boardStorage = new BoardStorage();
-            result = boardStorage.loadBlob(ws.blobName);
+            result = boardStorage.loadBlob(ws.string);
         } catch(Exception e) {
             e.printStackTrace();
         }
