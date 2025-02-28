@@ -58,11 +58,7 @@ public class SignalRController {
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
         String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserID: " + userId);
-        String accessKey = generateJwt(hubUrl, userId);
-
-        // T: WARNING temporary, we are adding the new board
-        // to the global hashmap
-        boards.boards.put(userId, new Board());        
+        String accessKey = generateJwt(hubUrl, userId);   
 
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
@@ -163,16 +159,31 @@ public class SignalRController {
         String boardId = Integer.toString(randomNumericBoardId);
 
 
-        
-        System.out.println("SessionID: " + request.getRequestedSessionId());
 
-        // T: TODO autojoin the group
+        // T: WARNING temporary, we are adding the new board
+        // to the global hashmap
+        boards.boards.put(email, new Board());     
+
+
+
+        // T: autojoin of the group (START)
+        System.out.println("joining group");
+
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + randomNumericBoardId + "/users/" + email;
+        String accessKey = generateJwt(hubUrl, email);
+
+        HttpResponse<String> responseForAddGroup = Unirest.put(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .asString();
+
+        System.out.println("addgroup: " + responseForAddGroup.getStatus());
+        System.out.println("addgroup: " + responseForAddGroup.getBody());
+        // T: autojoin of the group (END)
 
 
         // T: TODO check if the user is already "registered" in the database
         // T: TODO in the case is not already registered, register him
-
-        // T: TODO add the id of user to the session
 
         return boardId;
     }
