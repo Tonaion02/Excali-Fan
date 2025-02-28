@@ -158,7 +158,7 @@ public class SignalRController {
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = Integer.toString(randomNumericBoardId);
 
-
+        System.out.println("0000000");
 
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
