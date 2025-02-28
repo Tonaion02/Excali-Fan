@@ -157,9 +157,9 @@ public class SignalRController {
         // to exchange messages from clients
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = Integer.toString(randomNumericBoardId);
-
+        
         System.out.println("0000000");
-
+        try{
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
         boards.boards.put(email, new Board());     
@@ -184,7 +184,7 @@ public class SignalRController {
 
         // T: TODO check if the user is already "registered" in the database
         // T: TODO in the case is not already registered, register him
-
+}catch(RuntimeException re) {re.printStackTrace();}
         return boardId;
     }
 
