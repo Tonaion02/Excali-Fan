@@ -127,7 +127,7 @@ async function login() {
           data.groupId = boardSessionid;
           // T: WARNING for now we don't have a different UserId for each user
           // so we simply copy the groupId
-          data.userId = data.groupId;
+          data.userId = email;
           
           const loginContainer = document.getElementById("login-container");
           loginContainer.style.display = "none";
