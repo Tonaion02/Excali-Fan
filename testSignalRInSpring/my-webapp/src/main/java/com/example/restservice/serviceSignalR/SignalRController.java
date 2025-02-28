@@ -181,7 +181,7 @@ public class SignalRController {
 
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
-        boards.boards.put(email, new Board());     
+        boards.boards.put(boardId, new Board());     
 
 
 
