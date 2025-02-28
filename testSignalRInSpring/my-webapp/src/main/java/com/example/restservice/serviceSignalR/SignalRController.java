@@ -185,20 +185,20 @@ public class SignalRController {
 
 
 
-        // T: autojoin of the group (START)
-        System.out.println("joining group");
+        // // T: autojoin of the group (START)
+        // System.out.println("joining group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + randomNumericBoardId + "/users/" + email;
-        String accessKey = generateJwt(hubUrl, email);
+        // String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + randomNumericBoardId + "/users/" + email;
+        // String accessKey = generateJwt(hubUrl, email);
 
-        HttpResponse<String> responseForAddGroup = Unirest.put(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .asString();
+        // HttpResponse<String> responseForAddGroup = Unirest.put(hubUrl)
+        //     .header("Content-Type", "application/json")
+        //     .header("Authorization", "Bearer " + accessKey)
+        //     .asString();
 
-        System.out.println("addgroup: " + responseForAddGroup.getStatus());
-        System.out.println("addgroup: " + responseForAddGroup.getBody());
-        // T: autojoin of the group (END)
+        // System.out.println("addgroup: " + responseForAddGroup.getStatus());
+        // System.out.println("addgroup: " + responseForAddGroup.getBody());
+        // // T: autojoin of the group (END)
 
 
         // T: TODO check if the user is already "registered" in the database

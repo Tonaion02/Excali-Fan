@@ -129,6 +129,19 @@ async function login() {
           // so we simply copy the groupId
           data.userId = email;
           
+          // T: autojoin the group (START)
+          fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
+            {
+                method: "GET",
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json",
+                }
+            }        
+          ).
+          then((response) => console.log("adding to group during login: " + response.status))
+          // T: autojoin the group (END)
+
           const loginContainer = document.getElementById("login-container");
           loginContainer.style.display = "none";
           setup();
