@@ -17,5 +17,6 @@ Excali-Fun also allows to save to save boards in a storage.
 - Azure Function: It is used to handle some operations like downloading and uploading of the boards. 
 
 ## Project Architecture
+![architecture_image](doc/arc.png)
 
 ## Struttura della repository
