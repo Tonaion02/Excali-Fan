@@ -517,6 +517,11 @@ function addToGroup() {
     then((response) => console.log("adding to group: " + response.status))
 }
 
+
+
+// T: Load Board (START)
+// T: This function permits the loading of the board in the client
+// and trigger the loading on the server of the board 
 function loadBoard(boardId) {
 
     let accessToken = retrieveToken();
@@ -533,7 +538,6 @@ function loadBoard(boardId) {
         console.log("Reponse for the load of the Board");
         console.log(response);
 
-        // let boardTemp = JSON.parse(response.data);
         listLines = response.data.lines;
         update(canvasContext);        
     })
@@ -541,12 +545,53 @@ function loadBoard(boardId) {
         console.error("Errore:", error);
     });
 }
+// T: Load Board (END)
+
+
+
+// T: Save Board on Cloud (START)
+// T: This function permits to save a bord in cloud
+function saveOnCloud(boardSessionId, boardName)
+{
+    let accessToken = retrieveToken();
+    let email = extractEmailFromToken(accessToken);
+
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
+        { 
+            "blobName": boardName, 
+            "email": email,
+            "boardSessionId": boardSessionId
+        }, 
+        {
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": "application/json"
+            }
+        })
+        .then(response => {
+            console.log("Response status: " + response.status);
+
+            
+        })
+        .catch(error => {
+            console.error("Errore:", error);
+        });
+}
+// T: Save Board on Cloud (END)
 
 
 
 // T: disabilitate the context menu
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
+});
+
+let saveOnCloudButton = document.getElementById("save-option-cloud-button");
+saveOnCloudButton.addEventListener("click", () => {
+    let fileNameTextBox = document.getElementById("file-name");
+    let fileName = fileNameTextBox.value;
+
+    saveOnCloud(data.groupId, fileName);
 });
 
 let loginButton = document.getElementById("login")
