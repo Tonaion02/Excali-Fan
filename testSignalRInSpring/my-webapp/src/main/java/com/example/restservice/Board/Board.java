@@ -9,5 +9,17 @@ public class Board {
         this.lines = new ArrayList<>();
     }
 
+    public Board(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    public void setLines(List<Line> lines) {
+        this.lines = lines;
+    }
+
+    public List<Line> getLines() {
+        return lines;
+    }
+
     public List<Line> lines;
 }

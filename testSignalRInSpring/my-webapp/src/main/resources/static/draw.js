@@ -295,7 +295,7 @@ function setup() {
 
         function receiveCreateLine(command) {
             console.log("receiveCreateLine is called");
-            console.log(command.line.points)
+            console.log(command.line)
             
             listLines.push(command.line)
             update(ctx)
@@ -414,7 +414,7 @@ function isPointInLine(point, line, tollerance) {
     // T: Handle special case in which we have a single point (START)
     if(line.points.length == 1)
     {
-        let distance = sqrt((line.points[0].first - point.first) ** 2 + (line.potins[0].second - point.second) ** 2);
+        let distance = Math.sqrt((line.points[0].first - point.first) ** 2 + (line.potins[0].second - point.second) ** 2);
         if(distance < tollerance)
             return true
     }

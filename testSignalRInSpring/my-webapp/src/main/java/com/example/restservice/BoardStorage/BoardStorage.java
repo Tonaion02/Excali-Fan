@@ -11,6 +11,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.example.restservice.Board.Board;
+
 
 
 
@@ -51,6 +53,42 @@ public class BoardStorage {
         this.objectMapper = new ObjectMapper();
         System.out.println("Ended building BoardStorage");
     }
+
+    public String loadBoard(String blobName, String email) {
+        System.out.println("Starting loading blob from BoardStorage");
+
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
+        if (!blobClient.exists()) {
+            throw new RuntimeException("The blob with name: " + blobName + " doesn't exist");
+        }
+
+        System.out.println("Starting with json");
+
+        String boardJson = new String(blobClient.downloadContent().toBytes(), StandardCharsets.UTF_8);
+
+        return boardJson;
+    }
+
+    public Board parseBoardFromJson(String boardJson) {
+        Board board = null;
+
+        try {
+            board = objectMapper.readValue(boardJson, Board.class);
+        } catch(Exception e) {
+            System.out.println("Error in blobstorage: " + e.getMessage());
+        }
+
+        return board;
+    }
+
+    // T: TODO implement the saveBoard
+    public void saveBoard(String blobName, String email, String dataToSave) {
+
+    }
+
+
+
+
 
     // T: TEMPORARY to delete (START)
     public static class TestBlob {
