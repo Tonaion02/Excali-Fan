@@ -517,12 +517,12 @@ function addToGroup() {
     then((response) => console.log("adding to group: " + response.status))
 }
 
-function loadBoard() {
+function loadBoard(boardId) {
 
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/loadBoard", { "blobName": "simplyABlob", "email": email}, 
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/loadBoard", { "blobName": boardId, "email": email}, 
     {
         headers: {
             "Authorization": accessToken,
@@ -544,9 +544,6 @@ function loadBoard() {
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
-
-let loadButton = document.getElementById("lode-board");
-loadButton.addEventListener("click", loadBoard);
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)

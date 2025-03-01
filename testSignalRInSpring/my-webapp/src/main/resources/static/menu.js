@@ -80,7 +80,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Popola la lista di nomi
-    const names = ['Nome1', 'Nome2', 'Nome3', 'Nomefffffffffffffffffffffffffffffffffffffffffffffffffffffddddddddddddddddddd4', 'Nome5', 'Nome6', 'Nome7', 'Nosdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddme4', 'Nome5', 'Nome6', 'Nome7']; // Sostituisci con i nomi desiderati
+    // const names = ['Nome1', 'Nome2', 'Nome3', 'Nomefffffffffffffffffffffffffffffffffffffffffffffffffffffddddddddddddddddddd4', 'Nome5', 'Nome6', 'Nome7', 'Nosdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddme4', 'Nome5', 'Nome6', 'Nome7']; // Sostituisci con i nomi desiderati
+    const names = ['simplyABlob']
 
     names.forEach(name => {
         const wrapper = document.createElement('div');
@@ -99,7 +100,9 @@ document.addEventListener('DOMContentLoaded', () => {
         button.style.flexGrow = '1'; // Allow the button to expand
         button.style.whiteSpace = 'nowrap';
         button.addEventListener('click', () => {
-            alert(`Hai cliccato su ${name}`);
+            // alert(`Hai cliccato su ${name}`);
+            
+            loadBoard(name);
         });
 
         wrapper.appendChild(colorDiv);
