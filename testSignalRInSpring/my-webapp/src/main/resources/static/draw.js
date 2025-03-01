@@ -532,6 +532,9 @@ function loadBoard(boardId) {
     .then(response => {
         console.log("Reponse for the load of the Board");
         console.log(response);
+
+        let boardTemp = JSON.parse(response.data);
+        listLines = boardTemp.lines;        
     })
     .catch(error => {
         console.error("Errore:", error);
