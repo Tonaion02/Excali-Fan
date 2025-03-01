@@ -278,6 +278,8 @@ public class SignalRController {
         boards.boards.put(boardSessionId, board);
 
         
+        System.out.println("Succsefully added board in the server");
+
 
         return boardJson;
     }
