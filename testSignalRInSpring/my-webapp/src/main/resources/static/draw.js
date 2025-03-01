@@ -522,27 +522,31 @@ function loadBoard() {
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/loadBoard", { "blobName": "simplyABlob", "email": email}, {
-            headers: {
-                "Authorization": accessToken,
-                "Content-Type": "application/json"
-            }
-        })
-        .then(response => {
-            console.log("Reponse for the load of the Board");
-            console.log(response);
-
-            
-        })
-        .catch(error => {
-            console.error("Errore:", error);
-        });
+    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/loadBoard", { "blobName": "simplyABlob", "email": email}, 
+    {
+        headers: {
+            "Authorization": accessToken,
+            "Content-Type": "application/json"
+        }
+    })
+    .then(response => {
+        console.log("Reponse for the load of the Board");
+        console.log(response);
+    })
+    .catch(error => {
+        console.error("Errore:", error);
+    });
 }
+
+
 
 // T: disabilitate the context menu
 document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
+
+let loadButton = document.getElementById("lode-board");
+loadButton.addEventListener("click", loadBoard);
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
