@@ -61,18 +61,62 @@
             <input type="text" id="group-name" placeholder="Enter group name">
             <button id="add-group-button">Join Group</button>
         </div>
-        <div class="menu" id="menu">
-            <button id="export-image">
-                <img src="logo-dw.png" alt="Esporta" class="menu-icon">
-                Esporta immagine
+
+
+   <div class="menu" id="menu">
+        <button id="export-image">
+            <img src="logo-dw.png" alt="Esporta" class="menu-icon">
+               Salva in...
+         </button>
+
+
+	<div class="lode-board-container">
+            <button id="lode-board">
+        	<img src="logo-lode.png" alt="Lode Board" class="menu-icon">
+                Load Board
             </button>
-            <button id="save">
-                <img src="logo-ex.png" alt="Salva" class="menu-icon">
-                Salva
-            </button>
+        
+	<div class="lode-board-dropdown" id="lode-board-dropdown">
+            <!-- I nomi saranno aggiunti dinamicamente tramite JavaScript -->
+        </div>
+
+    </div>
+
+
         </div>
     </header>
     
+
+<div id="save-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-button">&times;</span>
+        <h2>Salva in...</h2>
+        <hr>
+        <div class="save-options">
+            <div class="save-option">
+                <img id="save-option-disco" src="logo-hd.png" alt="Disco">
+              
+                <button id="save-option-disco-button" class="save-button">Salva sul disco</button>
+            </div>
+            <div class="save-option">
+                <img id="save-option-cloud" src="logo-cloud.png" alt="Cloud">
+           
+                <button id="save-option-cloud-button" class="save-button">Salva sul Cloud</button>
+            </div>
+        </div>
+
+<p id="error-message" style="    color: red;
+    display: none;
+    margin-top: 21px;
+    margin-bottom: 0px;    
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;    
+    font-size: medium;">Inserire il nome del file.</p>
+
+<input type="text" id="file-name" placeholder="Nome del file" title="Il nome può contenere solo lettere, numeri, trattini alti (-) e bassi (_), ma non può iniziare con '-' o '_'">
+    </div>
+</div>
+
     <canvas id="drawingCanvas"></canvas>
     
     <div id="login-container"></div> 

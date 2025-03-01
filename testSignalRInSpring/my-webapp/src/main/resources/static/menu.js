@@ -54,42 +54,105 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuButton = document.getElementById('menu-button');
     const menu = document.getElementById('menu');
     const exportImageButton = document.getElementById('export-image');
-    const saveButton = document.getElementById('save');
+    const lodeBoardContainer = document.querySelector('.lode-board-container');
+    const lodeBoardDropdown = document.getElementById('lode-board-dropdown');
 
-    menuButton.addEventListener('click', () => {
-        menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+    menuButton.addEventListener('mousedown', (event) => {
+        event.stopPropagation(); // Impedisce la propagazione del click al documento
+        const isMenuVisible = menu.style.display === 'block';
+        menu.style.display = isMenuVisible ? 'none' : 'block';
     });
 
-    exportImageButton.addEventListener('click', () => {
-        const link = document.createElement('a');
-        link.download = 'disegno.png';
-        link.href = canvas.toDataURL();
-        link.click();
+    document.addEventListener('mousedown', (event) => {
+        if (menu.style.display === 'block' && !menu.contains(event.target) && event.target !== menuButton) {
+            menu.style.display = 'none';
+        }
     });
 
-    saveButton.addEventListener('click', () => {
-        // Aggiungi qui il codice per salvare il disegno
-        alert('Funzione di salvataggio non implementata');
-    });
+
 
     // Gestione del box di condivisione
     const shareButton = document.querySelector('.share-button');
     const shareBox = document.getElementById('share-box');
-    // const addGroupButton = document.getElementById('add-group-button');
-    // const currentGroupLabel = document.getElementById('current-group-label');
 
     shareButton.addEventListener('click', () => {
         shareBox.style.display = shareBox.style.display === 'block' ? 'none' : 'block';
     });
 
-    // addGroupButton.addEventListener('click', () => {
-    //     addGroup();
-    // });
+    // Popola la lista di nomi
+    const names = ['Nome1', 'Nome2', 'Nome3', 'Nomefffffffffffffffffffffffffffffffffffffffffffffffffffffddddddddddddddddddd4', 'Nome5', 'Nome6', 'Nome7', 'Nosdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddme4', 'Nome5', 'Nome6', 'Nome7']; // Sostituisci con i nomi desiderati
 
-    // function addGroup() {
-    //     const groupName = document.getElementById('group-name').value;
-    //     currentGroupLabel.textContent = `Current Group: ${groupName}`;
-        
-    //     // Add your logic here
-    // }
+    names.forEach(name => {
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.alignItems = 'center';
+
+        const colorDiv = document.createElement('div');
+        colorDiv.style.width = '4px';
+        colorDiv.style.height = '17px';
+        colorDiv.style.backgroundColor = '#8a87ff';
+        colorDiv.style.marginRight = '5px';
+        colorDiv.style.borderRadius = '4px';
+
+        const button = document.createElement('button');
+        button.textContent = name;
+        button.style.flexGrow = '1'; // Allow the button to expand
+        button.style.whiteSpace = 'nowrap';
+        button.addEventListener('click', () => {
+            alert(`Hai cliccato su ${name}`);
+        });
+
+        wrapper.appendChild(colorDiv);
+        wrapper.appendChild(button);
+        lodeBoardDropdown.appendChild(wrapper);
+    });
+
+    // Mostra la lista di nomi quando il cursore è sul bottone "Lode Board" o sulla lista stessa
+    lodeBoardContainer.addEventListener('mouseenter', () => {
+        lodeBoardDropdown.style.display = 'block';
+    });
+
+    lodeBoardContainer.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (!lodeBoardDropdown.matches(':hover') && !lodeBoardContainer.matches(':hover')) {
+                lodeBoardDropdown.style.display = 'none';
+            }
+        }, 125);
+    });
+
+    lodeBoardDropdown.addEventListener('mouseenter', () => {
+        lodeBoardDropdown.style.display = 'block';
+    });
+
+    lodeBoardDropdown.addEventListener('mouseleave', () => {
+        setTimeout(() => {
+            if (!lodeBoardDropdown.matches(':hover') && !lodeBoardContainer.matches(':hover')) {
+                lodeBoardDropdown.style.display = 'none';
+            }
+        }, 125);
+    });
+
+
+   lodeBoardDropdown.style.display = 'none';
+
+
+    const saveModal = document.getElementById('save-modal');
+    const saveButton = document.getElementById('export-image');
+    const closeButton = document.querySelector('.close-button');
+
+    saveButton.addEventListener('click', () => {
+        saveModal.style.display = 'block';
+    });
+
+    closeButton.addEventListener('click', () => {
+        saveModal.style.display = 'none';
+    });
+
+    window.addEventListener('click', (event) => {
+        if (event.target === saveModal) {
+            saveModal.style.display = 'none';
+        }
+    });
+
+
 });
