@@ -285,9 +285,10 @@ public class SignalRController {
     }
 
     public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String blobName, String email) {
+        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId) {
             this.blobName = blobName;
             this.email = email;
+            this.boardSessionId = boardSessionId;
         }
 
         public void setEmail(String email) {
@@ -306,15 +307,35 @@ public class SignalRController {
             return blobName;
         }
 
-        private String blobName;
-        private String email;
+        public void setBoardSessionId(String boardSessionId) {
+            this.boardSessionId = boardSessionId;
+        }
+
+        public String getBoardSessionId() {
+            return boardSessionId;
+        }
+
+        public String blobName;
+        public String email;
+        public String boardSessionId;
     }
 
     // T: This private api is used to persist the replica of Board
     // that are saved on server on the Blob Storage.
     @PostMapping("/api/saveBoard")
-    public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+    public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
 
+        Board board = boards.boards.get(requestBody.boardSessionId);
+
+        BoardStorage boardStorage = new BoardStorage();
+        try {
+            boardStorage.saveBoard(requestBody.blobName, requestBody.email, board);
+        } catch(Exception e) {
+            System.out.println("Error during saving of Board: " + e.getMessage());
+            e.printStackTrace();
+
+            response.setStatus(201);
+        }
     }
     
 

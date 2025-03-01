@@ -274,8 +274,180 @@ canvas {
     z-index: 0; /* Assicura che il canvas sia sotto la toolbar */
 }
 
+
+canvas:hover {
+	cursor: url('cursore-img.png')7 7, auto;
+}
+
+
 @media (max-width: 450px){
     .login-form{
         width: 100%;
     }
 }
+
+
+
+
+
+
+.lode-board-container {
+    position: relative;
+}
+
+.lode-board-dropdown {
+    display: none;
+    position: absolute;
+    top: 37px; /* Posiziona la tendina sotto il bottone */
+    left: 0;
+    background-color: #232329;
+    border-radius: 5px;
+    padding: 4px;
+    left: -5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    display: flex;
+    flex-direction: column; /* Disposizione verticale */
+    gap: 5px; /* Spazio tra i bottoni */
+    max-height: 250px; /* Limita l'altezza a circa 6 elementi */
+    overflow-y: auto; /* Aggiunge la scrollbar verticale */
+    min-width: 200px;
+    max-width: 350px; /* Limita la larghezza massima della scheda */
+    overflow-x: auto; /* Aggiunge la scrollbar orizzontale */
+}
+
+.lode-board-container:hover .lode-board-dropdown,
+.lode-board-dropdown:hover {
+    display: block;
+}
+
+.lode-board-dropdown button {
+    background-color: #232329;
+    color: #e0e0e0;
+    border: none;
+    padding: 4px;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: left;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    white-space: nowrap; /* Impedisce la rottura del testo */
+    overflow: visible; /* Mostra il testo completo */
+    max-width: 330px;
+}
+
+.lode-board-dropdown button:hover {
+    background-color: #37373e;
+}
+
+/* Stile per la scrollbar */
+.lode-board-dropdown::-webkit-scrollbar {
+    width: 6px; /* Riduce la larghezza della scrollbar verticale */
+    height: 6px; /* Riduce l'altezza della scrollbar orizzontale */
+}
+
+.lode-board-dropdown::-webkit-scrollbar-thumb {
+    background-color: #888;
+    border-radius: 4px;
+}
+
+.lode-board-dropdown::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+
+
+
+.modal {
+    display: none; /* Nascondi la scheda di default */
+    position: fixed;
+    z-index: 1000; /* Assicurati che sia sopra tutto il resto */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5); /* Sfondo semi-trasparente */
+}
+
+.modal-content {
+    background-color: #232329;
+    margin: 12% auto; /* Centra la scheda verticalmente */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Larghezza della scheda */
+    max-width: 520px; /* Larghezza massima della scheda */
+    position: relative;
+    border-radius: 10px; /* Bordi stondati */
+    color: #e0e0e0; /* Colore del testo */
+}
+
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.save-options {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.save-option {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0px 40px;
+}
+
+.save-option img {
+    display: block;
+    margin-bottom: 10px; /* Spazio tra l'immagine e il bottone */
+}
+
+.save-button {
+    padding: 10px;
+    background-color: #a8a5ff;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+}
+
+.save-button:hover {
+    background-color: #8a87ff;
+}
+
+#file-name {
+    display: block;
+    width: 96%;
+    padding: 10px;
+    margin-top: 20px;
+    border-radius: 5px;
+    background-color: #403e6a;
+    color: #e0e0e0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: 700;
+    border: none; /* Rimuove il bordo */
+    box-shadow: none; /* Rimuove eventuali ombre */
+}
+
+#save-option-cloud{
+    width: 189px;
+}
+
+#save-option-disco{
+    width: 138px;
+}
+

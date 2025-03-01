@@ -1,7 +1,7 @@
 package com.example.restservice.BoardStorage;
 
 import com.example.restservice.Keys;
-
+import com.azure.json.implementation.jackson.core.JsonProcessingException;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -82,8 +82,13 @@ public class BoardStorage {
     }
 
     // T: TODO implement the saveBoard
-    public void saveBoard(String blobName, String email, String dataToSave) {
+    public void saveBoard(String blobName, String email, Board board) throws Exception {
+        String boardJson = objectMapper.writeValueAsString(board);
+        BlobClient blobClient = containerClient.getBlobClient(blobName);
 
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
+            blobClient.upload(dataStream, boardJson.length(), true);
+        }
     }
 
 
