@@ -174,6 +174,7 @@ public class SignalRController {
         // T: generate a randomic number to identify the board
         // T: NOTE: we use this number to identify the board in persistence and like session
         // to exchange messages from clients
+        // T: WARNING: you can substitute that with UserId(email) + timestamp
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = Integer.toString(randomNumericBoardId);
         
@@ -181,24 +182,9 @@ public class SignalRController {
 
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
-        boards.boards.put(boardId, new Board());     
+        Board board = new Board();
+        boards.boards.put(boardId, board);     
 
-
-
-        // // T: autojoin of the group (START)
-        // System.out.println("joining group");
-
-        // String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + randomNumericBoardId + "/users/" + email;
-        // String accessKey = generateJwt(hubUrl, email);
-
-        // HttpResponse<String> responseForAddGroup = Unirest.put(hubUrl)
-        //     .header("Content-Type", "application/json")
-        //     .header("Authorization", "Bearer " + accessKey)
-        //     .asString();
-
-        // System.out.println("addgroup: " + responseForAddGroup.getStatus());
-        // System.out.println("addgroup: " + responseForAddGroup.getBody());
-        // // T: autojoin of the group (END)
 
 
         // T: TODO check if the user is already "registered" in the database
@@ -209,26 +195,126 @@ public class SignalRController {
 
 
 
-    public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String dataToSave, String blobName) {
-            this.dataToSave = dataToSave;
+
+
+    public static class RequestBodyBlobToLoad {
+        public RequestBodyBlobToLoad(String blobName, String email) {
+            this.blobName = blobName;
+            this.email = email;
+        }
+
+        public String getBlobName() {
+            return blobName;
+        }
+
+        public void setBlobName(String blobName) {
             this.blobName = blobName;
         }
 
-        private String dataToSave;
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
         private String blobName;
+        private String email;
     }
 
-    // T: This private api is used to retrieve the Blob of a Board
+    // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
     // like a json and then load in the "remote boards"(boards stored)
     // in central memory of the Server the board.
+    // T: WARNING remember to return the new BoardSessionId or find
+    // another solution
     @PostMapping("/api/loadBoard")
-    public String loadBoard(@RequestHeader("Authentication") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+    public String loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
         String boardJson = null;
+        
+        BoardStorage boardStorage = new BoardStorage();
+        boardJson = boardStorage.loadBoard(requestBody.blobName, requestBody.email);
+
+
+
+        // T: WARNING: you can substitute that with UserId(email) + timestamp
+        int numericBoardSessionId = Math.abs(ThreadLocalRandom.current().nextInt());
+        String boardSessionId = Integer.toString(numericBoardSessionId);
+
+
+
+        // T: autojoin the new group (START)
+        System.out.println("adding to group");
+
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + requestBody.email;
+        String accessKey = generateJwt(hubUrl, requestBody.email);
+
+        HttpResponse<String> response = Unirest.put(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .asString();
+
+        System.out.println("addgroup: " + response.getStatus());
+        System.out.println("addgroup: " + response.getBody());        
+        // T: autojoin the new group (END)
+
+
+
+        // T: parse the board in a board object from json (START)
+        Board board = null;
+        board = boardStorage.parseBoardFromJson(boardJson);
+
+        if(board == null)
+        {
+            System.out.println("FAILED TO LOAD BOARD");
+            return boardJson;
+        }
+        // T: parse the board in a board object from json (END)
+
+
+
+        // T: Add board to the collection of boards
+        boards.boards.put(boardSessionId, board);
+
+        
+        System.out.println("Succsefully added board in the server");
 
 
         return boardJson;
+    }
+
+    public static class RequestBodyBlobToSave {
+        public RequestBodyBlobToSave(String blobName, String email) {
+            this.blobName = blobName;
+            this.email = email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setBlobName(String blobName) {
+            this.blobName = blobName;
+        }
+
+        public String getBlobName() {
+            return blobName;
+        }
+
+        private String blobName;
+        private String email;
+    }
+
+    // T: This private api is used to persist the replica of Board
+    // that are saved on server on the Blob Storage.
+    @PostMapping("/api/saveBoard")
+    public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+
     }
     
 
@@ -328,30 +414,30 @@ public class SignalRController {
         }
     }
 
-    @PostMapping("/api/readFromBlobStorage")
-    public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
-        String result = null;
-        try {
-            BoardStorage boardStorage = new BoardStorage();
-            result = boardStorage.loadBlob(ws.blobName);
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+    // @PostMapping("/api/readFromBlobStorage")
+    // public String readFromBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody WrapperString ws) {
+    //     String result = null;
+    //     try {
+    //         BoardStorage boardStorage = new BoardStorage();
+    //         result = boardStorage.loadBlob(ws.blobName);
+    //     } catch(Exception e) {
+    //         e.printStackTrace();
+    //     }
+    //     return result;
+    // }
 
-    @PostMapping("/api/saveToBlobStorage")
-    public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
-        BoardStorage boardStorage = new BoardStorage();
+    // @PostMapping("/api/saveToBlobStorage")
+    // public void saveToBlobStorage(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
+    //     BoardStorage boardStorage = new BoardStorage();
 
-        try {
-            boardStorage.saveBlob(requestBody.blobName, requestBody.dataToSave);
-        } catch(Exception e)
-        {
-            e.printStackTrace();
-            response.setStatus(201);
-        }
-    }
+    //     try {
+    //         boardStorage.saveBlob(requestBody.blobName, requestBody.dataToSave);
+    //     } catch(Exception e)
+    //     {
+    //         e.printStackTrace();
+    //         response.setStatus(201);
+    //     }
+    // }
     // T: TEMPORARY for testing of blobStorage (END)
 
 
