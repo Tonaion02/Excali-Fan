@@ -534,7 +534,8 @@ function loadBoard(boardId) {
         console.log(response);
 
         // let boardTemp = JSON.parse(response.data);
-        listLines = response.data.lines;        
+        listLines = response.data.lines;
+        update(ctx);        
     })
     .catch(error => {
         console.error("Errore:", error);
