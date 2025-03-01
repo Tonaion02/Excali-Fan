@@ -230,7 +230,7 @@ public class SignalRController {
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")
-    public String loadBoard(@RequestHeader("Authentication") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
+    public String loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
         String boardJson = null;
         
         BoardStorage boardStorage = new BoardStorage();
@@ -311,7 +311,7 @@ public class SignalRController {
     // T: This private api is used to persist the replica of Board
     // that are saved on server on the Blob Storage.
     @PostMapping("/api/saveBoard")
-    public void saveBoard(@RequestHeader("Authentication") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
+    public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody) {
 
     }
     
