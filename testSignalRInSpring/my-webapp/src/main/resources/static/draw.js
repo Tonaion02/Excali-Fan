@@ -592,6 +592,9 @@ saveOnCloudButton.addEventListener("click", () => {
     let fileName = fileNameTextBox.value;
 
     saveOnCloud(data.groupId, fileName);
+
+    let windowFileManager = document.getElementById("save-modal");
+    windowFileManager.style.display = "none";
 });
 
 let loginButton = document.getElementById("login")
