@@ -83,12 +83,19 @@ public class BoardStorage {
 
     public void saveBoard(String boardStorageId, String precBoardStorageId, String email, Board board) throws Exception {
 
-        if(! boardStorageId.equals(precBoardStorageId)) {
-            BlobClient precBlobClient = containerClient.getBlobClient(email + "/" + precBoardStorageId);
-            precBlobClient.delete();
+        try {
+            if(! boardStorageId.equals(precBoardStorageId)) {
+                BlobClient precBlobClient = containerClient.getBlobClient(email + "/" + precBoardStorageId);
+                precBlobClient.delete();
+            }
+        // T: this is used to handle the situation in which there
+        // is not an old file with name precBoardStorageId to delete
+        } catch(BlobStorageException e) {
+            e.printStackTrace();
         }
-
         
+
+
 
         String boardJson = objectMapper.writeValueAsString(board);
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);

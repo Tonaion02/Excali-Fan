@@ -624,7 +624,7 @@ function saveOnCloud(boardSessionId, boardName)
         .then(response => {
             console.log("Response status: " + response.status);
 
-            if(boardName !== data.currentBoardStorageId) {
+            if(boardName != data.currentBoardStorageId) {
 
                 // T: Update the list of boardStorageIds (START)
                 // T: Update the list of boardStorageIds with the new file name
@@ -642,7 +642,25 @@ function saveOnCloud(boardSessionId, boardName)
 
                 setupLoadBoardWindow();
             }
+            else {
+
+                // T: update the list of boardStorageIds (START)
+                let found = false;
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId === boardName) {
+                        found = true;
+                    }
+                }
+
+                if(! found) {
+                    boardStorageIdsConst.push(boardName);
+                }
+                // T: update the list of boardStorageIds (END)
                 
+                setupLoadBoardWindow();
+            }
         })
         .catch(error => {
             console.error("Errore:", error);
@@ -664,7 +682,7 @@ function setupLoadBoardWindow() {
 
     boardStorageIdsConst.forEach(name => {
 
-        if(name !== data.currentBoardStorageId)
+        if(name != data.currentBoardStorageId)
         {
             const wrapper = document.createElement('div');
             wrapper.style.display = 'flex';
