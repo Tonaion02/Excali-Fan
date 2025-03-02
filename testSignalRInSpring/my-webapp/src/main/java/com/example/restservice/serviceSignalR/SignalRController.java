@@ -260,18 +260,18 @@ public class SignalRController {
             e.printStackTrace();
         }
         if(email == null) {
-            System.out.println("email of user retrieved from token: " + email);
+            System.out.println("email retrieved is null");
             return null;
         }
+        System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
-        
         
         
         
         String boardJson = null;
         
         BoardStorage boardStorage = new BoardStorage();
-        boardJson = boardStorage.loadBoard(requestBody.blobName, requestBody.email);
+        boardJson = boardStorage.loadBoard(requestBody.blobName, email);
 
 
 
@@ -284,8 +284,8 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + requestBody.email;
-        String accessKey = generateJwt(hubUrl, requestBody.email);
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
             .header("Content-Type", "application/json")
@@ -363,7 +363,18 @@ public class SignalRController {
     public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
 
         // T: Retrieve email from token (START)
-
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+        }
+        System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
 
 
@@ -371,7 +382,7 @@ public class SignalRController {
 
         BoardStorage boardStorage = new BoardStorage();
         try {
-            boardStorage.saveBoard(requestBody.blobName, requestBody.email, board);
+            boardStorage.saveBoard(requestBody.blobName, email, board);
         } catch(Exception e) {
             System.out.println("Error during saving of Board: " + e.getMessage());
             e.printStackTrace();
