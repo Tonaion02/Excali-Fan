@@ -569,8 +569,8 @@ function loadBoard(boardId) {
             console.log("Reponse for the load of the Board");
             console.log(response);
     
-            let lines = JSON.parse(response.data.boardJson);
-            listLines = lines;
+            let board = JSON.parse(response.data.boardJson);
+            listLines = board.lines;
     
             console.log(response.data.boardJson);
     
