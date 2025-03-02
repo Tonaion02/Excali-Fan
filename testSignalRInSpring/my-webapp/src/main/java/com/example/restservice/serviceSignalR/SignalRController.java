@@ -393,7 +393,7 @@ public class SignalRController {
     @PostMapping("/api/saveBoard")
     public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
 
-        System.out.println("precBlobName: " + requestBody.precBlobName);
+        System.out.println("precBlobName: " + requestBody.precBoardStorageId);
         System.out.println("blobName: " + requestBody.blobName);
 
         // T: Retrieve email from token (START)
@@ -418,7 +418,7 @@ public class SignalRController {
 
         BoardStorage boardStorage = new BoardStorage();
         try {
-            boardStorage.saveBoard(requestBody.blobName, requestBody.precBlobName, email, board);
+            boardStorage.saveBoard(requestBody.blobName, requestBody.precBoardStorageId, email, board);
         } catch(Exception e) {
             System.out.println("Error during saving of Board: " + e.getMessage());
             e.printStackTrace();
