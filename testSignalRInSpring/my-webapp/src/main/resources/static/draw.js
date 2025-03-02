@@ -653,7 +653,7 @@ function saveOnCloud(boardSessionId, boardName)
                     }
                 }
 
-                if(found == true) {
+                if(! found) {
                     boardStorageIdsConst.push(boardName);
                 }
                 // T: update the list of boardStorageIds (END)
