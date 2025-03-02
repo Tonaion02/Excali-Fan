@@ -207,14 +207,14 @@ function setup() {
               "Content-Type": "application/json"
             }
           })
-            .then(response => {
-              console.log("Risposta:", response.status);
-              boardStorageIdsConst = response.data;
-              setupLoadBoardWindow();              
-            })
-            .catch(error => {
-              console.error("Errore:", error);
-            });
+        .then(response => {
+          console.log("Risposta:", response.status);
+          boardStorageIdsConst = response.data;
+          setupLoadBoardWindow();              
+        })
+        .catch(error => {
+          console.error("Errore:", error);
+        });
         // T: Retrieve the list of boards (END)
 
 
@@ -571,6 +571,11 @@ function loadBoard(boardId) {
         console.log(response);
 
         listLines = response.data.lines;
+
+        data.currentBoardStorageId = boardId;
+
+        setupLoadBoardWindow();
+        
         update(canvasContext);        
     })
     .catch(error => {
