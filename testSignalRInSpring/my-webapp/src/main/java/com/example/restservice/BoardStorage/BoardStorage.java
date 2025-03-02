@@ -54,12 +54,12 @@ public class BoardStorage {
         System.out.println("Ended building BoardStorage");
     }
 
-    public String loadBoard(String blobName, String email) {
+    public String loadBoard(String boardPersistenceId, String email) {
         System.out.println("Starting loading blob from BoardStorage");
 
-        BlobClient blobClient = containerClient.getBlobClient(blobName);
+        BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardPersistenceId);
         if (!blobClient.exists()) {
-            throw new RuntimeException("The blob with name: " + blobName + " doesn't exist");
+            throw new RuntimeException("The blob with name: " + boardPersistenceId + " doesn't exist");
         }
 
         System.out.println("Starting with json");
@@ -81,7 +81,6 @@ public class BoardStorage {
         return board;
     }
 
-    // T: TODO implement the saveBoard
     public void saveBoard(String boardStorageId, String email, Board board) throws Exception {
         String boardJson = objectMapper.writeValueAsString(board);
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
@@ -91,6 +90,23 @@ public class BoardStorage {
         }
     }
 
+    // T: This function permits to retrieve the list of blobs
+    // contained in a directory(usually named with UserId)
+    public List<String> listBoards(String directory) throws Exception {
+
+        List<String> listBoards = new ArrayList<>();
+
+        // T: List boards in the directory (START)
+        System.out.println("boards in the " + directory + ":");
+        for (BlobItem blobItem : containerClient.listBlobsByHierarchy("/", new ListBlobsOptions().setPrefix(directory), null)) {
+            String blobName = blobItem.getName();
+            System.out.println(blobName);
+            listBoards.add(blobName);
+        }
+        // T: List boards in the directory (END)
+
+        return listBoards;
+    }
 
 
 

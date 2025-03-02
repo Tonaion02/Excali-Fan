@@ -57,7 +57,7 @@ function extractEmailFromToken(accessToken) {
   const payloadBase64 = accessToken.split(".")[1];
   const payloadDecoded = JSON.parse(atob(payloadBase64));
 
-  // T: extrac email from payload(can be in email or in upn)
+  // T: extract email from payload(can be in email or in upn)
   const userEmail = payloadDecoded.email || payloadDecoded.upn;
   console.log("Email of user:", userEmail);
 

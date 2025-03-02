@@ -187,6 +187,12 @@ function setup() {
 
 
 
+        // T: Retrieve the list of boards (START)
+        
+        // T: Retrieve the list of boards (END)
+
+
+
         // Set EventListener for mouse down (START)
         canvas.addEventListener('mousedown', 
             (e) => {
