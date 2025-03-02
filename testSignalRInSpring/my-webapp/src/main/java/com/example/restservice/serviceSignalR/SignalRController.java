@@ -339,10 +339,15 @@ public class SignalRController {
     }
 
     public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId) {
+        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId, String precBoardStorageId) {
             this.blobName = blobName;
             this.email = email;
             this.boardSessionId = boardSessionId;
+            this.precBoardStorageId = precBoardStorageId;
+        }
+
+        public RequestBodyBlobToSave() {
+
         }
 
         public void setEmail(String email) {
@@ -369,15 +374,27 @@ public class SignalRController {
             return boardSessionId;
         }
 
+        public String getPrecBoardStorageId() {
+            return precBoardStorageId;
+        }
+
+        public void setPrecBoardStorageId(String precBoardStorageId) {
+            this.precBoardStorageId = precBoardStorageId;
+        }
+
         public String blobName;
         public String email;
         public String boardSessionId;
+        public String precBoardStorageId;
     }
 
     // T: This private api is used to persist the replica of Board
     // that are saved on server on the Blob Storage.
     @PostMapping("/api/saveBoard")
     public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
+
+        System.out.println("precBlobName: " + requestBody.precBoardStorageId);
+        System.out.println("blobName: " + requestBody.blobName);
 
         // T: Retrieve email from token (START)
         String email = null;
@@ -395,12 +412,13 @@ public class SignalRController {
         // T: Retrieve email from token (END)
 
 
-
         Board board = boards.boards.get(requestBody.boardSessionId);
+
+
 
         BoardStorage boardStorage = new BoardStorage();
         try {
-            boardStorage.saveBoard(requestBody.blobName, email, board);
+            boardStorage.saveBoard(requestBody.blobName, requestBody.precBoardStorageId, email, board);
         } catch(Exception e) {
             System.out.println("Error during saving of Board: " + e.getMessage());
             e.printStackTrace();
@@ -426,6 +444,7 @@ public class SignalRController {
         }
         System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
+
 
 
         // T: Retrieve the list of boards (START)

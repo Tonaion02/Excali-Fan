@@ -583,7 +583,7 @@ function loadBoard(boardId) {
             console.log("UIIIIIIIIIIII");
     
             data.currentBoardStorageId = boardId;
-    
+
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
@@ -612,7 +612,8 @@ function saveOnCloud(boardSessionId, boardName)
         { 
             "blobName": boardName, 
             "email": email,
-            "boardSessionId": boardSessionId
+            "boardSessionId": boardSessionId,
+            "precBoardStorageId": data.currentBoardStorageId,
         }, 
         {
             headers: {
@@ -622,6 +623,26 @@ function saveOnCloud(boardSessionId, boardName)
         })
         .then(response => {
             console.log("Response status: " + response.status);
+
+            if(boardName !== data.currentBoardStorageId) {
+
+                // T: Update the list of boardStorageIds (START)
+                // T: Update the list of boardStorageIds with the new file name
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId === data.currentBoardStorageId) {
+                        boardStorageIdsConst[boardStorageIdIndex] = boardName;
+                    }
+                }
+                // T: Update the list of boardStorageIds (END)
+
+                // T: Update the current boardStorageId because it changed
+                data.currentBoardStorageId = boardName;
+
+                setupLoadBoardWindow();
+            }
+                
         })
         .catch(error => {
             console.error("Errore:", error);
@@ -702,7 +723,7 @@ document.addEventListener("contextmenu", function(event) {
 let saveOnCloudButton = document.getElementById("save-option-cloud-button");
 saveOnCloudButton.addEventListener("click", () => {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value;
+    let fileName = fileNameTextBox.value; 
 
     saveOnCloud(data.groupId, fileName);
 
