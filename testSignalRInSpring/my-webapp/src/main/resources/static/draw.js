@@ -642,6 +642,22 @@ function saveOnCloud(boardSessionId, boardName)
 
                 setupLoadBoardWindow();
             }
+            else {
+                // T: update the list of boardStorageIds (START)
+                let found = false;
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId === boardName) {
+                         found = true;
+                    }
+                }
+
+                if(found == true) {
+                    boardStorageIdsConst.push(boardName);
+                }
+                // T: update the list of boardStorageIds (END)
+            }
                 
         })
         .catch(error => {
