@@ -316,7 +316,7 @@ public class SignalRController {
         if(board == null)
         {
             System.out.println("FAILED TO LOAD BOARD");
-            return new LoadBoardResult(boardSessionId, boardJson);;
+            return new LoadBoardResult(boardSessionId, boardJson);
         }
         // T: parse the board in a board object from json (END)
 
@@ -329,7 +329,7 @@ public class SignalRController {
         System.out.println("Succsefully added board in the server");
 
 
-        return new LoadBoardResult(boardSessionId, boardJson);;
+        return new LoadBoardResult(boardSessionId, boardJson);
     }
 
     public static class RequestBodyBlobToSave {
