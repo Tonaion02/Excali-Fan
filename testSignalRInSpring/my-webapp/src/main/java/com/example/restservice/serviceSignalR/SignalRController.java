@@ -36,6 +36,9 @@ import com.example.restservice.Keys;
 import com.example.restservice.TokenValidatorEntraId;
 import com.example.restservice.Board.*;
 
+import com.nimbusds.jwt.SignedJWT;
+import java.text.ParseException;
+
 
 
 
@@ -148,15 +151,12 @@ public class SignalRController {
             this.email = email;
         }
     }
+
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
     public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
-        // T: WARNING in future retrieve the email directly from the AccessToken
-        String email = we.email;
-
-
-        
+                
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
@@ -169,6 +169,23 @@ public class SignalRController {
         }
         // T: verify if the token is valid (END)
 
+
+
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(loginToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email of user retrieved from token: " + email);
+            return null;
+        }
+        // T: Retrieve email from token (END)
+        
 
 
         // T: generate a randomic number to identify the board
@@ -225,12 +242,31 @@ public class SignalRController {
 
     // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
-    // like a json and then load in the "remote boards"(boards stored)
-    // in central memory of the Server the board.
+    // like a json and then load it in the "remote boards"(boards stored 
+    // in central memory of the Server) the board.
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")
     public String loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
+        
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email of user retrieved from token: " + email);
+            return null;
+        }
+        // T: Retrieve email from token (END)
+        
+        
+        
+        
         String boardJson = null;
         
         BoardStorage boardStorage = new BoardStorage();
@@ -325,6 +361,11 @@ public class SignalRController {
     @PostMapping("/api/saveBoard")
     public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
 
+        // T: Retrieve email from token (START)
+
+        // T: Retrieve email from token (END)
+
+
         Board board = boards.boards.get(requestBody.boardSessionId);
 
         BoardStorage boardStorage = new BoardStorage();
@@ -337,6 +378,8 @@ public class SignalRController {
             response.setStatus(201);
         }
     }
+
+
     
 
 
