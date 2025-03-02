@@ -198,8 +198,6 @@ function setup() {
 
 
         // T: Retrieve the list of boards (START) 
-        data.currentBoardStorageId = data.groupId;
-
         let accessToken = retrieveToken();
         axios.post("https://rest-service-1735827345127.azurewebsites.net/api/listBoards", {}, {
             headers: {
@@ -573,6 +571,9 @@ function loadBoard(boardId) {
         listLines = response.data.lines;
 
         data.currentBoardStorageId = boardId;
+
+        const boardStorageIdTextBox = document.getElementById("file-name");
+        boardStorageIdTextBox.value = data.currentBoardStorageId;
 
         setupLoadBoardWindow();
         
