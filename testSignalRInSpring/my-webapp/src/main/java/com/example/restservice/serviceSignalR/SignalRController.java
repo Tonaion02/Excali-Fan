@@ -339,10 +339,11 @@ public class SignalRController {
     }
 
     public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId) {
+        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId, String precBlobName) {
             this.blobName = blobName;
             this.email = email;
             this.boardSessionId = boardSessionId;
+            this.precBlobName = precBlobName;
         }
 
         public void setEmail(String email) {

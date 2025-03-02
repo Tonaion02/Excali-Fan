@@ -583,7 +583,7 @@ function loadBoard(boardId) {
             console.log("UIIIIIIIIIIII");
     
             data.currentBoardStorageId = boardId;
-    
+
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
