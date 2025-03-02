@@ -96,9 +96,20 @@ public class BoardStorage {
 
         List<String> listBoards = new ArrayList<>();
 
+        // // T: List boards in the directory (START)
+        // System.out.println("boards in the " + directory + ":");
+        // for (BlobItem blobItem : containerClient.listBlobs()) {
+        //     // if(! blobItem.isPrefix()) {
+        //         String blobName = blobItem.getName();
+        //         System.out.println(blobName);
+        //         listBoards.add(blobName);    
+        //     // }
+        // }
+        // // T: List boards in the directory (END)
+
         // T: List boards in the directory (START)
         System.out.println("boards in the " + directory + ":");
-        for (BlobItem blobItem : containerClient.listBlobs()) {
+        for (BlobItem blobItem : containerClient.listBlobsByHierarchy(directory + "/")) {
             // if(! blobItem.isPrefix()) {
                 String blobName = blobItem.getName();
                 System.out.println(blobName);
