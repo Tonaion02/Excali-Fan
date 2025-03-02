@@ -568,8 +568,10 @@ function loadBoard(boardId) {
         console.log("Reponse for the load of the Board");
         console.log(response);
 
-        listLines = response.data.lines;
+        let lines = JSON.parse(response.data.boardJson);
+        listLines = lines;
 
+        data.groupId = response.data.boardSessionId;
         data.currentBoardStorageId = boardId;
 
         const boardStorageIdTextBox = document.getElementById("file-name");
