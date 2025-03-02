@@ -624,8 +624,22 @@ function saveOnCloud(boardSessionId, boardName)
         .then(response => {
             console.log("Response status: " + response.status);
 
-            if(boardName !== data.currentBoardStorageId)
+            if(boardName !== data.currentBoardStorageId) {
+                // T: Update the current boardStorageId because it changed
                 data.currentBoardStorageId = boardName;
+
+                // T: Update the list of boardStorageIds (START)
+                // T: Update the list of boardStorageIds with the new file name
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId === data.currentBoardStorageId) {
+                        boardStorageIdsConst[boardStorageIdIndex] = boardName;
+                    }
+                }
+                // T: Update the list of boardStorageIds (END)
+            }
+                
         })
         .catch(error => {
             console.error("Errore:", error);
