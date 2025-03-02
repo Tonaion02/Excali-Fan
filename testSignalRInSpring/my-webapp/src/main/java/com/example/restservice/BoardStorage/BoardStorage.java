@@ -98,7 +98,7 @@ public class BoardStorage {
 
         // T: List boards in the directory (START)
         System.out.println("boards in the " + directory + ":");
-        for (BlobItem blobItem : containerClient.listBlobsByHierarchy(directory)) {
+        for (BlobItem blobItem : containerClient.listBlobs()) {
             if(! blobItem.isPrefix()) {
                 String blobName = blobItem.getName();
                 System.out.println(blobName);
