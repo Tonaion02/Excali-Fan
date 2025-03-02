@@ -209,6 +209,7 @@ function setup() {
           })
             .then(response => {
               console.log("Risposta:", response.status);
+              boardStorageIdsConst = response.data;
               setupLoadBoardWindow();              
             })
             .catch(error => {
