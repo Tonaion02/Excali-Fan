@@ -181,9 +181,10 @@ public class SignalRController {
             e.printStackTrace();
         }
         if(email == null) {
-            System.out.println("email of user retrieved from token: " + email);
+            System.out.println("email retrieved from token is null");
             return null;
         }
+        System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
         
 
