@@ -152,18 +152,18 @@ public class Line {
         }
         if (other instanceof Line) {
             Line otherLine = (Line) other;
-            return this.getId().equals(otherLine.getId());
+            return this.obatainId().equals(otherLine.obatainId());
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        final int idAsLong = (int) Long.parseLong(this.getId());
+        final int idAsLong = (int) Long.parseLong(this.obatainId());
         return idAsLong;
     }
 
-    public String getId() {
+    public String obatainId() {
         return userId + Long.toString(timestamp);
     }
 }

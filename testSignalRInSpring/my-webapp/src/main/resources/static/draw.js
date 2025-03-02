@@ -554,6 +554,10 @@ function addToGroup() {
 // and trigger the loading on the server of the board 
 function loadBoard(boardId) {
 
+    // Clear the current line and add the first point of the line
+    currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
+
+
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
@@ -634,6 +638,8 @@ function setupLoadBoardWindow() {
     // T: WARNING really inefficient way to update the content
     // of this dropdown menu
     lodeBoardDropdown.innerHTML = "";
+
+
 
     boardStorageIdsConst.forEach(name => {
 
