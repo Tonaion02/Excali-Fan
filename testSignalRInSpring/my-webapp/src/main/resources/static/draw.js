@@ -565,22 +565,29 @@ function loadBoard(boardId) {
         }
     })
     .then(response => {
-        console.log("Reponse for the load of the Board");
-        console.log(response);
-
-        let lines = JSON.parse(response.data.boardJson);
-        listLines = lines;
-
-        data.groupId = response.data.boardSessionId;
-        
-        data.currentBoardStorageId = boardId;
-
-        const boardStorageIdTextBox = document.getElementById("file-name");
-        boardStorageIdTextBox.value = data.currentBoardStorageId;
-
-        setupLoadBoardWindow();
-        
-        update(canvasContext);        
+        if(response != null) {
+            console.log("Reponse for the load of the Board");
+            console.log(response);
+    
+            let lines = JSON.parse(response.data.boardJson);
+            listLines = lines;
+    
+            console.log(response.data.boardJson);
+    
+            data.groupId = response.data.boardSessionId;
+            
+            console.log("UIIIIIIIIIIII");
+    
+            data.currentBoardStorageId = boardId;
+    
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.currentBoardStorageId;
+    
+            setupLoadBoardWindow();
+            
+            update(canvasContext);   
+        }
+     
     })
     .catch(error => {
         console.error("Errore:", error);
