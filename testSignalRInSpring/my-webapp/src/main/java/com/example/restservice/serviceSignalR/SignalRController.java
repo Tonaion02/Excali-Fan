@@ -96,6 +96,9 @@ public class SignalRController {
 
     @PostMapping("/api/createLine")
     public void createLine(@RequestBody CreateLineCommand command) {
+        try {
+
+        
         Board board = boards.boards.get(command.groupId);
         synchronized (board) {
             board.lines.add(command.line);
@@ -117,6 +120,9 @@ public class SignalRController {
 
         System.out.println("sendMessage: " + response.getStatus());
         System.out.println("sendMessage: " + response.getBody());
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        }   
     }
 
     // T: This api is used to test if the validation of the Token works
