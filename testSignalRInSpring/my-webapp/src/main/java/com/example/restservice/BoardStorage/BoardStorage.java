@@ -85,6 +85,8 @@ public class BoardStorage {
         String boardJson = objectMapper.writeValueAsString(board);
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
 
+        System.out.println("boardJson: " + boardJson);
+
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
             blobClient.upload(dataStream, boardJson.length(), true);
         }

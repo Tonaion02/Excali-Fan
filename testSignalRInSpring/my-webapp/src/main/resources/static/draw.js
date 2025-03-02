@@ -572,6 +572,7 @@ function loadBoard(boardId) {
         listLines = lines;
 
         data.groupId = response.data.boardSessionId;
+        
         data.currentBoardStorageId = boardId;
 
         const boardStorageIdTextBox = document.getElementById("file-name");
