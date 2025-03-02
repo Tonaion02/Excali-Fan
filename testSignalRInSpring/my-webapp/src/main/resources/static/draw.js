@@ -198,8 +198,6 @@ function setup() {
 
 
         // T: Retrieve the list of boards (START) 
-        data.currentBoardStorageId = data.groupId;
-
         let accessToken = retrieveToken();
         axios.post("https://rest-service-1735827345127.azurewebsites.net/api/listBoards", {}, {
             headers: {
@@ -207,14 +205,14 @@ function setup() {
               "Content-Type": "application/json"
             }
           })
-            .then(response => {
-              console.log("Risposta:", response.status);
-              boardStorageIdsConst = response.data;
-              setupLoadBoardWindow();              
-            })
-            .catch(error => {
-              console.error("Errore:", error);
-            });
+        .then(response => {
+          console.log("Risposta:", response.status);
+          boardStorageIdsConst = response.data;
+          setupLoadBoardWindow();              
+        })
+        .catch(error => {
+          console.error("Errore:", error);
+        });
         // T: Retrieve the list of boards (END)
 
 
@@ -567,11 +565,29 @@ function loadBoard(boardId) {
         }
     })
     .then(response => {
-        console.log("Reponse for the load of the Board");
-        console.log(response);
-
-        listLines = response.data.lines;
-        update(canvasContext);        
+        if(response != null) {
+            console.log("Reponse for the load of the Board");
+            console.log(response);
+    
+            let board = JSON.parse(response.data.boardJson);
+            listLines = board.lines;
+    
+            console.log(response.data.boardJson);
+    
+            data.groupId = response.data.boardSessionId;
+            
+            console.log("UIIIIIIIIIIII");
+    
+            data.currentBoardStorageId = boardId;
+    
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.currentBoardStorageId;
+    
+            setupLoadBoardWindow();
+            
+            update(canvasContext);   
+        }
+     
     })
     .catch(error => {
         console.error("Errore:", error);

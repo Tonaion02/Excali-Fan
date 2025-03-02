@@ -96,6 +96,9 @@ public class SignalRController {
 
     @PostMapping("/api/createLine")
     public void createLine(@RequestBody CreateLineCommand command) {
+        try {
+
+        
         Board board = boards.boards.get(command.groupId);
         synchronized (board) {
             board.lines.add(command.line);
@@ -117,6 +120,9 @@ public class SignalRController {
 
         System.out.println("sendMessage: " + response.getStatus());
         System.out.println("sendMessage: " + response.getBody());
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        }   
     }
 
     // T: This api is used to test if the validation of the Token works
@@ -242,6 +248,16 @@ public class SignalRController {
         private String email;
     }
 
+    public static class LoadBoardResult {
+        public LoadBoardResult(String boardSessionId, String boardJson) {
+            this.boardSessionId = boardSessionId;
+            this.boardJson = boardJson;
+        }
+
+        public String boardSessionId;
+        public String boardJson;
+    }
+
     // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
     // like a json and then load it in the "remote boards"(boards stored 
@@ -249,7 +265,7 @@ public class SignalRController {
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")
-    public String loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
+    public LoadBoardResult loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
         
         // T: Retrieve email from token (START)
         String email = null;
@@ -306,7 +322,7 @@ public class SignalRController {
         if(board == null)
         {
             System.out.println("FAILED TO LOAD BOARD");
-            return boardJson;
+            return new LoadBoardResult(boardSessionId, boardJson);
         }
         // T: parse the board in a board object from json (END)
 
@@ -319,7 +335,7 @@ public class SignalRController {
         System.out.println("Succsefully added board in the server");
 
 
-        return boardJson;
+        return new LoadBoardResult(boardSessionId, boardJson);
     }
 
     public static class RequestBodyBlobToSave {
