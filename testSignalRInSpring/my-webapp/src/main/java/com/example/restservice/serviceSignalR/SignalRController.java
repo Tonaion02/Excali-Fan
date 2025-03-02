@@ -407,6 +407,8 @@ public class SignalRController {
 
         Board board = boards.boards.get(requestBody.boardSessionId);
 
+
+        
         BoardStorage boardStorage = new BoardStorage();
         try {
             boardStorage.saveBoard(requestBody.blobName, requestBody.precBlobName, email, board);

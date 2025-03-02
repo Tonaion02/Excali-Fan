@@ -612,7 +612,8 @@ function saveOnCloud(boardSessionId, boardName)
         { 
             "blobName": boardName, 
             "email": email,
-            "boardSessionId": boardSessionId
+            "boardSessionId": boardSessionId,
+            "precBoardStorageId": data.currentBoardStorageId,
         }, 
         {
             headers: {
@@ -622,6 +623,9 @@ function saveOnCloud(boardSessionId, boardName)
         })
         .then(response => {
             console.log("Response status: " + response.status);
+
+            if(boardName !== data.currentBoardStorageId)
+                data.currentBoardStorageId = boardName;
         })
         .catch(error => {
             console.error("Errore:", error);
@@ -702,7 +706,7 @@ document.addEventListener("contextmenu", function(event) {
 let saveOnCloudButton = document.getElementById("save-option-cloud-button");
 saveOnCloudButton.addEventListener("click", () => {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value;
+    let fileName = fileNameTextBox.value; 
 
     saveOnCloud(data.groupId, fileName);
 
