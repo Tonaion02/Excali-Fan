@@ -82,9 +82,9 @@ public class BoardStorage {
     }
 
     // T: TODO implement the saveBoard
-    public void saveBoard(String blobName, String email, Board board) throws Exception {
+    public void saveBoard(String boardStorageId, String email, Board board) throws Exception {
         String boardJson = objectMapper.writeValueAsString(board);
-        BlobClient blobClient = containerClient.getBlobClient(blobName);
+        BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
 
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
             blobClient.upload(dataStream, boardJson.length(), true);
