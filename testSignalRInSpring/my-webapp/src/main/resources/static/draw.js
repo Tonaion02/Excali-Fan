@@ -643,21 +643,29 @@ function saveOnCloud(boardSessionId, boardName)
                 setupLoadBoardWindow();
             }
             else {
+                console.log("qui");
+
                 // T: update the list of boardStorageIds (START)
                 let found = false;
                 for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    console.log("qui5");
                     let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
 
                     if(boardStorageId === boardName) {
-                         found = true;
+                        console.log("qui4");
+                        found = true;
                     }
                 }
 
                 if(! found) {
                     boardStorageIdsConst.push(boardName);
+
+                    console.log("qui2");
                 }
                 // T: update the list of boardStorageIds (END)
                 
+
+                console.log("qui3");
                 setupLoadBoardWindow();
             }
                 
