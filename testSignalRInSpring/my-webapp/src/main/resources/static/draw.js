@@ -624,7 +624,7 @@ function saveOnCloud(boardSessionId, boardName)
         .then(response => {
             console.log("Response status: " + response.status);
 
-            if(boardName !== data.currentBoardStorageId) {
+            if(boardName != data.currentBoardStorageId) {
 
                 // T: Update the list of boardStorageIds (START)
                 // T: Update the list of boardStorageIds with the new file name
