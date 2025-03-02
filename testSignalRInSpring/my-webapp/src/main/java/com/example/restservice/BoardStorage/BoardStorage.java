@@ -99,11 +99,10 @@ public class BoardStorage {
         // T: List boards in the directory (START)
         System.out.println("boards in the " + directory + "/:");
         for (BlobItem blobItem : containerClient.listBlobsByHierarchy(directory + "/")) {
-            // if(! blobItem.isPrefix()) {
-                String blobName = blobItem.getName();
-                System.out.println(blobName);
-                listBoards.add(blobName);    
-            // }
+            String blobName = blobItem.getName();
+            blobName = blobName.substring(blobName.indexOf("/"));
+            System.out.println(blobName);
+            listBoards.add(blobName);    
         }
         // T: List boards in the directory (END)
 
