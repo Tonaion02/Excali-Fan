@@ -95,6 +95,25 @@ document.addEventListener('DOMContentLoaded', () => {
         colorDiv.style.marginRight = '5px';
         colorDiv.style.borderRadius = '4px';
 
+        // Create the download button
+        const downloadButton = document.createElement('button');
+        downloadButton.style.backgroundColor = 'transparent';
+        downloadButton.style.border = 'none';
+        downloadButton.style.cursor = 'pointer';
+        downloadButton.style.marginRight = '10px';
+        downloadButton.style.width = '20px'; // Add some space between the buttons
+
+        const downloadIcon = document.createElement('img');
+        downloadIcon.src = 'logo-dw.png';
+        downloadIcon.alt = 'Download';
+        downloadIcon.style.height = '20px'; // Adjust the size as needed
+
+        downloadButton.appendChild(downloadIcon);
+
+        downloadButton.addEventListener('click', () => {
+            alert(`Download ${name}`);
+        });
+
         const button = document.createElement('button');
         button.textContent = name;
         button.style.flexGrow = '1'; // Allow the button to expand
@@ -106,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         wrapper.appendChild(colorDiv);
+        wrapper.appendChild(downloadButton); // Add the download button to the wrapper
         wrapper.appendChild(button);
         lodeBoardDropdown.appendChild(wrapper);
     });

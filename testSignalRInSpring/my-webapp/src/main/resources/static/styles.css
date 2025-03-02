@@ -333,7 +333,7 @@ canvas:hover {
     font-weight: 700;
     white-space: nowrap; /* Impedisce la rottura del testo */
     overflow: visible; /* Mostra il testo completo */
-    max-width: 330px;
+    max-width: 300px;
 }
 
 .lode-board-dropdown button:hover {
