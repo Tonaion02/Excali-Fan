@@ -24,8 +24,10 @@ const data = {
     username: '',
     userId: '',
     groupId: '',
+    currentBoardStorageId: null
 }
 
+let boardStorageIdsConst = [];
 
 
 const endPointForCreateLine = `/api/createLine`;
@@ -184,6 +186,36 @@ function setup() {
             isDrawing = false;
         });
         // Set EventListener for toolbar (END)
+
+
+
+        // T: Set like default boardStorageId the groupId (START)
+        data.currentBoardStorageId = data.groupId;
+        const boardStorageIdTextBox = document.getElementById("file-name");
+        boardStorageIdTextBox.value = data.currentBoardStorageId;
+        // T: Set like default boardStorageId the groupId (END)
+
+
+
+        // T: Retrieve the list of boards (START) 
+        data.currentBoardStorageId = data.groupId;
+
+        let accessToken = retrieveToken();
+        axios.post("https://rest-service-1735827345127.azurewebsites.net/api/listBoards", {}, {
+            headers: {
+              "Authorization": accessToken,
+              "Content-Type": "application/json"
+            }
+          })
+            .then(response => {
+              console.log("Risposta:", response.status);
+              boardStorageIdsConst = response.data;
+              setupLoadBoardWindow();              
+            })
+            .catch(error => {
+              console.error("Errore:", error);
+            });
+        // T: Retrieve the list of boards (END)
 
 
 
@@ -570,14 +602,73 @@ function saveOnCloud(boardSessionId, boardName)
         })
         .then(response => {
             console.log("Response status: " + response.status);
-
-            
         })
         .catch(error => {
             console.error("Errore:", error);
         });
 }
 // T: Save Board on Cloud (END)
+
+
+
+// T: setup the window to load the board (START)
+function setupLoadBoardWindow() {
+
+    const lodeBoardDropdown = document.getElementById('lode-board-dropdown');
+    // T: WARNING really inefficient way to update the content
+    // of this dropdown menu
+    lodeBoardDropdown.innerHTML = "";
+
+    boardStorageIdsConst.forEach(name => {
+
+        if(name !== data.currentBoardStorageId)
+        {
+            const wrapper = document.createElement('div');
+            wrapper.style.display = 'flex';
+            wrapper.style.alignItems = 'center';
+    
+            const colorDiv = document.createElement('div');
+            colorDiv.style.width = '4px';
+            colorDiv.style.height = '17px';
+            colorDiv.style.backgroundColor = '#8a87ff';
+            colorDiv.style.marginRight = '5px';
+            colorDiv.style.borderRadius = '4px';
+    
+            // Create the download button
+            const downloadButton = document.createElement('button');
+            downloadButton.style.backgroundColor = 'transparent';
+            downloadButton.style.border = 'none';
+            downloadButton.style.cursor = 'pointer';
+            downloadButton.style.marginRight = '10px';
+            downloadButton.style.width = '20px'; // Add some space between the buttons
+    
+            const downloadIcon = document.createElement('img');
+            downloadIcon.src = 'logo-dw.png';
+            downloadIcon.alt = 'Download';
+            downloadIcon.style.height = '20px'; // Adjust the size as needed
+    
+            downloadButton.appendChild(downloadIcon);
+    
+            downloadButton.addEventListener('click', () => {
+                alert(`Download ${name}`);
+            });
+    
+            const button = document.createElement('button');
+            button.textContent = name;
+            button.style.flexGrow = '1'; 
+            button.style.whiteSpace = 'nowrap';
+            button.addEventListener('click', () => {
+                loadBoard(name);
+            });
+    
+            wrapper.appendChild(colorDiv);
+            wrapper.appendChild(downloadButton); // Add the download button to the wrapper
+            wrapper.appendChild(button);
+            lodeBoardDropdown.appendChild(wrapper);
+        }
+    });
+}
+// T: setup the window to load the board (END)
 
 
 
@@ -592,6 +683,9 @@ saveOnCloudButton.addEventListener("click", () => {
     let fileName = fileNameTextBox.value;
 
     saveOnCloud(data.groupId, fileName);
+
+    let windowFileManager = document.getElementById("save-modal");
+    windowFileManager.style.display = "none";
 });
 
 let loginButton = document.getElementById("login")

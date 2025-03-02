@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.sql.Wrapper;
 import java.util.Date;
+import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
 import org.springframework.http.HttpHeaders;
@@ -35,6 +36,9 @@ import com.azure.core.annotation.Post;
 import com.example.restservice.Keys;
 import com.example.restservice.TokenValidatorEntraId;
 import com.example.restservice.Board.*;
+
+import com.nimbusds.jwt.SignedJWT;
+import java.text.ParseException;
 
 
 
@@ -148,15 +152,12 @@ public class SignalRController {
             this.email = email;
         }
     }
+
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
     public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
-        // T: WARNING in future retrieve the email directly from the AccessToken
-        String email = we.email;
-
-
-        
+                
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
         if(!TokenValidatorEntraId.validateToken(loginToken)) {
@@ -169,6 +170,24 @@ public class SignalRController {
         }
         // T: verify if the token is valid (END)
 
+
+
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(loginToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved from token is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+        
 
 
         // T: generate a randomic number to identify the board
@@ -225,16 +244,35 @@ public class SignalRController {
 
     // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
-    // like a json and then load in the "remote boards"(boards stored)
-    // in central memory of the Server the board.
+    // like a json and then load it in the "remote boards"(boards stored 
+    // in central memory of the Server) the board.
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")
     public String loadBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToLoad requestBody) {
+        
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+        
+        
+        
         String boardJson = null;
         
         BoardStorage boardStorage = new BoardStorage();
-        boardJson = boardStorage.loadBoard(requestBody.blobName, requestBody.email);
+        boardJson = boardStorage.loadBoard(requestBody.blobName, email);
 
 
 
@@ -247,8 +285,8 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + requestBody.email;
-        String accessKey = generateJwt(hubUrl, requestBody.email);
+        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
             .header("Content-Type", "application/json")
@@ -325,17 +363,69 @@ public class SignalRController {
     @PostMapping("/api/saveBoard")
     public void saveBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestBodyBlobToSave requestBody, HttpServletResponse response) {
 
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+
+
+
         Board board = boards.boards.get(requestBody.boardSessionId);
 
         BoardStorage boardStorage = new BoardStorage();
         try {
-            boardStorage.saveBoard(requestBody.blobName, requestBody.email, board);
+            boardStorage.saveBoard(requestBody.blobName, email, board);
         } catch(Exception e) {
             System.out.println("Error during saving of Board: " + e.getMessage());
             e.printStackTrace();
 
             response.setStatus(201);
         }
+    }
+
+    @PostMapping("/api/listBoards")
+    public List<String> listBoards(@RequestHeader("Authorization") String accessToken) {
+        
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+
+
+        // T: Retrieve the list of boards (START)
+        BoardStorage boardStorage = new BoardStorage();
+        List<String> boardsList;
+        try {
+            boardsList = boardStorage.listBoards(email);
+        } catch(Exception e) {
+            System.out.println("Error during saving of Board: " + e.getMessage());
+            e.printStackTrace();
+
+            return null;
+        }
+        // T: Retrieve the list of boards (END)
+
+        return boardsList;
     }
     
 
