@@ -657,6 +657,8 @@ function saveOnCloud(boardSessionId, boardName)
                     boardStorageIdsConst.push(boardName);
                 }
                 // T: update the list of boardStorageIds (END)
+                
+                setupLoadBoardWindow();
             }
                 
         })
