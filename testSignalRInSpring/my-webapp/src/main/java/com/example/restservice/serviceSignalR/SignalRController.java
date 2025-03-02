@@ -369,9 +369,18 @@ public class SignalRController {
             return boardSessionId;
         }
 
+        public String getPrecBlobName() {
+            return precBlobName;
+        }
+
+        public void setPrecBlobName(String precBlobName) {
+            this.precBlobName = precBlobName;
+        }
+
         public String blobName;
         public String email;
         public String boardSessionId;
+        public String precBlobName;
     }
 
     // T: This private api is used to persist the replica of Board
@@ -400,7 +409,7 @@ public class SignalRController {
 
         BoardStorage boardStorage = new BoardStorage();
         try {
-            boardStorage.saveBoard(requestBody.blobName, email, board);
+            boardStorage.saveBoard(requestBody.blobName, requestBody.precBlobName, email, board);
         } catch(Exception e) {
             System.out.println("Error during saving of Board: " + e.getMessage());
             e.printStackTrace();
@@ -426,6 +435,7 @@ public class SignalRController {
         }
         System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
+
 
 
         // T: Retrieve the list of boards (START)

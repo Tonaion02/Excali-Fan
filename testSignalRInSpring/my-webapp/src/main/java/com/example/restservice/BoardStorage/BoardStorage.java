@@ -81,7 +81,15 @@ public class BoardStorage {
         return board;
     }
 
-    public void saveBoard(String boardStorageId, String email, Board board) throws Exception {
+    public void saveBoard(String boardStorageId, String precBoardStorageId, String email, Board board) throws Exception {
+
+        if(! boardStorageId.equals(precBoardStorageId)) {
+            BlobClient precBlobClient = containerClient.getBlobClient(email + "/" + precBoardStorageId);
+            precBlobClient.delete();
+        }
+
+        
+
         String boardJson = objectMapper.writeValueAsString(board);
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
 
