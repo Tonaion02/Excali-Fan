@@ -339,11 +339,15 @@ public class SignalRController {
     }
 
     public static class RequestBodyBlobToSave {
-        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId, String precBlobName) {
+        public RequestBodyBlobToSave(String blobName, String email, String boardSessionId, String precBoardStorageId) {
             this.blobName = blobName;
             this.email = email;
             this.boardSessionId = boardSessionId;
-            this.precBlobName = precBlobName;
+            this.precBoardStorageId = precBoardStorageId;
+        }
+
+        public RequestBodyBlobToSave() {
+
         }
 
         public void setEmail(String email) {
@@ -370,18 +374,18 @@ public class SignalRController {
             return boardSessionId;
         }
 
-        public String getPrecBlobName() {
-            return precBlobName;
+        public String getPrecBoardStorageId() {
+            return precBoardStorageId;
         }
 
-        public void setPrecBlobName(String precBlobName) {
-            this.precBlobName = precBlobName;
+        public void setPrecBoardStorageId(String precBoardStorageId) {
+            this.precBoardStorageId = precBoardStorageId;
         }
 
         public String blobName;
         public String email;
         public String boardSessionId;
-        public String precBlobName;
+        public String precBoardStorageId;
     }
 
     // T: This private api is used to persist the replica of Board
