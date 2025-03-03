@@ -208,6 +208,7 @@ public class SignalRController {
         // T: WARNING temporary, we are adding the new board
         // to the global hashmap
         Board board = new Board();
+        board.setOwnerUserId(email);
         boards.boards.put(boardId, board);     
 
 
@@ -412,7 +413,17 @@ public class SignalRController {
         // T: Retrieve email from token (END)
 
 
+
         Board board = boards.boards.get(requestBody.boardSessionId);
+
+
+
+        // T: Check if the UserId is the owner (START)
+        if(board.getOwnerUserId() == null || ! board.getOwnerUserId().equals(email)) {
+            System.out.println("You: " + email + " don't have permission to save the board");
+            return;
+        }
+        // T: Check if the UserId is the owner (END)
 
 
 
@@ -491,14 +502,16 @@ public class SignalRController {
         return new Login(userId);
     }
 
-    // T: WARNING temporary, for now it permits to add a user to a group
+
+
+
     @GetMapping("/api/addgroup")
     public void addToGroup(@RequestParam String groupId, @RequestParam String userId) {
 
         System.out.println("adding to group");
 
         String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
-        String accessKey = generateJwt(hubUrl, userId);
+            String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
             .header("Content-Type", "application/json")
@@ -508,6 +521,7 @@ public class SignalRController {
         System.out.println("addgroup: " + response.getStatus());
         System.out.println("addgroup: " + response.getBody());
     }
+
 
     @GetMapping("/publicApi/isingroup")
     public void isUserInGroup(@RequestParam String groupId, @RequestParam String userId) {
