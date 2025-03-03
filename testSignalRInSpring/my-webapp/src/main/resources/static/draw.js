@@ -582,8 +582,6 @@ function loadBoard(boardId) {
             console.log(response.data.boardJson);
     
             data.groupId = response.data.boardSessionId;
-            
-            console.log("UIIIIIIIIIIII");
     
             data.currentBoardStorageId = boardId;
 
@@ -591,7 +589,7 @@ function loadBoard(boardId) {
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
             // T: re-activate the download button when you are not a guest
-            document.getElementById("export-image").setAttribute("disabled", "false");
+            document.getElementById("export-image").removeAttribute("disabled");
 
             setupLoadBoardWindow();
             
