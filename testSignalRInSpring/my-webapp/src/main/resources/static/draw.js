@@ -648,27 +648,26 @@ function saveOnCloud(boardSessionId, boardName)
                 // T: Update the current boardStorageId because it changed
                 data.currentBoardStorageId = boardName;
 
-                setupLoadBoardWindow();
+                // setupLoadBoardWindow();
             }
-            else {
+            
 
-                // T: update the list of boardStorageIds (START)
-                let found = false;
-                for(let boardStorageIdIndex in boardStorageIdsConst) {
-                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+            // T: update the list of boardStorageIds (START)
+            let found = false;
+            for(let boardStorageIdIndex in boardStorageIdsConst) {
+                let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
 
-                    if(boardStorageId === boardName) {
+                    if(boardStorageId == boardName) {
                         found = true;
                     }
-                }
-
-                if(! found) {
-                    boardStorageIdsConst.push(boardName);
-                }
-                // T: update the list of boardStorageIds (END)
-                
-                setupLoadBoardWindow();
             }
+
+            if(! found) {
+                boardStorageIdsConst.push(boardName);
+            }
+            // T: update the list of boardStorageIds (END)
+                
+            setupLoadBoardWindow();
         })
         .catch(error => {
             console.error("Errore:", error);
