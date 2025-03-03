@@ -136,13 +136,13 @@ function update(ctx) {
 
 function setup() {    
 
-    // T: retrieve the HTML element that represent the cursor in canvas
-    const cursor = document.getElementById("circleCursor");
+    // // T: retrieve the HTML element that represent the cursor in canvas
+    // const cursor = document.getElementById("circleCursor");
 
-    // T: set some properties of the cursor (START)
-    cursor.style.display = "block";
-    cursor.style.width = `${tollerance * 2}px`;
-    cursor.style.height = `${tollerance * 2}px`;
+    // // T: set some properties of the cursor (START)
+    // cursor.style.display = "block";
+    // cursor.style.width = `${tollerance * 2}px`;
+    // cursor.style.height = `${tollerance * 2}px`;
 
     // T: set the content of GroupLabel
     const currentGroupLabel = document.getElementById('current-group-label');
