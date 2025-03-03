@@ -585,6 +585,11 @@ function loadBoard(boardId) {
     
             data.currentBoardStorageId = boardId;
 
+            // T: update the boardSessionId in share div
+            const shareBox = document.getElementById("current-group-label");
+            shareBox.textContent = "GroupID corrente: " + data.groupId;
+
+            // T: update the text-box of boardStorageId
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
