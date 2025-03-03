@@ -9,8 +9,9 @@ public class Board {
         this.lines = new ArrayList<>();
     }
 
-    public Board(List<Line> lines) {
+    public Board(List<Line> lines, String ownerUserId) {
         this.lines = lines;
+        this.ownerUserId = ownerUserId;
     }
 
     public void setLines(List<Line> lines) {
@@ -21,5 +22,14 @@ public class Board {
         return lines;
     }
 
+    public String getOwnerUserId() {
+        return ownerUserId;
+    }
+
+    public void setOwnerUserId(String ownerUserId) {
+        this.ownerUserId = ownerUserId;
+    }
+
     public List<Line> lines;
+    public String ownerUserId;
 }
