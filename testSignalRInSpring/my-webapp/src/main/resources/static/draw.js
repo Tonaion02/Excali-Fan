@@ -616,6 +616,23 @@ function saveOnCloud(boardSessionId, boardName)
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
+    // T: check if the boardName is already in use (START)
+    let founded = false;
+    if(boardName != data.currentBoardStorageId) {
+        for(let boardStorageIdIndex in boardStorageIdsConst) {
+            let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+            if(boardStorageId == boardName) {
+                founded = true;
+            }
+        }
+    }
+    
+    if(founded) {
+        console.log("boardId already in use");
+        return;
+    }
+    // T: check if the boardName is already in use (END)
+
     axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
         { 
             "blobName": boardName, 
@@ -630,6 +647,11 @@ function saveOnCloud(boardSessionId, boardName)
             }
         })
         .then(response => {
+
+            if(response.status != 200) {
+                return;
+            }
+
             console.log("Response status: " + response.status);
 
             if(boardName != data.currentBoardStorageId) {
