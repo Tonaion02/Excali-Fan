@@ -545,6 +545,9 @@ function addToGroup() {
         }        
     ).
     then((response) => console.log("adding to group: " + response.status))
+
+    // T: disable the button to save the boards when you are guest in a board
+    document.getElementById("export-image").setAttribute("disabled", "true");
 }
 
 
@@ -587,11 +590,13 @@ function loadBoard(boardId) {
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
+            // T: re-activate the download button when you are not a guest
+            document.getElementById("export-image").setAttribute("disabled", "false");
+
             setupLoadBoardWindow();
             
             update(canvasContext);   
         }
-     
     })
     .catch(error => {
         console.error("Errore:", error);
