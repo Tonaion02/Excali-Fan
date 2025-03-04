@@ -24,23 +24,31 @@ public class Function {
     public Function() {
         this.secret = "gervaso";
 
-        SecretClient secretClient = null;
-        if(keySignalR == null || accountKeyBlobStorage == null) {
-            secretClient = new SecretClientBuilder()
-            .vaultUrl(keyVaultUrl)
-            .credential(new DefaultAzureCredentialBuilder().build())
-            .buildClient();
+        try {
+            SecretClient secretClient = null;
+            if(keySignalR == null || accountKeyBlobStorage == null) {
+                secretClient = new SecretClientBuilder()
+                .vaultUrl(keyVaultUrl)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient();
+            }
+    
+            if(keySignalR == null) {
+                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+                keySignalR = secretValueForSignalR;
+            }
+
+            // if(accountKeyBlobStorage == null) {
+            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            // }
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        } catch(Exception e) {
+            e.printStackTrace();
         }
 
-        if(keySignalR == null) {
-            String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-            keySignalR = secretValueForSignalR;
-        }
 
-        // if(accountKeyBlobStorage == null) {
-        //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-        //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
-        // }
     }
 
     public static final String secretNameKeySignalR = "keyForSignalR";
