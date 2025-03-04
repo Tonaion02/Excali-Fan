@@ -10,6 +10,7 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 
 import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.identity.ManagedIdentityCredential;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
@@ -24,30 +25,6 @@ public class Function {
 
     public Function() {
         this.secret = "gervaso";
-
-        try {
-            // SecretClient secretClient = null;
-            // if(keySignalR == null || accountKeyBlobStorage == null) {
-            //     secretClient = new SecretClientBuilder()
-            //     .vaultUrl(keyVaultUrl)
-            //     .credential(new DefaultAzureCredentialBuilder().build())
-            //     .buildClient();
-            // }
-    
-            // if(keySignalR == null) {
-            //     String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-            //     keySignalR = secretValueForSignalR;
-            // }
-
-            // if(accountKeyBlobStorage == null) {
-            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            // }
-        } catch(RuntimeException e) {
-            e.printStackTrace();
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
 
 
     }
@@ -73,11 +50,13 @@ public class Function {
         try {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
+            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
                 secretClient = new SecretClientBuilder()
                 .vaultUrl(keyVaultUrl)
-                .credential(new DefaultAzureCredentialBuilder().build())
+                .credential(credential)
                 // .credential(new ManagedIdentityCredentialBuilder().build())
                 .buildClient();
             }
