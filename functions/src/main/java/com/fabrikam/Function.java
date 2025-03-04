@@ -32,10 +32,10 @@ public class Function {
             .buildClient();
         }
 
-        if(keySignalR == null) {
-            String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-            keySignalR = secretValueForSignalR;
-        }
+        // if(keySignalR == null) {
+        //     String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+        //     keySignalR = secretValueForSignalR;
+        // }
 
         // if(accountKeyBlobStorage == null) {
         //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
@@ -60,7 +60,9 @@ public class Function {
                 authLevel = AuthorizationLevel.ANONYMOUS)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
-        context.getLogger().info("Java HTTP trigger processed a request.");
+
+        try {
+        // context.getLogger().info("Java HTTP trigger processed a request.");
 
         // Parse query parameter
         final String query = request.getQueryParameters().get("name");
@@ -70,6 +72,9 @@ public class Function {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
         } else {
             return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
+        }
+        } catch(Exception e) {
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         }
     }
 
