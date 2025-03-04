@@ -17,6 +17,12 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
 import java.util.Optional;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+
 
 
 
@@ -32,7 +38,7 @@ public class Function {
     public static final String secretNameKeySignalR = "keyForSignalR";
     public static final String storageAccountName = "excalifunstorage";
     public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
+    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
 
     private static String secret;
     private static String keySignalR = null;
@@ -50,26 +56,56 @@ public class Function {
         try {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
-            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+            String urlString = "https://vault.azure.net";
+            URL url = new URL(urlString);
 
-            SecretClient secretClient = null;
-            if(keySignalR == null || accountKeyBlobStorage == null) {
-                secretClient = new SecretClientBuilder()
-                .vaultUrl(keyVaultUrl)
-                .credential(credential)
-                // .credential(new ManagedIdentityCredentialBuilder().build())
-                .buildClient();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            
+            int responseCode = connection.getResponseCode();
+            context.getLogger().info("Response code: " + responseCode);
+
+            if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
+                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                String inputLine;
+                StringBuffer response = new StringBuffer();
+                
+                while ((inputLine = in.readLine()) != null) {
+                    response.append(inputLine);
+                }
+                in.close();
+                
+                // Print the response
+                // System.out.println("Response: " + response.toString());
+                context.getLogger().info("Response: " + response.toString());
+            } else {
+                context.getLogger().info("GET request failed. Response Code: " + responseCode);
+                // System.out.println("GET request failed. Response Code: " + responseCode);
             }
 
-            if(keySignalR == null) {
-                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-                keySignalR = secretValueForSignalR;
-            }
+            connection.disconnect();
 
-            if(accountKeyBlobStorage == null) {
-                String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-                accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            }
+
+            // ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+
+            // SecretClient secretClient = null;
+            // if(keySignalR == null || accountKeyBlobStorage == null) {
+            //     secretClient = new SecretClientBuilder()
+            //     .vaultUrl(keyVaultUrl)
+            //     .credential(credential)
+            //     // .credential(new ManagedIdentityCredentialBuilder().build())
+            //     .buildClient();
+            // }
+
+            // if(keySignalR == null) {
+            //     String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+            //     keySignalR = secretValueForSignalR;
+            // }
+
+            // if(accountKeyBlobStorage == null) {
+            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            // }
 
             // Parse query parameter
             final String query = request.getQueryParameters().get("name");
@@ -88,22 +124,4 @@ public class Function {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         } 
     }
-
-    // @FunctionName("otherfunction")
-    // public HttpResponseMessage otherfunction(
-    //     @HttpTrigger(
-    //         name="req",
-    //         methods = {HttpMethod.GET, HttpMethod.POST},
-    //         authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
-    //     final ExecutionContext context) {
-    //     context.getLogger().info("Java HTTP trigger processed a request");
-
-    //     // T: Parse request (START)
-    //     final String query = request.getQueryParameters().get("parameter");
-    //     final String parameter = request.getBody().orElse(query);
-    //     // T: Parse request (END)
-        
-    //     // return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " signalR: " + keySignalR + " blob: " + accountKeyBlobStorage).build();
-    //     return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter).build();
-    // }
 }
