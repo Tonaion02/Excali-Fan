@@ -77,8 +77,8 @@ public class Function {
             if(keySignalR == null || accountKeyBlobStorage == null) {
                 secretClient = new SecretClientBuilder()
                 .vaultUrl(keyVaultUrl)
-                // .credential(new DefaultAzureCredentialBuilder().build())
-                .credential(new ManagedIdentityCredentialBuilder().build())
+                .credential(new DefaultAzureCredentialBuilder().build())
+                // .credential(new ManagedIdentityCredentialBuilder().build())
                 .buildClient();
             }
 
