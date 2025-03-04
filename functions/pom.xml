@@ -23,6 +23,14 @@
             <artifactId>azure-functions-java-library</artifactId>
             <version>${azure.functions.java.library.version}</version>
         </dependency>
+
+		<!-- Azure Key Vault dependency -->
+		<dependency>
+    		<groupId>com.azure</groupId>
+    		<artifactId>azure-security-keyvault-secrets</artifactId>
+    		<version>4.9.1</version>
+		</dependency>
+
         <!-- Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

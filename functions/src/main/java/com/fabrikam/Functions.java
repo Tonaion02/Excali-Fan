@@ -9,26 +9,40 @@ import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretClient;
+import com.azure.security.keyvault.secrets.SecretClientBuilder;
+
 import java.util.Optional;
 
 
 
 
 
-public class Function {
+public class Functions {
 
-    public Function() {
+    public Functions() {
         this.secret = "gervaso";
+
+        SecretClient secretClient = null;
+
+        if(keySignalR == null) {
+
+        }
+
+        if(accountKeyBlobStorage == null) {
+
+        }
     }
 
+    public static final String secretNameKeySignalR = "keyForSignalR";
+    public static final String storageAccountName = "excalifunstorage";
+    public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
+    
     private static String secret;
+    private static String keySignalR = null;
+    private static String accountKeyBlobStorage = null;
 
-
-    /**
-     * This function listens at endpoint "/api/HttpExample". Two ways to invoke it using "curl" command in bash:
-     * 1. curl -d "HTTP Body" {your host}/api/HttpExample
-     * 2. curl "{your host}/api/HttpExample?name=HTTP%20Query"
-     */
     @FunctionName("HttpExample")
     public HttpResponseMessage run(
             @HttpTrigger(
@@ -48,5 +62,24 @@ public class Function {
         } else {
             return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + this.secret).build();
         }
+    }
+
+    @FunctionName("otherfunction")
+    public HttpResponseMessage otherfunction(
+        @HttpTrigger(
+            name="req2",
+            methods = {HttpMethod.GET, HttpMethod.POST},
+            authLevel = AuthorizationLevel.ANONYMOUS) HttpRequestMessage<Optional<String>> request,
+        final ExecutionContext context) {
+        context.getLogger().info("Java HTTP trigger processed a request");
+
+        // T: Parse request (START)
+        final String query = request.getQueryParameters().get("parameter");
+        final String parameter = request.getBody().orElse(query);
+        // T: Parse request (END)
+
+        
+        
+        return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " secret: " + this.secret).build();
     }
 }
