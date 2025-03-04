@@ -10,6 +10,7 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
 
 import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
@@ -76,7 +77,8 @@ public class Function {
             if(keySignalR == null || accountKeyBlobStorage == null) {
                 secretClient = new SecretClientBuilder()
                 .vaultUrl(keyVaultUrl)
-                .credential(new DefaultAzureCredentialBuilder().build())
+                // .credential(new DefaultAzureCredentialBuilder().build())
+                .credential(new ManagedIdentityCredentialBuilder().build())
                 .buildClient();
             }
 
