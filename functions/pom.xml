@@ -31,6 +31,14 @@
     		<version>4.9.1</version>
 		</dependency>
 
+        <!-- Azure Managed Identity dependency -->
+		<dependency>
+    		<groupId>com.azure</groupId>
+    		<artifactId>azure-identity</artifactId>
+    		<version>1.6.0</version>
+		</dependency>
+
+
         <!-- Test -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

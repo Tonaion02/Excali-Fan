@@ -25,20 +25,29 @@ public class Functions {
         this.secret = "gervaso";
 
         SecretClient secretClient = null;
+        if(keySignalR == null || accountKeyBlobStorage == null) {
+            secretClient = new SecretClientBuilder()
+            .vaultUrl(keyVaultUrl)
+            .credential(new DefaultAzureCredentialBuilder().build())
+            .buildClient();
+        }
 
         if(keySignalR == null) {
-
+            String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+            keySignalR = secretValueForSignalR;
         }
 
         if(accountKeyBlobStorage == null) {
-
+            String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+            accountKeyBlobStorage = secretValueForAzureBlobStorage;
         }
     }
 
     public static final String secretNameKeySignalR = "keyForSignalR";
     public static final String storageAccountName = "excalifunstorage";
     public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    
+    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
+
     private static String secret;
     private static String keySignalR = null;
     private static String accountKeyBlobStorage = null;
@@ -77,9 +86,7 @@ public class Functions {
         final String query = request.getQueryParameters().get("parameter");
         final String parameter = request.getBody().orElse(query);
         // T: Parse request (END)
-
         
-        
-        return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " secret: " + this.secret).build();
+        return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " signalR: " + keySignalR + " blob: " + accountKeyBlobStorage).build();
     }
 }
