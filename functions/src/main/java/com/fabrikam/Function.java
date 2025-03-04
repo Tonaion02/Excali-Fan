@@ -19,9 +19,9 @@ import java.util.Optional;
 
 
 
-public class Functions {
+public class Function {
 
-    public Functions() {
+    public Function() {
         this.secret = "gervaso";
 
         SecretClient secretClient = null;
