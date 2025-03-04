@@ -16,6 +16,14 @@ import java.util.Optional;
 
 
 public class Function {
+
+    public Function() {
+        this.secret = "gervaso";
+    }
+
+    private static String secret;
+
+
     /**
      * This function listens at endpoint "/api/HttpExample". Two ways to invoke it using "curl" command in bash:
      * 1. curl -d "HTTP Body" {your host}/api/HttpExample
@@ -38,7 +46,7 @@ public class Function {
         if (name == null) {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
         } else {
-            return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name).build();
+            return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + this.secret).build();
         }
     }
 }
