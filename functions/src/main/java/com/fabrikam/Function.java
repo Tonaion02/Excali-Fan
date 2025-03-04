@@ -70,19 +70,37 @@ public class Function {
             final ExecutionContext context) {
 
         try {
-        context.getLogger().info("Java HTTP trigger processed a request.");
-        System.out.println("Porcamadonna");
+            context.getLogger().info("Java HTTP trigger processed a request.");
 
-        // Parse query parameter
-        final String query = request.getQueryParameters().get("name");
-        final String name = request.getBody().orElse(query);
+            SecretClient secretClient = null;
+            if(keySignalR == null || accountKeyBlobStorage == null) {
+                secretClient = new SecretClientBuilder()
+                .vaultUrl(keyVaultUrl)
+                .credential(new DefaultAzureCredentialBuilder().build())
+                .buildClient();
+            }
 
-        if (name == null) {
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
-        } else {
-            return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
-        }
+            if(keySignalR == null) {
+                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+                keySignalR = secretValueForSignalR;
+            }
+
+            if(accountKeyBlobStorage == null) {
+                String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+                accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            }
+
+            // Parse query parameter
+            final String query = request.getQueryParameters().get("name");
+            final String name = request.getBody().orElse(query);
+
+            if (name == null) {
+                return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
+            } else {
+                return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
+            }
         } catch(Exception e) {
+            context.getLogger().info("Error: " + e.getMessage() + ": \n" + e.getStackTrace());
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         }
     }
