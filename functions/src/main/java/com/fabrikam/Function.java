@@ -80,15 +80,15 @@ public class Function {
                 .buildClient();
             }
 
-            if(keySignalR == null) {
-                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-                keySignalR = secretValueForSignalR;
-            }
+            // if(keySignalR == null) {
+            //     String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+            //     keySignalR = secretValueForSignalR;
+            // }
 
-            if(accountKeyBlobStorage == null) {
-                String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-                accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            }
+            // if(accountKeyBlobStorage == null) {
+            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            // }
 
             // Parse query parameter
             final String query = request.getQueryParameters().get("name");
