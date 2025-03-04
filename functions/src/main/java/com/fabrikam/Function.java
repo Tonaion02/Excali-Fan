@@ -100,7 +100,10 @@ public class Function {
                 return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
             }
         } catch(Exception e) {
-            context.getLogger().info("Error: " + e.getMessage() + ": \n" + e.getStackTrace());
+            context.getLogger().info("Error: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         } 
     }
