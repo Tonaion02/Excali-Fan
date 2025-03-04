@@ -71,6 +71,7 @@ public class Function {
 
         try {
         context.getLogger().info("Java HTTP trigger processed a request.");
+        System.out.println("Porcamadonna");
 
         // Parse query parameter
         final String query = request.getQueryParameters().get("name");
