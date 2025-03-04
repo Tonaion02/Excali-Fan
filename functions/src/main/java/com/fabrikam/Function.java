@@ -98,17 +98,22 @@ public class Function {
         try {
             // 1. Ottenere il token di accesso dalla Managed Identity
             String token = getManagedIdentityToken();
-            System.out.println("Access Token: " + token);
+            context.getLogger().info("Access Token: " + token);
 
             // 2. Usare il token per recuperare un segreto da Key Vault
-            String keyVaultName = "YOUR-KEYVAULT-NAME"; // Sostituisci con il tuo Key Vault
-            String secretName = "YOUR-SECRET-NAME"; // Sostituisci con il nome del segreto
+            String keyVaultName = "testkeyvault10000"; // Sostituisci con il tuo Key Vault
+            String secretName = "keyForSignalR"; // Sostituisci con il nome del segreto
             String secretValue = getSecretFromKeyVault(keyVaultName, secretName, token);
 
-            System.out.println("Secret Value: " + secretValue);
+            context.getLogger().info("Secret Value: " + secretValue);
         } catch (Exception e) {
-            e.printStackTrace();
+            context.getLogger().info("Error: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }
         }
+
+        return request.createResponseBuilder(HttpStatus.OK).body("Hello, ").build();
     }
 
     // Metodo per ottenere il token dalla Managed Identity
