@@ -56,7 +56,7 @@ public class Function {
         try {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
-            String urlString = "https://vault.azure.net";
+            String urlString = "http://vault.keyvault.net";
             URL url = new URL(urlString);
 
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
