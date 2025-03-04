@@ -102,7 +102,7 @@ public class Function {
         } catch(Exception e) {
             context.getLogger().info("Error: " + e.getMessage() + ": \n" + e.getStackTrace());
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
-        }
+        } 
     }
 
     // @FunctionName("otherfunction")
