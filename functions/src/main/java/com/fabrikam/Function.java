@@ -87,6 +87,7 @@ public class Function {
         final String parameter = request.getBody().orElse(query);
         // T: Parse request (END)
         
-        return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " signalR: " + keySignalR + " blob: " + accountKeyBlobStorage).build();
+        // return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter + " signalR: " + keySignalR + " blob: " + accountKeyBlobStorage).build();
+        return request.createResponseBuilder(HttpStatus.OK).body("parameter: " + parameter).build();
     }
 }
