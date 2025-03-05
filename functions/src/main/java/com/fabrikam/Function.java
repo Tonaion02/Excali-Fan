@@ -8,7 +8,8 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
-
+import com.azure.identity.ClientSecretCredential;
+import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.identity.ManagedIdentityCredential;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
@@ -86,7 +87,15 @@ public class Function {
             // connection.disconnect();
 
 
-            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+        // Crea le credenziali
+        ClientSecretCredential credential = new ClientSecretCredentialBuilder()
+            .clientId(System.getenv("AZURE_CLIENT_ID"))
+            .clientSecret(System.getenv("AZURE_CLIENT_SECRET"))
+            .tenantId(System.getenv("AZURE_TENANT_ID"))
+            .build();
+
+
+            //ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
