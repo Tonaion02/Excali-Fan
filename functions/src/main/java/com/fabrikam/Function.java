@@ -56,56 +56,56 @@ public class Function {
         try {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
-            String urlString = "https://vault.keyvault.net";
-            URL url = new URL(urlString);
+            // String urlString = "https://vault.keyvault.net";
+            // URL url = new URL(urlString);
 
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("GET");
+            // HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            // connection.setRequestMethod("GET");
             
-            int responseCode = connection.getResponseCode();
-            context.getLogger().info("Response code: " + responseCode);
+            // int responseCode = connection.getResponseCode();
+            // context.getLogger().info("Response code: " + responseCode);
 
-            if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
-                BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                String inputLine;
-                StringBuffer response = new StringBuffer();
+            // if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
+            //     BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+            //     String inputLine;
+            //     StringBuffer response = new StringBuffer();
                 
-                while ((inputLine = in.readLine()) != null) {
-                    response.append(inputLine);
-                }
-                in.close();
+            //     while ((inputLine = in.readLine()) != null) {
+            //         response.append(inputLine);
+            //     }
+            //     in.close();
                 
-                // Print the response
-                // System.out.println("Response: " + response.toString());
-                context.getLogger().info("Response: " + response.toString());
-            } else {
-                context.getLogger().info("GET request failed. Response Code: " + responseCode);
-                // System.out.println("GET request failed. Response Code: " + responseCode);
+            //     // Print the response
+            //     // System.out.println("Response: " + response.toString());
+            //     context.getLogger().info("Response: " + response.toString());
+            // } else {
+            //     context.getLogger().info("GET request failed. Response Code: " + responseCode);
+            //     // System.out.println("GET request failed. Response Code: " + responseCode);
+            // }
+
+            // connection.disconnect();
+
+
+            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+
+            SecretClient secretClient = null;
+            if(keySignalR == null || accountKeyBlobStorage == null) {
+                secretClient = new SecretClientBuilder()
+                .vaultUrl(keyVaultUrl)
+                .credential(credential)
+                // .credential(new ManagedIdentityCredentialBuilder().build())
+                .buildClient();
             }
 
-            connection.disconnect();
+            if(keySignalR == null) {
+                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+                keySignalR = secretValueForSignalR;
+            }
 
-
-            // ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
-
-            // SecretClient secretClient = null;
-            // if(keySignalR == null || accountKeyBlobStorage == null) {
-            //     secretClient = new SecretClientBuilder()
-            //     .vaultUrl(keyVaultUrl)
-            //     .credential(credential)
-            //     // .credential(new ManagedIdentityCredentialBuilder().build())
-            //     .buildClient();
-            // }
-
-            // if(keySignalR == null) {
-            //     String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-            //     keySignalR = secretValueForSignalR;
-            // }
-
-            // if(accountKeyBlobStorage == null) {
-            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            // }
+            if(accountKeyBlobStorage == null) {
+                String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+                accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            }
 
             // Parse query parameter
             final String query = request.getQueryParameters().get("name");
