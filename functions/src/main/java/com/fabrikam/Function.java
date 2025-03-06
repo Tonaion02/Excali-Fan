@@ -8,6 +8,7 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.azure.core.credential.TokenRequestContext;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.DefaultAzureCredentialBuilder;
@@ -16,6 +17,7 @@ import com.azure.identity.ManagedIdentityCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import java.io.BufferedReader;
@@ -58,6 +60,12 @@ public class Function {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
             ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+
+            String resource = "https://vault.azure.net/"; // Example: Azure Key Vault
+            TokenRequestContext requestContext = new TokenRequestContext()
+                .setScopes(Collections.singletonList(resource));
+
+            context.getLogger().info("token: " + credential.getToken(requestContext));
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
