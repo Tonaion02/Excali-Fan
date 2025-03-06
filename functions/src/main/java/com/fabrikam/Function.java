@@ -18,6 +18,7 @@ import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.identity.ManagedIdentityCredential;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
+import com.azure.core.credential.AccessToken;
 import com.azure.security.keyvault.secrets.SecretAsyncClient;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
@@ -30,6 +31,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.time.Instant;
+import java.time.OffsetDateTime;
 
 
 
@@ -70,7 +72,8 @@ public class Function {
             TokenRequestContext requestContext = new TokenRequestContext()
                 .setScopes(Collections.singletonList(keyVaultUrl));
 
-            context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken());
+            String token = credential.getToken(requestContext).block().getToken();
+            context.getLogger().info("token: " + token);
 
 
 
@@ -87,7 +90,7 @@ public class Function {
             .credential(new TokenCredential() {
                 @Override
                 public Mono<AccessToken> getToken(TokenRequestContext request) {
-                    return Mono.just(new AccessToken(token, Instant.now().plusSeconds(3600)));
+                    return Mono.just(new AccessToken(token, OffsetDateTime.now().plusHours(1)));
                 }
             })
             .buildClient();
