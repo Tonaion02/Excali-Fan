@@ -66,11 +66,11 @@ public class Function {
 
             ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
-            String resource = "https://vault.azure.net/.default";
+            String resource = "https://vault.azure.net";
             // TokenRequestContext requestContext = new TokenRequestContext()
             //     .setScopes(Collections.singletonList(resource));
             TokenRequestContext requestContext = new TokenRequestContext()
-                .setScopes(Collections.singletonList(keyVaultUrl));
+                .setScopes(Collections.singletonList(resource));
 
             String token = credential.getToken(requestContext).block().getToken();
             context.getLogger().info("token: " + token);
