@@ -8,6 +8,10 @@ import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+
+import reactor.core.publisher.Mono;
+
+import com.azure.core.credential.TokenCredential;
 import com.azure.core.credential.TokenRequestContext;
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
@@ -25,6 +29,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.Instant;
 
 
 
@@ -65,25 +70,32 @@ public class Function {
             TokenRequestContext requestContext = new TokenRequestContext()
                 .setScopes(Collections.singletonList(keyVaultUrl));
 
-
-
             context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken());
 
 
 
-            SecretAsyncClient secretClient = null;
-            if(keySignalR == null || accountKeyBlobStorage == null) {
-                secretClient = new SecretClientBuilder()
-                .vaultUrl(keyVaultUrl)
-                .credential(credential)
-                // .credential(new ManagedIdentityCredentialBuilder().build())
-                .buildAsyncClient();
-            }
+            // SecretClient secretClient = null;
+            // if(keySignalR == null || accountKeyBlobStorage == null) {
+            //     secretClient = new SecretClientBuilder()
+            //     .vaultUrl(keyVaultUrl)
+            //     .credential(credential)
+            //     // .credential(new ManagedIdentityCredentialBuilder().build())
+            //     .buildClient();
+            // }
+            SecretClient secretClient = new SecretClientBuilder()
+            .vaultUrl(keyVaultUrl)
+            .credential(new TokenCredential() {
+                @Override
+                public Mono<AccessToken> getToken(TokenRequestContext request) {
+                    return Mono.just(new AccessToken(token, Instant.now().plusSeconds(3600)));
+                }
+            })
+            .buildClient();
 
             
 
             if(keySignalR == null) {
-                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).block().getValue();
+                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
                 keySignalR = secretValueForSignalR;
             }
 

@@ -38,6 +38,13 @@
     		<version>1.6.0</version>
 		</dependency>
 
+    <!-- Azure Core for authentication -->
+    <dependency>
+        <groupId>com.azure</groupId>
+        <artifactId>azure-core</artifactId>
+        <version>1.45.0</version>
+    </dependency>
+
 
         <dependency>
             <groupId>org.slf4j</groupId>
