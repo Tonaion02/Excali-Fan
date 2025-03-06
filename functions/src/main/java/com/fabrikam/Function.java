@@ -58,11 +58,15 @@ public class Function {
 
             ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
-            String resource = "https://vault.azure.net";
+            String resource = "https://vault.azure.net/.default";
+            // TokenRequestContext requestContext = new TokenRequestContext()
+            //     .setScopes(Collections.singletonList(resource));
             TokenRequestContext requestContext = new TokenRequestContext()
-                .setScopes(Collections.singletonList(resource));
+                .setScopes(Collections.singletonList(keyVaultUrl));
+
 
             context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken());
+
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
