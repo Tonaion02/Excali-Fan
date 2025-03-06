@@ -14,6 +14,7 @@ import com.azure.identity.ClientSecretCredentialBuilder;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.identity.ManagedIdentityCredential;
 import com.azure.identity.ManagedIdentityCredentialBuilder;
+import com.azure.security.keyvault.secrets.SecretAsyncClient;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
@@ -65,29 +66,31 @@ public class Function {
                 .setScopes(Collections.singletonList(keyVaultUrl));
 
 
+
             context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken());
 
 
-            SecretClient secretClient = null;
+
+            SecretAsyncClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
                 secretClient = new SecretClientBuilder()
                 .vaultUrl(keyVaultUrl)
                 .credential(credential)
                 // .credential(new ManagedIdentityCredentialBuilder().build())
-                .buildClient();
+                .buildAsyncClient();
             }
 
             
 
             if(keySignalR == null) {
-                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).block().getValue();
                 keySignalR = secretValueForSignalR;
             }
 
-            if(accountKeyBlobStorage == null) {
-                String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-                accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            }
+            // if(accountKeyBlobStorage == null) {
+            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
+            // }
 
             // Parse query parameter
             final String query = request.getQueryParameters().get("name");
