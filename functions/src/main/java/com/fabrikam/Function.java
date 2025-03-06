@@ -65,7 +65,8 @@ public class Function {
             TokenRequestContext requestContext = new TokenRequestContext()
                 .setScopes(Collections.singletonList(resource));
 
-            context.getLogger().info("token: " + credential.getToken(requestContext));
+            context.getLogger().info("token: " + credential.getToken(requestContext).block());
+            // context.getLogger().info("id client: " + credential.getClientId());
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
