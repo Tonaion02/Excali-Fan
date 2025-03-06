@@ -29,13 +29,10 @@ import java.net.URL;
 
 
 
-
 public class Function {
 
     public Function() {
         this.secret = "gervaso";
-
-
     }
 
     public static final String secretNameKeySignalR = "keyForSignalR";
@@ -61,12 +58,11 @@ public class Function {
 
             ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
-            String resource = "https://vault.azure.net/"; // Example: Azure Key Vault
+            String resource = "https://vault.azure.net";
             TokenRequestContext requestContext = new TokenRequestContext()
                 .setScopes(Collections.singletonList(resource));
 
-            context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken().replace("\n", "\\n"));
-            // context.getLogger().info("id client: " + credential.getClientId());
+            context.getLogger().info("token: " + credential.getToken(requestContext).block().getToken());
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
@@ -76,6 +72,8 @@ public class Function {
                 // .credential(new ManagedIdentityCredentialBuilder().build())
                 .buildClient();
             }
+
+            
 
             if(keySignalR == null) {
                 String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
