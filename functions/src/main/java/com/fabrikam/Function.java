@@ -57,45 +57,7 @@ public class Function {
         try {
             context.getLogger().info("Java HTTP trigger processed a request.");
 
-            // String urlString = "https://vault.keyvault.net";
-            // URL url = new URL(urlString);
-
-            // HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            // connection.setRequestMethod("GET");
-            
-            // int responseCode = connection.getResponseCode();
-            // context.getLogger().info("Response code: " + responseCode);
-
-            // if (responseCode == HttpURLConnection.HTTP_OK) { // HTTP 200
-            //     BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            //     String inputLine;
-            //     StringBuffer response = new StringBuffer();
-                
-            //     while ((inputLine = in.readLine()) != null) {
-            //         response.append(inputLine);
-            //     }
-            //     in.close();
-                
-            //     // Print the response
-            //     // System.out.println("Response: " + response.toString());
-            //     context.getLogger().info("Response: " + response.toString());
-            // } else {
-            //     context.getLogger().info("GET request failed. Response Code: " + responseCode);
-            //     // System.out.println("GET request failed. Response Code: " + responseCode);
-            // }
-
-            // connection.disconnect();
-
-
-        // Crea le credenziali
-        ClientSecretCredential credential = new ClientSecretCredentialBuilder()
-            .clientId(System.getenv("AZURE_CLIENT_ID"))
-            .clientSecret(System.getenv("AZURE_CLIENT_SECRET"))
-            .tenantId(System.getenv("AZURE_TENANT_ID"))
-            .build();
-
-
-            //ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
             SecretClient secretClient = null;
             if(keySignalR == null || accountKeyBlobStorage == null) {
