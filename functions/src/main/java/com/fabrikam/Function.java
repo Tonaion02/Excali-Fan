@@ -33,6 +33,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.util.Collections;
 import java.util.Optional;
+import java.util.Map;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -70,7 +71,8 @@ public class Function {
                 name = "req",
                 methods = {HttpMethod.POST},
                 authLevel = AuthorizationLevel.ANONYMOUS)
-                HttpRequestMessage<Optional<String>> request,
+                // HttpRequestMessage<Optional<String>> request,
+                HttpRequestMessage<Map<String, String>> request,
             final ExecutionContext context) {
 
         // try {
@@ -140,9 +142,6 @@ public class Function {
 
 
         System.out.println("Starting building BoardStorage");
-
-        // connectionString = "DefaultEndpointsProtocol=https;AccountName=TUO_ACCOUNT;AccountKey=TUO_KEY;EndpointSuffix=core.windows.net";
-        // T: Build the connection string from the information of the storage account
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
@@ -160,9 +159,9 @@ public class Function {
         
         System.out.println("Ended building BoardStorage");
         
-        String email = request.getQueryParameters().get("email");
-        String boardStorageId = request.getQueryParameters().get("boardStorageId");
-        String boardJson = request.getQueryParameters().get("boardJson");
+        String email = request.getBody().get("email");
+        String boardStorageId = request.getBody().get("boardStorageId");
+        String boardJson = request.getBody().get("boardJson");
         
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
@@ -174,10 +173,6 @@ public class Function {
             }
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         }
-
-
-
-        
 
         return request.createResponseBuilder(HttpStatus.OK).body("default return").build();
     }
