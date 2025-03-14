@@ -59,6 +59,13 @@
         </dependency>
 
 
+        <!-- Azure Storage -->
+        <dependency>
+            <groupId>com.azure</groupId>
+            <artifactId>azure-storage-blob</artifactId>
+            <version>12.21.0</version>  <!-- Check for latest version -->
+        </dependency>
+
 
 
         <!-- Test -->

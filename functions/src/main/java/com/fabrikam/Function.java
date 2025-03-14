@@ -23,13 +23,23 @@ import com.azure.security.keyvault.secrets.SecretAsyncClient;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
+import com.azure.storage.blob.BlobClient;
+import com.azure.storage.blob.BlobClientBuilder;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.Collections;
 import java.util.Optional;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 
@@ -48,6 +58,8 @@ public class Function {
     public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
     public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
 
+    private static final String containerName = "boardstorage";
+
     private static String secret;
     private static String keySignalR = null;
     private static String accountKeyBlobStorage = null;
@@ -56,7 +68,7 @@ public class Function {
     public HttpResponseMessage run(
             @HttpTrigger(
                 name = "req",
-                methods = {HttpMethod.GET, HttpMethod.POST},
+                methods = {HttpMethod.POST},
                 authLevel = AuthorizationLevel.ANONYMOUS)
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
@@ -124,12 +136,48 @@ public class Function {
         //     return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         // }
         
+
+
+
+        System.out.println("Starting building BoardStorage");
+
+        // connectionString = "DefaultEndpointsProtocol=https;AccountName=TUO_ACCOUNT;AccountKey=TUO_KEY;EndpointSuffix=core.windows.net";
+        // T: Build the connection string from the information of the storage account
+        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
+
+        BlobServiceClient serviceClient = new BlobServiceClientBuilder()
+                .connectionString(connectionString)
+                .buildClient();
+
+        System.out.println("PORCODIO!!!!!!!!!!!!!!");
+
+        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
         
+        if (!containerClient.exists()) {
+            System.out.println("PORCODIO2!!!!!!!!!!!!!!");
+            containerClient.create();
+        }
+        
+        System.out.println("Ended building BoardStorage");
+        
+        String email = request.getQueryParameters().get("email");
+        String boardStorageId = request.getQueryParameters().get("boardStorageId");
+        String boardJson = request.getQueryParameters().get("boardJson");
+        
+        BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
+            blobClient.upload(dataStream, boardJson.length(), true);
+        } catch(Exception e) {
+            context.getLogger().info("Error: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
+        }
 
 
 
-
-
+        
 
         return request.createResponseBuilder(HttpStatus.OK).body("default return").build();
     }
