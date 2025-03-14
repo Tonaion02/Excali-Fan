@@ -141,23 +141,23 @@ public class Function {
 
 
 
-        System.out.println("Starting building BoardStorage");
+        context.getLogger().info("Starting building BoardStorage");
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
 
-        System.out.println("PORCODIO!!!!!!!!!!!!!!");
+        context.getLogger().info("PORCODIO!!!!!!!!!!!!!!");
 
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
         
         if (!containerClient.exists()) {
-            System.out.println("PORCODIO2!!!!!!!!!!!!!!");
+            context.getLogger().info("PORCODIO2!!!!!!!!!!!!!!");
             containerClient.create();
         }
         
-        System.out.println("Ended building BoardStorage");
+        context.getLogger().info("Ended building BoardStorage");
         
         String email = request.getBody().get("email");
         String boardStorageId = request.getBody().get("boardStorageId");
