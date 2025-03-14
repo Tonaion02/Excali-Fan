@@ -65,6 +65,40 @@ public class Function {
     private static String keySignalR = null;
     private static String accountKeyBlobStorage = null;
 
+    public static class parameter {
+        parameter() {
+
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getBoardStorageId() {
+            return boardStorageId;
+        }
+
+        public void setBoardStorageId(String boardStorageId) {
+            this.boardStorageId = boardStorageId;
+        }
+
+        public String getBoardJson() {
+            return boardJson;
+        }
+
+        public void setBoardJson(String boardJson) {
+            this.boardJson = boardJson;
+        }
+
+        public String email;
+        public String boardStorageId;
+        public String boardJson;
+    }
+
     @FunctionName("HttpExample")
     public HttpResponseMessage run(
             @HttpTrigger(
@@ -72,7 +106,7 @@ public class Function {
                 methods = {HttpMethod.POST},
                 authLevel = AuthorizationLevel.ANONYMOUS)
                 // HttpRequestMessage<Optional<String>> request,
-                HttpRequestMessage<Map<String, String>> request,
+                HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
 
         // try {
@@ -159,9 +193,27 @@ public class Function {
         
         context.getLogger().info("Ended building BoardStorage");
         
-        String email = request.getBody().get("email");
-        String boardStorageId = request.getBody().get("boardStorageId");
-        String boardJson = request.getBody().get("boardJson");
+        String bodyJson = request.getBody().get();
+        // String email = request.getBody().get("email");
+        // String boardStorageId = request.getBody().get("boardStorageId");
+        // String boardJson = request.getBody().get("boardJson");
+        ObjectMapper objectMapper = new ObjectMapper();
+        parameter par = null;
+        try {
+            par = objectMapper.readValue(bodyJson, parameter.class);
+        } catch(Exception e) {
+            context.getLogger().info("Error: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();            
+        }
+        
+        String email = par.email;
+        String boardStorageId = par.boardStorageId;
+        String boardJson = par.boardJson;
+        
+
         
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
