@@ -61,67 +61,76 @@ public class Function {
                 HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
 
-        try {
-            context.getLogger().info("Java HTTP trigger processed a request.");
+        // try {
+        //     context.getLogger().info("Java HTTP trigger processed a request.");
 
-            ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
+        //     ManagedIdentityCredential credential = new ManagedIdentityCredentialBuilder().build();
 
-            String resource = "https://vault.azure.net";
-            // TokenRequestContext requestContext = new TokenRequestContext()
-            //     .setScopes(Collections.singletonList(resource));
-            TokenRequestContext requestContext = new TokenRequestContext()
-                .setScopes(Collections.singletonList(resource));
+        //     String resource = "https://vault.azure.net";
+        //     // TokenRequestContext requestContext = new TokenRequestContext()
+        //     //     .setScopes(Collections.singletonList(resource));
+        //     TokenRequestContext requestContext = new TokenRequestContext()
+        //         .setScopes(Collections.singletonList(resource));
 
-            String token = credential.getToken(requestContext).block().getToken();
-            context.getLogger().info("token: " + token);
+        //     String token = credential.getToken(requestContext).block().getToken();
+        //     context.getLogger().info("token: " + token);
 
 
 
-            // SecretClient secretClient = null;
-            // if(keySignalR == null || accountKeyBlobStorage == null) {
-            //     secretClient = new SecretClientBuilder()
-            //     .vaultUrl(keyVaultUrl)
-            //     .credential(credential)
-            //     // .credential(new ManagedIdentityCredentialBuilder().build())
-            //     .buildClient();
-            // }
-            SecretClient secretClient = new SecretClientBuilder()
-            .vaultUrl(keyVaultUrl)
-            .credential(new TokenCredential() {
-                @Override
-                public Mono<AccessToken> getToken(TokenRequestContext request) {
-                    return Mono.just(new AccessToken(token, OffsetDateTime.now().plusHours(1)));
-                }
-            })
-            .buildClient();
+        //     // SecretClient secretClient = null;
+        //     // if(keySignalR == null || accountKeyBlobStorage == null) {
+        //     //     secretClient = new SecretClientBuilder()
+        //     //     .vaultUrl(keyVaultUrl)
+        //     //     .credential(credential)
+        //     //     // .credential(new ManagedIdentityCredentialBuilder().build())
+        //     //     .buildClient();
+        //     // }
+        //     SecretClient secretClient = new SecretClientBuilder()
+        //     .vaultUrl(keyVaultUrl)
+        //     .credential(new TokenCredential() {
+        //         @Override
+        //         public Mono<AccessToken> getToken(TokenRequestContext request) {
+        //             return Mono.just(new AccessToken(token, OffsetDateTime.now().plusHours(1)));
+        //         }
+        //     })
+        //     .buildClient();
 
             
 
-            if(keySignalR == null) {
-                String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
-                keySignalR = secretValueForSignalR;
-            }
+        //     if(keySignalR == null) {
+        //         String secretValueForSignalR = secretClient.getSecret(secretNameKeySignalR).getValue();
+        //         keySignalR = secretValueForSignalR;
+        //     }
 
-            // if(accountKeyBlobStorage == null) {
-            //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
-            //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
-            // }
+        //     // if(accountKeyBlobStorage == null) {
+        //     //     String secretValueForAzureBlobStorage = secretClient.getSecret(secretNameBlobStorageAccount).getValue();
+        //     //     accountKeyBlobStorage = secretValueForAzureBlobStorage;
+        //     // }
 
-            // Parse query parameter
-            final String query = request.getQueryParameters().get("name");
-            final String name = request.getBody().orElse(query);
+        //     // Parse query parameter
+        //     final String query = request.getQueryParameters().get("name");
+        //     final String name = request.getBody().orElse(query);
 
-            if (name == null) {
-                return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
-            } else {
-                return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
-            }
-        } catch(Exception e) {
-            context.getLogger().info("Error: " + e.getMessage());
-            for(Object o : e.getStackTrace()) {
-                context.getLogger().info(o.toString());
-            }
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
-        } 
+        //     if (name == null) {
+        //         return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Please pass a name on the query string or in the request body").build();
+        //     } else {
+        //         return request.createResponseBuilder(HttpStatus.OK).body("Hello, " + name + " secret: " + secret).build();
+        //     }
+        // } catch(Exception e) {
+        //     context.getLogger().info("Error: " + e.getMessage());
+        //     for(Object o : e.getStackTrace()) {
+        //         context.getLogger().info(o.toString());
+        //     }
+        //     return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
+        // }
+        
+        
+
+
+
+
+
+
+        return request.createResponseBuilder(HttpStatus.OK).body("default return").build();
     }
 }
