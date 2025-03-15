@@ -86,13 +86,11 @@ public class UploadBoard {
                 .connectionString(connectionString)
                 .buildClient();
 
-
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
         
         if (!containerClient.exists()) {
             containerClient.create();
         }
-        
         
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -109,8 +107,6 @@ public class UploadBoard {
         String email = par.email;
         String boardStorageId = par.boardStorageId;
         String boardJson = par.boardJson;
-        
-
         
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
