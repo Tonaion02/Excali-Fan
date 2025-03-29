@@ -9,6 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.nimbusds.jwt.SignedJWT;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.HttpResponseMessage;
@@ -21,6 +22,10 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+
+
+
+
 
 public class DownloadBoard {
         
@@ -39,14 +44,6 @@ public class DownloadBoard {
 
         }
 
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
         public String getBoardStorageId() {
             return boardStorageId;
         }
@@ -55,7 +52,6 @@ public class DownloadBoard {
             this.boardStorageId = boardStorageId;
         }
 
-        public String email;
         public String boardStorageId;
     }
 
@@ -83,6 +79,22 @@ public class DownloadBoard {
             context.getLogger().info("Valid token");
         }
         // T: Token validation (END)
+
+        // T: retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(loginToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: retrieve email from token (END)
         
 
 
@@ -112,7 +124,6 @@ public class DownloadBoard {
             }
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();            
         }
-        String email = par.email;
         String boardStorageId = par.boardStorageId;
 
         context.getLogger().info("porco2");
