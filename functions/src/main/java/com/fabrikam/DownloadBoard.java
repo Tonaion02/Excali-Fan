@@ -97,7 +97,7 @@ public class DownloadBoard {
             containerClient.create();
         }
 
-
+        context.getLogger().info("porco1");
 
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -114,12 +114,14 @@ public class DownloadBoard {
         String email = par.email;
         String boardStorageId = par.boardStorageId;
 
+        context.getLogger().info("porco2");
 
 
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
         byte[] fileData = blobClient.downloadContent().toBytes();
 
 
+        context.getLogger().info("porco3");
 
         return request.
         createResponseBuilder(HttpStatus.OK).
