@@ -136,13 +136,13 @@ function update(ctx) {
 
 function setup() {    
 
-    // T: retrieve the HTML element that represent the cursor in canvas
-    const cursor = document.getElementById("circleCursor");
+    // // T: retrieve the HTML element that represent the cursor in canvas
+    // const cursor = document.getElementById("circleCursor");
 
-    // T: set some properties of the cursor (START)
-    cursor.style.display = "block";
-    cursor.style.width = `${tollerance * 2}px`;
-    cursor.style.height = `${tollerance * 2}px`;
+    // // T: set some properties of the cursor (START)
+    // cursor.style.display = "block";
+    // cursor.style.width = `${tollerance * 2}px`;
+    // cursor.style.height = `${tollerance * 2}px`;
 
     // T: set the content of GroupLabel
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -585,6 +585,11 @@ function loadBoard(boardId) {
     
             data.currentBoardStorageId = boardId;
 
+            // T: update the boardSessionId in share div
+            const shareBox = document.getElementById("current-group-label");
+            shareBox.textContent = "GroupID corrente: " + data.groupId;
+
+            // T: update the text-box of boardStorageId
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
@@ -643,27 +648,26 @@ function saveOnCloud(boardSessionId, boardName)
                 // T: Update the current boardStorageId because it changed
                 data.currentBoardStorageId = boardName;
 
-                setupLoadBoardWindow();
+                // setupLoadBoardWindow();
             }
-            else {
+            
 
-                // T: update the list of boardStorageIds (START)
-                let found = false;
-                for(let boardStorageIdIndex in boardStorageIdsConst) {
-                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+            // T: update the list of boardStorageIds (START)
+            let found = false;
+            for(let boardStorageIdIndex in boardStorageIdsConst) {
+                let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
 
-                    if(boardStorageId === boardName) {
+                    if(boardStorageId == boardName) {
                         found = true;
                     }
-                }
-
-                if(! found) {
-                    boardStorageIdsConst.push(boardName);
-                }
-                // T: update the list of boardStorageIds (END)
-                
-                setupLoadBoardWindow();
             }
+
+            if(! found) {
+                boardStorageIdsConst.push(boardName);
+            }
+            // T: update the list of boardStorageIds (END)
+                
+            setupLoadBoardWindow();
         })
         .catch(error => {
             console.error("Errore:", error);

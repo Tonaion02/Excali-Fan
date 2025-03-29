@@ -421,6 +421,7 @@ public class SignalRController {
         // T: Check if the UserId is the owner (START)
         if(board.getOwnerUserId() == null || ! board.getOwnerUserId().equals(email)) {
             System.out.println("You: " + email + " don't have permission to save the board");
+            response.setStatus(210);
             return;
         }
         // T: Check if the UserId is the owner (END)
@@ -428,6 +429,29 @@ public class SignalRController {
 
 
         BoardStorage boardStorage = new BoardStorage();
+
+
+
+        // T: Check if the boardStorageId collides with the boardStorageId of an existing board (START)
+        if(! requestBody.precBoardStorageId.equals(requestBody.blobName)) {
+            try {
+                List<String> listOfBoards = boardStorage.listBoards(email);
+                for(var boardStorageId : listOfBoards) {
+                    if(boardStorageId.equals(requestBody.blobName)) {
+                        System.out.println("The boardStorageId: " + boardStorageId + " is already in use");
+                        response.setStatus(211);
+                        return;
+                    }
+                }
+            } catch(Exception e) {
+                System.out.println("Error in retrieving the list of boards:");
+                e.printStackTrace();            
+            }
+        }
+        // T: Check if the boardStorageId collides with the boardStorageId of an existing board (END)
+
+
+
         try {
             boardStorage.saveBoard(requestBody.blobName, requestBody.precBoardStorageId, email, board);
         } catch(Exception e) {
