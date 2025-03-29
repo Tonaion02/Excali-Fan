@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.nimbusds.jwt.SignedJWT;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.HttpResponseMessage;
@@ -39,14 +40,6 @@ public class UploadBoard {
 
         }
 
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
         public String getBoardStorageId() {
             return boardStorageId;
         }
@@ -63,7 +56,6 @@ public class UploadBoard {
             this.boardJson = boardJson;
         }
 
-        public String email;
         public String boardStorageId;
         public String boardJson;
     }
@@ -95,6 +87,22 @@ public class UploadBoard {
         }
         // T: Token validation (END)
 
+        // T: retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(loginToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: retrieve email from token (END)
+
 
 
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
@@ -121,7 +129,6 @@ public class UploadBoard {
             }
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();            
         }        
-        String email = par.email;
         String boardStorageId = par.boardStorageId;
         String boardJson = par.boardJson;
         
