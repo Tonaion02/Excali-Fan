@@ -32,7 +32,6 @@ public class UploadBoard {
     private static final String containerName = "boardstorage";
 
     private static String secret;
-    private static String keySignalR = null;
     private static String accountKeyBlobStorage = null;
 
     public static class parameter {
@@ -80,6 +79,22 @@ public class UploadBoard {
             HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
         
+
+        // T: Token validation (START)
+        String loginToken = request.getHeaders().get("Authorization");
+        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken))
+        {
+            context.getLogger().info("Invalid token");
+            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: invalid token").build();
+        }
+        else
+        {
+            context.getLogger().info("Valid token");
+        }
+        // T: Token validation (END)
+
+
+
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
