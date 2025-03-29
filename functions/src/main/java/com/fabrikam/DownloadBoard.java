@@ -14,6 +14,7 @@ import com.microsoft.azure.functions.annotation.FunctionName;
 import com.microsoft.azure.functions.HttpResponseMessage;
 import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.HttpRequestMessage;
+import com.azure.core.util.BinaryData;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -116,9 +117,14 @@ public class DownloadBoard {
 
         context.getLogger().info("porco2");
 
+        byte[] fileData = null;
         try {
             BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
-            byte[] fileData = blobClient.downloadContent().toBytes();    
+            context.getLogger().info("blobClient: " + blobClient);
+            BinaryData binaryData = blobClient.downloadContent();
+            context.getLogger().info("binaryData: " + binaryData);
+            fileData = binaryData.toBytes();
+            context.getLogger().info("fileData: " + fileData);    
         } catch(Exception e) {
             context.getLogger().info("Error: " + e.getMessage());
             for(Object o : e.getStackTrace()) {
