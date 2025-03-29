@@ -116,10 +116,15 @@ public class DownloadBoard {
 
         context.getLogger().info("porco2");
 
-
-        BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
-        byte[] fileData = blobClient.downloadContent().toBytes();
-
+        try {
+            BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
+            byte[] fileData = blobClient.downloadContent().toBytes();    
+        } catch(Exception e) {
+            context.getLogger().info("Error: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }
+        }
 
         context.getLogger().info("porco3");
 
