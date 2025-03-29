@@ -82,7 +82,7 @@ public class UploadBoard {
 
         // T: Token validation (START)
         String loginToken = request.getHeaders().get("Authorization");
-        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken))
+        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken, context))
         {
             context.getLogger().info("Invalid token");
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: invalid token").build();
