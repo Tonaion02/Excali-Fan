@@ -80,19 +80,17 @@ public class UploadBoard {
             final ExecutionContext context) {
         
 
+
         // T: Token validation (START)
         String loginToken = request.getHeaders().get("authorization");
-        for(String key : request.getHeaders().keySet())
-        {   
+        for(String key : request.getHeaders().keySet()) {   
             context.getLogger().info("header: " + key);
         }
-        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken, context))
-        {
+        if(loginToken == null || loginToken.isEmpty() || !TokenValidatorEntraId.validateToken(loginToken, context)) {
             context.getLogger().info("Invalid token:" + loginToken);
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: invalid token").build();
         }
-        else
-        {
+        else {
             context.getLogger().info("Valid token");
         }
         // T: Token validation (END)
