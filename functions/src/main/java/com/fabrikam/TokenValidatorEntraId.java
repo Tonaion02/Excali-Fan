@@ -1,5 +1,6 @@
 package com.fabrikam;
 
+import com.microsoft.azure.functions.ExecutionContext;
 import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jose.jwk.JWK;
@@ -37,57 +38,57 @@ public class TokenValidatorEntraId {
      * @param token Il token JWT da verificare
      * @return true se il token è valido, false altrimenti
      */
-    public static boolean validateToken(String token) {
+    public static boolean validateToken(String token, final ExecutionContext context) {
         try {
             // Parsing del token JWT
             SignedJWT signedJWT = SignedJWT.parse(token);
-            System.out.println("Token parsato con successo.");
+            context.getLogger().info("Token parsato con successo.");
 
 
-            System.out.println("Algoritmo del token: " + signedJWT.getHeader().getAlgorithm());
+            context.getLogger().info("Algoritmo del token: " + signedJWT.getHeader().getAlgorithm());
 
             // Recupero della chiave pubblica corretta
-            RSAPublicKey publicKey = getPublicKey(signedJWT.getHeader().getKeyID());
+            RSAPublicKey publicKey = getPublicKey(signedJWT.getHeader().getKeyID(), context);
             if (publicKey == null) {
-                System.out.println("Chiave pubblica non trovata per il token.");
+                context.getLogger().info("Chiave pubblica non trovata per il token.");
                 return false;
             }
 
             // Verifica della firma
             JWSVerifier verifier = new RSASSAVerifier(publicKey);
             if (!signedJWT.verify(verifier)) {
-                System.out.println("Firma non valida.");
+                context.getLogger().info("Firma non valida.");
                 return false;
             }
-            System.out.println("Firma verificata con successo.");
+            context.getLogger().info("Firma verificata con successo.");
 
             // Controllo della scadenza (exp)
             if (isTokenExpired(signedJWT)) {
-                System.out.println("Token scaduto.");
+                context.getLogger().info("Token scaduto.");
                 return false;
             }
-            System.out.println("Token non scaduto.");
+            context.getLogger().info("Token non scaduto.");
 
             // Controllo dell'issuer (iss)
             if (!isIssuerValid(signedJWT)) {
-                System.out.println("Issuer non valido.");
+                context.getLogger().info("Issuer non valido.");
                 return false;
             }
-            System.out.println("Issuer valido.");
+            context.getLogger().info("Issuer valido.");
 
             // Controllo dell’audience (aud)
             if (!isAudienceValid(signedJWT)) {
-                System.out.println("Audience non valida.");
+                context.getLogger().info("Audience non valida.");
                 return false;
             }
-            System.out.println("Audience valida.");
+            context.getLogger().info("Audience valida.");
 
-            System.out.println("Token valido.");
+            context.getLogger().info("Token valido.");
             return true;
 
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Errore durante la validazione del token: " + e.getMessage());
+            context.getLogger().info("Errore durante la validazione del token: " + e.getMessage());
             return false;
         }
     }
@@ -100,21 +101,21 @@ public class TokenValidatorEntraId {
      * @throws IOException    Se c'è un problema nel recupero della chiave
      * @throws ParseException Se la risposta del server non è valida
      */
-    private static RSAPublicKey getPublicKey(String kid) throws IOException, ParseException {
+    private static RSAPublicKey getPublicKey(String kid, final ExecutionContext context) throws IOException, ParseException {
         JWKSet jwkSet = JWKSet.load(new URL(JWKS_URL_V1));
 
         try {
             for (JWK jwk : jwkSet.getKeys()) {
                 if (jwk.getKeyID().equals(kid) && jwk instanceof RSAKey) {
-                    System.out.println("Chiave pubblica trovata per KID: " + kid);
+                    context.getLogger().info("Chiave pubblica trovata per KID: " + kid);
                     return ((RSAKey) jwk).toRSAPublicKey();
                 }
             }
         } catch(Exception e) {
-            System.out.println("A maronn i l'eccezion: " + e.getMessage());
+            context.getLogger().info("A maronn i l'eccezion: " + e.getMessage());
         }
 
-        System.out.println("Nessuna chiave pubblica corrispondente trovata per KID: " + kid);
+        context.getLogger().info("Nessuna chiave pubblica corrispondente trovata per KID: " + kid);
         return null;
     }
 
