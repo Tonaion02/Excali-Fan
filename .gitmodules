@@ -1,6 +1,3 @@
-[submodule "experiments/ImGUI/experiments/ImGUI/imgui-js"]
-	path = experiments/ImGUI/experiments/ImGUI/imgui-js
-	url = git@github.com:flyover/imgui-js.git
 [submodule "experiments/ImGUI/imgui-js"]
 	path = experiments/ImGUI/imgui-js
 	url = git@github.com:flyover/imgui-js.git
