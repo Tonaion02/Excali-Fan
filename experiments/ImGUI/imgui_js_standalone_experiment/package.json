@@ -1,5 +1,5 @@
 {
-  "name": "imgui_js_standalone_experiment",
+  "name": "imgui_standalone_experiment",
   "version": "1.0.0",
   "scripts": {
     "start-example-html": "http-server -c-1 -o example/index.html"

@@ -9,14 +9,22 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             step((generator = generator.apply(thisArg, _arguments || [])).next());
         });
     };
-    var ImGui, ImGui_Impl, imgui_demo_js_1, imgui_memory_editor_js_1, font, show_demo_window, show_another_window, clear_color, memory_editor, show_sandbox_window, show_gamepad_window, show_movie_window, f, counter, done, source, image_urls, image_url, image_element, image_gl_texture, video_urls, video_url, video_element, video_gl_texture, video_w, video_h, video_time_active, video_time, video_duration;
+    
+    var ImGui, ImGui_Impl, imgui_demo_js_1, imgui_memory_editor_js_1, font, clear_color, memory_editor, show_sandbox_window, show_gamepad_window, show_movie_window, f, counter, done, source, image_urls, image_url, image_element, image_gl_texture, video_urls, video_url, video_element, video_gl_texture, video_w, video_h, video_time_active, video_time, video_duration;
+    // T: NOTES: these variables are useless now
+    // var show_another_window, show_demo_window;
     var __moduleName = context_1 && context_1.id;
+
+    // T: added by me
+    var boolean_field, use_font;
+
     function LoadArrayBuffer(url) {
         return __awaiter(this, void 0, void 0, function* () {
             const response = yield fetch(url);
             return response.arrayBuffer();
         });
     }
+    
     function main() {
         return __awaiter(this, void 0, void 0, function* () {
             yield ImGui.default();
@@ -37,7 +45,9 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             }
         });
     }
+    
     exports_1("default", main);
+    
     function AddFontFromFileTTF(url, size_pixels, font_cfg = null, glyph_ranges = null) {
         return __awaiter(this, void 0, void 0, function* () {
             font_cfg = font_cfg || new ImGui.FontConfig();
@@ -45,6 +55,9 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             return ImGui.GetIO().Fonts.AddFontFromMemoryTTF(yield LoadArrayBuffer(url), size_pixels, font_cfg, glyph_ranges);
         });
     }
+
+    var canvas;
+
     function _init() {
         return __awaiter(this, void 0, void 0, function* () {
             const EMSCRIPTEN_VERSION = `${ImGui.bind.__EMSCRIPTEN_major__}.${ImGui.bind.__EMSCRIPTEN_minor__}.${ImGui.bind.__EMSCRIPTEN_tiny__}`;
@@ -68,7 +81,7 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
             io.Fonts.AddFontDefault();
             // T: NOTES: Here there is the path for the font used
-            font = yield AddFontFromFileTTF("../imgui/misc/fonts/Roboto-Medium.ttf", 16.0);
+            font = yield AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 14.0);
             // font = await AddFontFromFileTTF("../imgui/misc/fonts/Cousine-Regular.ttf", 15.0);
             // font = await AddFontFromFileTTF("../imgui/misc/fonts/DroidSans.ttf", 16.0);
             // font = await AddFontFromFileTTF("../imgui/misc/fonts/ProggyTiny.ttf", 10.0);
@@ -82,7 +95,8 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             // T: NOTES: Here is where the canvas is acquired
             if (typeof (window) !== "undefined") {
                 const output = document.getElementById("output") || document.body;
-                const canvas = document.createElement("canvas");
+                canvas = document.createElement("canvas");
+                // const canvas = document.createElement("canvas");
                 output.appendChild(canvas);
                 canvas.tabIndex = 1;
                 canvas.style.position = "absolute";
@@ -109,6 +123,10 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             }
         });
     }
+
+
+
+    
     // Main loop
     function _loop(time) {
         // Poll and handle events (inputs, window resize, etc.)
@@ -132,13 +150,43 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             // T: NOTES: these static variables are commented here and then defined at the end of this file(WTF???)
             // static float f = 0.0f;
             // static int counter = 0;
-            
+
+
+            // T: Change font (START)
+            if (use_font && font) {
+                ImGui.PushFont(font);
+
+                // T: this code is useless
+                // ImGui.Text(`${font.GetDebugName()}`);
+                // if (font.FindGlyphNoFallback(0x5929)) {
+                //     ImGui.Text(`U+5929: \u5929`);
+                // }
+                
+                // T: Remove the font 
+                // ImGui.PopFont();
+            }
+            // T: Change font (END)
+
+
             ImGui.Begin("Window Title"); // Create a window called "Hello, world!" and append into it.
             ImGui.Text("Displaying some text"); // Display some text
-            ImGui.Checkbox("Demo Window", (value = show_demo_window) => show_demo_window = value); // Edit bools storing our windows open/close state
+            // T: NOTES: this code is useless
+            // ImGui.Checkbox("Demo Window", (value = show_demo_window) => show_demo_window = value); // Edit bools storing our windows open/close state
+            ImGui.Checkbox("checkbox", (value = boolean_field) => boolean_field = value); // Edit bools
+            ImGui.Checkbox("use_font", (value = use_font) => use_font = value);
+
+
+            // T: This code make possible that when we have the pointer on the checkbox
+            // we create the tooltip writing on it a string
+            if (ImGui.IsItemHovered()) {
+                ImGui.BeginTooltip();
+                ImGui.Text("Hello!");
+                ImGui.EndTooltip();
+            }
+
             ImGui.SliderFloat("float", (value = f) => f = value, 0.0, 1.0); // Edit 1 float using a slider from 0.0f to 1.0f
             ImGui.ColorEdit3("clear color", clear_color); // Edit 3 floats representing a color
-            if (ImGui.Button("Button")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+            if (ImGui.Button("Increment counter")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
                 counter++;
             ImGui.SameLine();
             ImGui.Text(`counter = ${counter}`);
@@ -223,7 +271,10 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
         ImGui.EndFrame();
         // Rendering
         ImGui.Render();
-        const gl = ImGui_Impl.gl;
+
+        // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize WebGL in another
+        // point of the code    
+        const gl = ImGui_Impl.gl;        
         if (gl) {
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
             gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
@@ -262,8 +313,12 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             if (ctx) {
                 ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
             }
-            CleanUpImage();
-            CleanUpVideo();
+
+            // T: NOTES: for now this code is useless (START)
+            // CleanUpImage();
+            // CleanUpVideo();
+            // T: NOTES: for now this code is useless (END)
+            
             // Cleanup
             ImGui_Impl.Shutdown();
             ImGui.DestroyContext();
@@ -509,8 +564,15 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
         execute: function () {
             font = null;
             // Our state
-            show_demo_window = true;
-            show_another_window = false;
+            // T: these variables are currently useless (START)
+            // show_demo_window = true;
+            // show_another_window = false;
+            // T: these variables are currently useless (END)
+
+            boolean_field = false;
+
+            use_font = false;
+
             clear_color = new ImGui.Vec4(0.45, 0.55, 0.60, 1.00);
             memory_editor = new imgui_memory_editor_js_1.MemoryEditor();
             memory_editor.Open = false;
