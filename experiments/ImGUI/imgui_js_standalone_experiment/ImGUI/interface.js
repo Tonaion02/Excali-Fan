@@ -1,4 +1,4 @@
-System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memory_editor.js"], function (exports_1, context_1) {
+System.register(["imgui-js", "./imgui_impl.js", /*"./imgui_demo.js",*/ "./imgui_memory_editor.js"], function (exports_1, context_1) {
     "use strict";
 
     var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
@@ -561,9 +561,9 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             function (ImGui_Impl_1) {
                 ImGui_Impl = ImGui_Impl_1;
             },
-            function (imgui_demo_js_1_1) {
-                imgui_demo_js_1 = imgui_demo_js_1_1;
-            },
+            // function (imgui_demo_js_1_1) {
+            //     imgui_demo_js_1 = imgui_demo_js_1_1;
+            // },
             function (imgui_memory_editor_js_1_1) {
                 imgui_memory_editor_js_1 = imgui_memory_editor_js_1_1;
             }
