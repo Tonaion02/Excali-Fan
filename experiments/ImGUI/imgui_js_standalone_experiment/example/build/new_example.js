@@ -1,5 +1,6 @@
 System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memory_editor.js"], function (exports_1, context_1) {
     "use strict";
+
     var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
         function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
         return new (P || (P = Promise))(function (resolve, reject) {
@@ -93,11 +94,18 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
             // ImGui_ImplOpenGL3_Init(glsl_version);
 
             // T: NOTES: Here is where the canvas is acquired
-            if (typeof (window) !== "undefined") {
+            if (typeof (window) !== "undefined") { 
                 const output = document.getElementById("output") || document.body;
-                canvas = document.createElement("canvas");
-                // const canvas = document.createElement("canvas");
-                output.appendChild(canvas);
+                
+                // T: NOTES: Here we are creating canvas element (START)
+                // canvas = document.createElement("canvas");
+                // // const canvas = document.createElement("canvas");
+                // output.appendChild(canvas);
+                // T: NOTES: Here we are creating canvas element (END)
+                
+                // T: NOTES: Retrieve canvas from HTML5
+                const canvas = document.getElementsByTagName("canvas")[0];
+
                 canvas.tabIndex = 1;
                 canvas.style.position = "absolute";
                 canvas.style.left = "0px";
@@ -107,6 +115,7 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
                 canvas.style.width = "100%";
                 canvas.style.height = "100%";
                 canvas.style.userSelect = "none";
+
                 ImGui_Impl.Init(canvas);
             }
             else {
@@ -272,8 +281,8 @@ System.register(["imgui-js", "./imgui_impl.js", "./imgui_demo.js", "./imgui_memo
         // Rendering
         ImGui.Render();
 
-        // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize WebGL in another
-        // point of the code    
+        // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize
+        // WebGL in another point of the code    
         const gl = ImGui_Impl.gl;        
         if (gl) {
             gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);

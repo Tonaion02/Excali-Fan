@@ -2,6 +2,10 @@ System.register(["imgui-js"], function (exports_1, context_1) {
     "use strict";
     var ImGui, clipboard_text, canvas, gl, g_ShaderHandle, g_VertHandle, g_FragHandle, g_AttribLocationTex, g_AttribLocationProjMtx, g_AttribLocationPosition, g_AttribLocationUV, g_AttribLocationColor, g_VboHandle, g_ElementsHandle, g_FontTexture, ctx, prev_time, key_code_to_index, mouse_button_map;
     var __moduleName = context_1 && context_1.id;
+
+
+
+    // T: event listeners (START)
     function document_on_copy(event) {
         if (event.clipboardData) {
             event.clipboardData.setData("text/plain", clipboard_text);
@@ -135,6 +139,10 @@ System.register(["imgui-js"], function (exports_1, context_1) {
             event.preventDefault();
         }
     }
+    // T: event listeners (END)
+
+
+
     function Init(value) {
         const io = ImGui.GetIO();
         if (typeof (window) !== "undefined") {
@@ -144,9 +152,11 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         else {
             io.BackendPlatformName = "imgui_impl_console";
         }
+
         if (typeof (navigator) !== "undefined") {
             io.ConfigMacOSXBehaviors = navigator.platform.match(/Mac/) !== null;
         }
+
         if (typeof (document) !== "undefined") {
             document.body.addEventListener("copy", document_on_copy);
             document.body.addEventListener("cut", document_on_cut);
@@ -182,8 +192,12 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         if (typeof (window) !== "undefined") {
             if (value instanceof (HTMLCanvasElement)) {
                 canvas = value;
-                value = canvas.getContext("webgl2", { alpha: false }) || canvas.getContext("webgl", { alpha: false }) || canvas.getContext("2d");
+                // T: NOTES: commented to inject the OpenGL context from the outside through
+                // the gl_glob global variable
+                // value = canvas.getContext("webgl2", { alpha: false }) || canvas.getContext("webgl", { alpha: false }) || canvas.getContext("2d");
+                value = gl_glob;
             }
+
             if (typeof WebGL2RenderingContext !== "undefined" && value instanceof (WebGL2RenderingContext)) {
                 io.BackendRendererName = "imgui_impl_webgl2";
                 canvas = canvas || value.canvas;
@@ -241,6 +255,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         CreateDeviceObjects();
     }
     exports_1("Init", Init);
+    
+    
+    
     function Shutdown() {
         DestroyDeviceObjects();
         if (canvas !== null) {
@@ -269,6 +286,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         }
     }
     exports_1("Shutdown", Shutdown);
+
+
+
     function NewFrame(time) {
         const io = ImGui.GetIO();
         if (io.WantSaveIniSettings) {
@@ -453,6 +473,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         }
     }
     exports_1("NewFrame", NewFrame);
+    
+    
+    
     function RenderDrawData(draw_data = ImGui.GetDrawData()) {
         const io = ImGui.GetIO();
         if (draw_data === null) {
@@ -671,6 +694,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         gl && (last_scissor_box !== null) && gl.scissor(last_scissor_box[0], last_scissor_box[1], last_scissor_box[2], last_scissor_box[3]);
     }
     exports_1("RenderDrawData", RenderDrawData);
+    
+    
+    
     function CreateFontsTexture() {
         const io = ImGui.GetIO();
         // Backup GL state
@@ -708,6 +734,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         gl && last_texture && gl.bindTexture(gl.TEXTURE_2D, last_texture);
     }
     exports_1("CreateFontsTexture", CreateFontsTexture);
+    
+    
+    
     function DestroyFontsTexture() {
         const io = ImGui.GetIO();
         io.Fonts.TexID = null;
@@ -715,6 +744,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         g_FontTexture = null;
     }
     exports_1("DestroyFontsTexture", DestroyFontsTexture);
+    
+    
+    
     function CreateDeviceObjects() {
         const vertex_shader = [
             "uniform mat4 ProjMtx;",
@@ -758,6 +790,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         CreateFontsTexture();
     }
     exports_1("CreateDeviceObjects", CreateDeviceObjects);
+    
+    
+    
     function DestroyDeviceObjects() {
         DestroyFontsTexture();
         gl && gl.deleteBuffer(g_VboHandle);
@@ -777,6 +812,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
         g_FragHandle = null;
     }
     exports_1("DestroyDeviceObjects", DestroyDeviceObjects);
+    
+    
+    
     return {
         setters: [
             function (ImGui_1) {

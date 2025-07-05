@@ -7,23 +7,32 @@
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/flyover/system.ts/build/system.js"></script>
     <script type="text/javascript" src="system.config.js"></script>
-    <!-- <script type="text/javascript">
-    System.import("main")
-    .then(function (main) { main.default(); })
-    .catch(console.error);
-    </script> -->
-
+    
     <script type="text/javascript">
-      if(debug == true)
-      {
-        console.log("Debug Mode");
-        System.import("new_example").then(function (main) {main.default(); })
-      }
-      else
-      {
-        console.log("Release Mode");
+      var gl_glob;
+      document.addEventListener("DOMContentLoaded", load);
+
+      function load() {
+        gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
+                      document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
+                      document.getElementsByTagName("canvas")[0].getContext("2d");
+        
+        console.log(gl_glob);
+
+        if(debug == true)
+        {
+          console.log("Debug Mode");
+          System.import("new_example").then(function (main) {main.default(); }) // .catch(console.error);
+        }
+        else
+        {
+          console.log("Release Mode");
+        }
       }
     </script>
-
   </head>
+
+  <body>
+    <canvas>
+  </body>
 </html>
