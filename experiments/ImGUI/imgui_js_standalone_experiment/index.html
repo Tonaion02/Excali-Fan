@@ -12,6 +12,7 @@
       var gl_glob;
       document.addEventListener("DOMContentLoaded", load);
 
+      // T: This is the loading function (START)
       function load() {
         gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
                       document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
@@ -20,13 +21,16 @@
         if(debug == true)
         {
           console.log("Debug Mode");
-          System.import("new_example").then(function (main) {main.default(); }) // .catch(console.error);
+          System.import("debug_interface")
+          .then(function (main) {main.default(); })
+          .catch(console.error)
         }
         else
         {
           console.log("Release Mode");
         }
       }
+      // T: This is the loading function (END)
     </script>
   </head>
 

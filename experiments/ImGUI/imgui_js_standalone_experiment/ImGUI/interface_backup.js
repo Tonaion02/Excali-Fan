@@ -26,6 +26,7 @@ System.register(["imgui-js", "./imgui_impl.js", /*"./imgui_demo.js",*/ "./imgui_
         });
     }
     
+    // T: Changed the name of this function from "main" to "interface"
     function main() {
         return __awaiter(this, void 0, void 0, function* () {
             yield ImGui.default();
