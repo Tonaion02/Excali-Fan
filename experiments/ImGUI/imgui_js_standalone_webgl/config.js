@@ -3,7 +3,8 @@
 // T: probably i will put all this global variable in a global_variable files, probably config 
 // can be something like that.
 var ImGui, ImGui_Impl;
-var boolean_field, use_font, clear_color;
+var boolean_field, use_font;
+var clear_color = {x: 0, y: 0, z: 0, w: 0}
 
 var imgui_init;
 var imgui_start_frame;
@@ -16,4 +17,4 @@ function here() {
     io.Fonts.AddFontDefault();
 }
 
-var debug = true;
+var debug = false;

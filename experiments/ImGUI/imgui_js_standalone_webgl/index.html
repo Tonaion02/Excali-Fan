@@ -46,8 +46,8 @@
       }
     </script>
 
-    <!-- <script id="javascript_code" src="index.js"></script> -->
-
+<script src="index.js"></script>
+    
     <script type="text/javascript">
       var gl_glob;
       document.addEventListener("DOMContentLoaded", load);
@@ -59,8 +59,7 @@
                       document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
                       document.getElementsByTagName("canvas")[0].getContext("2d");
 
-        console.log(gl_glob);
-
+        let module;
         if(debug == true)
         {
           console.log("Debug Mode");
@@ -87,7 +86,15 @@
           console.log("Release Mode");
 
           // T: TODO: Add in Release mode a way similar to main.default to
-          // initialize and handle the loop 
+          // initialize and handle the loop
+
+          // import("./index.js").
+          // then((module) =>
+          // {
+          //   module.index();
+          // })
+
+          index();
         }
       }
       // T: This is the loading function (END)

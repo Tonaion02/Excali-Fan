@@ -64,17 +64,8 @@ function assert_attrib_uniform_location(location)
 
 
 
-function index()
+function loop() 
 {
-
-}
-
-
-
-
-function loop() {
-
-
     const gl = gl_glob;    
     console.log(gl.getParameter(gl.VERSION));
     if(!gl)
@@ -200,7 +191,7 @@ function loop() {
     // T: Tell WebGL how to convert from clip space to pixel
     gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     
-     gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     
@@ -243,6 +234,21 @@ function loop() {
 
 
 
+
+
+// export function index()
+function index()
+{
+    if (typeof window !== "undefined") {
+        window.requestAnimationFrame(loop);
+    }        
+}
+
+
+
+
+
+if(debug)
 System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memory_editor.js"], function (exports_1, context_1) {
     "use strict";
     
