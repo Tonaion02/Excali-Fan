@@ -7,43 +7,43 @@
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/flyover/system.ts/build/system.js"></script>
     <script type="text/javascript" src="system.config.js"></script>
-    
+
     <script src="https://webgl2fundamentals.org/webgl/resources/webgl-utils.js"></script>
 
     <script id="vertex_shader" type="notjs">#version 300 es
     
-    precision highp float;
-    
-    in vec2 a_position;
-    in vec4 a_color;
-    
-    out vec4 fin_color;
-    
-    uniform vec2 u_resolution;
-    
-    void main() 
-    {
-      vec2 zeroToOne = a_position / u_resolution;
-      vec2 zeroToTwo = zeroToOne * 2.0;
-      vec2 clipSpace = zeroToTwo - 1.0;
-      fin_color = a_color;
-      gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
-    }
+      precision highp float;
+      
+      in vec2 a_position;
+      in vec4 a_color;
+      
+      out vec4 fin_color;
+      
+      uniform vec2 u_resolution;
+      
+      void main() 
+      {
+        vec2 zeroToOne = a_position / u_resolution;
+        vec2 zeroToTwo = zeroToOne * 2.0;
+        vec2 clipSpace = zeroToTwo - 1.0;
+        fin_color = a_color;
+        gl_Position = vec4(clipSpace * vec2(1, -1), 0, 1);
+      }
     </script>
 
     <script id="fragment_shader" type="notjs">#version 300 es
     
-    precision highp float;
-    
-    in vec4 fin_color;
-    
-    out vec4 fragColor;
-    
-    void main()
-    {
-      fragColor = fin_color;
-      // fragColor = vec4(0, 0, 0, 1);
-    }
+      precision highp float;
+      
+      in vec4 fin_color;
+      
+      out vec4 fragColor;
+      
+      void main()
+      {
+        fragColor = fin_color;
+        // fragColor = vec4(0, 0, 0, 1);
+      }
     </script>
 
     <!-- <script id="javascript_code" src="index.js"></script> -->
@@ -53,7 +53,8 @@
       document.addEventListener("DOMContentLoaded", load);
 
       // T: This is the loading function (START)
-      function load() {
+      function load()
+      {
         gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
                       document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
                       document.getElementsByTagName("canvas")[0].getContext("2d");
@@ -63,41 +64,30 @@
         if(debug == true)
         {
           console.log("Debug Mode");
-          // System.import("debug_interface")
-          // // T: NOTE: I discovered that the name "main" is not mandatory
-          // // in the past I thinked that this name is mandatory for whatever
-          // // reason, but it's not. 
-          // // The unique important thing is that the name must match with the
-          // // name that is exported in the file interface.js
-          // // Probably every other method that is exported can work like that.
-          // .then(function (main) {main.default(); })
-          // .catch(console.error)
-          // .then(() => 
-          // {
-          //   index();
-          // });
 
-
-    System.import("all")
-    // T: NOTE: I discovered that the name "main" is not mandatory
-    // in the past I thinked that this name is mandatory for whatever
-    // reason, but it's not. 
-    // The unique important thing is that the name must match with the
-    // name that is exported in the file interface.js
-    // Probably every other method that is exported can work like that.
-    .then(function (main) 
-    { 
-        main.default();
-    })
-    .catch(console.error)
-    .then(() => 
-    {
-        // index();
-    });
+          System.import("all")
+          // T: NOTE: I discovered that the name "main" is not mandatory
+          // in the past I thinked that this name is mandatory for whatever
+          // reason, but it's not. 
+          // The unique important thing is that the name must match with the
+          // name that is exported in the file interface.js
+          // Probably every other method that is exported can work like that.
+          .then(function (main) 
+          { 
+              main.default();
+          })
+          .catch(console.error)
+          .then(() => 
+          {
+              // index();
+          });
         }
         else
         {
           console.log("Release Mode");
+
+          // T: TODO: Add in Release mode a way similar to main.default to
+          // initialize and handle the loop 
         }
       }
       // T: This is the loading function (END)

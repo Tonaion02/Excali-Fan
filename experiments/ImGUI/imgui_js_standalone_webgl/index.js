@@ -66,185 +66,178 @@ function assert_attrib_uniform_location(location)
 
 function index()
 {
-    if (typeof (window) !== "undefined") {
-        window.requestAnimationFrame(loop);
-    }
 
-    // System.import("debug_interface")
-    // // T: NOTE: I discovered that the name "main" is not mandatory
-    // // in the past I thinked that this name is mandatory for whatever
-    // // reason, but it's not. 
-    // // The unique important thing is that the name must match with the
-    // // name that is exported in the file interface.js
-    // // Probably every other method that is exported can work like that.
-    // .then(function (main) 
-    // { 
-    //     main.default();
-
-    //     main.another();
-    // })
-    // .catch(console.error)
-    // .then(() => 
-    // {
-    //     // index();
-    // });
-    
-
-    // const gl = canvas.getContext("webgl2");    
-    // console.log(gl.getParameter(gl.VERSION));
-    // if(!gl)
-    // {   
-    //     console.log("ERROR: WebGL isn't working");
-    //     return;
-    // }
-
-    // const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-    // if (debugInfo) {
-    //   const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
-    //   const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
-    //   console.log('Vendor:', vendor);
-    //   console.log('Renderer:', renderer);
-    // } else {
-    //   console.log('WEBGL_debug_renderer_info not supported');
-    // }
-
-
-
-    // // T: Loading shaders (START)
-    // let vertex_shader_src = document.querySelector("#vertex_shader").text;
-    // let fragment_shader_src = document.querySelector("#fragment_shader").text;
-    // // T: Loading shaders (END)
-
-    // // T: Compiling shaders (START)
-    // let vertex_shader = create_shader(gl, gl.VERTEX_SHADER, vertex_shader_src);
-    // let fragment_shader = create_shader(gl, gl.FRAGMENT_SHADER, fragment_shader_src);
-    // // T: Compiling shaders (END)
-
-    // // T: Create program
-    // let program = create_program(gl, vertex_shader, fragment_shader);
-    // gl.useProgram(program);
-
-
-    // // T: lookup for uniform and attrib locations (START)
-    // let position_attribute_location = gl.getAttribLocation(program, "a_position");
-    // assert_attrib_uniform_location(position_attribute_location);
-    // let color_attribute_location = gl.getAttribLocation(program, "a_color");
-    // assert_attrib_uniform_location(color_attribute_location);
-
-    // let resolution_uniform_location = gl.getUniformLocation(program, "u_resolution");
-    // assert_attrib_uniform_location(resolution_uniform_location);
-    // // T: lookup for uniform and attrib locations (END)
-
-
-
-    // // T: Create and select the vertex array
-    // let vao = gl.createVertexArray();
-    // gl.bindVertexArray(vao);
-
-    // // T: Create position buffer (START)
-    // let position_buffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
-    // var positions = [
-    //   100, 0,
-    //   200, 0,
-    //   100, 20,
-    // ];
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
-    // // T: Create position buffer (END)
-
-    // // T: Tell the attribute how to get data out of positionBuffer(ARRAY_BUFFER) (START)
-    // gl.enableVertexAttribArray(position_attribute_location);
-    // // T: 2 components per iteration
-    // let size = 2;          
-    // // T: the data is 32bit floats
-    // let type = gl.FLOAT;   
-    // // T: don't normalize the data
-    // let normalize = false; 
-    // // T: 0 = move forward size * sizeof(type) each iteration to get the next position
-    // let stride = 0;
-    // // T: start at the beginning of the buffer        
-    // let offset = 0;        
-    // gl.vertexAttribPointer(position_attribute_location, size, type, normalize, stride, offset);
-    // // T: Tell the attribute how to get data out of positionBuffer(ARRAY_BUFFER) (END)
-
-
-    
-    // // T: Create color buffer (START)
-    // let color_buffer = gl.createBuffer();
-    // gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
-    // var colors = [
-    //     0.0, 0.0, 1.0, 1.0,
-    //     0.0, 0.0, 1.0, 1.0,
-    //     0.0, 0.0, 1.0, 1.0,
-    // ];
-    // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-    // // T: Create color buffer (END)
-
-    // // T: Tell the attribute how to get data out of color_buffer(ARRAY_BUFFER) (START)
-    // gl.enableVertexAttribArray(color_attribute_location);
-    // // T: 2 components per iteration
-    // let size_color = 4;          
-    // // T: the data is 32bit floats
-    // let type_color = gl.FLOAT;   
-    // // T: don't normalize the data
-    // let normalize_color = false; 
-    // // T: 0 = move forward size * sizeof(type) each iteration to get the next position
-    // let stride_color = 0;
-    // // T: start at the beginning of the buffer        
-    // let offset_color = 0;        
-    // gl.vertexAttribPointer(color_attribute_location, size_color, type_color, normalize_color, stride_color, offset_color);
-    // // T: Tell the attribute how to get data out of color_buffer(ARRAY_BUFFER) (END)
-
-
-
-    // // T: Helper function to make working the resize of the window
-    // webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-    // console.log("canvas size: (" + gl.canvas.width + " " + gl.canvas.height + ")");
-    
-    // // T: Set uniform for resolution of canvas
-    // gl.uniform2f(resolution_uniform_location, gl.canvas.width, gl.canvas.height);
-
-    // // T: Tell WebGL how to convert from clip space to pixel
-    // gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
-    
-    // gl.clearColor(0, 0, 0, 0);
-    // gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    
-
-
-
-    // // T: Draw the triangle (START)
-    // let primitiveType = gl.TRIANGLES;
-    // let offset_ = 0;
-    // let count = 3;
-    // gl.drawArrays(primitiveType, offset_, count);
-    // // T: Draw the triangle (END)
 }
 
-// main();
-// index();
 
 
 
 function loop() {
+
+
+    const gl = gl_glob;    
+    console.log(gl.getParameter(gl.VERSION));
+    if(!gl)
+    {   
+        console.log("ERROR: WebGL isn't working");
+        return;
+    }
+
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    if (debugInfo) {
+      const vendor = gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL);
+      const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL);
+      console.log('Vendor:', vendor);
+      console.log('Renderer:', renderer);
+    } else {
+      console.log('WEBGL_debug_renderer_info not supported');
+    }
+
+
+
+    // T: Loading shaders (START)
+    let vertex_shader_src = document.querySelector("#vertex_shader").text;
+    let fragment_shader_src = document.querySelector("#fragment_shader").text;
+    // T: Loading shaders (END)
+
+    // T: Compiling shaders (START)
+    let vertex_shader = create_shader(gl, gl.VERTEX_SHADER, vertex_shader_src);
+    let fragment_shader = create_shader(gl, gl.FRAGMENT_SHADER, fragment_shader_src);
+    // T: Compiling shaders (END)
+
+    // T: Create program
+    let program = create_program(gl, vertex_shader, fragment_shader);
+    gl.useProgram(program);
+
+
+    // T: lookup for uniform and attrib locations (START)
+    let position_attribute_location = gl.getAttribLocation(program, "a_position");
+    assert_attrib_uniform_location(position_attribute_location);
+    let color_attribute_location = gl.getAttribLocation(program, "a_color");
+    assert_attrib_uniform_location(color_attribute_location);
+
+    let resolution_uniform_location = gl.getUniformLocation(program, "u_resolution");
+    assert_attrib_uniform_location(resolution_uniform_location);
+    // T: lookup for uniform and attrib locations (END)
+
+
+
+    // T: Create and select the vertex array
+    let vao = gl.createVertexArray();
+    gl.bindVertexArray(vao);
+
+    // T: Create position buffer (START)
+    let position_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
+    var positions = [
+      100, 0,
+      200, 0,
+      100, 20,
+
+      101, 21,
+      201, 21,
+      201, 1,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    // T: Create position buffer (END)
+
+    // T: Tell the attribute how to get data out of positionBuffer(ARRAY_BUFFER) (START)
+    gl.enableVertexAttribArray(position_attribute_location);
+    // T: 2 components per iteration
+    let size = 2;          
+    // T: the data is 32bit floats
+    let type = gl.FLOAT;   
+    // T: don't normalize the data
+    let normalize = false; 
+    // T: 0 = move forward size * sizeof(type) each iteration to get the next position
+    let stride = 0;
+    // T: start at the beginning of the buffer        
+    let offset = 0;        
+    gl.vertexAttribPointer(position_attribute_location, size, type, normalize, stride, offset);
+    // T: Tell the attribute how to get data out of positionBuffer(ARRAY_BUFFER) (END)
+
+
     
-    // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize
-    // WebGL in another point of the code    
-    var gl = gl_glob;
-    console.log(gl);        
-    if (gl) {
-        gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        gl.clear(gl.COLOR_BUFFER_BIT);
-        //gl.useProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-    }
-    const ctx = ImGui_Impl.ctx;
-    if (ctx) {
-        // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        ctx.fillStyle = `rgba(${clear_color.x * 0xff}, ${clear_color.y * 0xff}, ${clear_color.z * 0xff}, ${clear_color.w})`;
-        ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-    }
+    // T: Create color buffer (START)
+    let color_buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, color_buffer);
+    var colors = [
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+        0.0, 0.0, 1.0, 1.0,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+    // T: Create color buffer (END)
+
+    // T: Tell the attribute how to get data out of color_buffer(ARRAY_BUFFER) (START)
+    gl.enableVertexAttribArray(color_attribute_location);
+    // T: 2 components per iteration
+    let size_color = 4;          
+    // T: the data is 32bit floats
+    let type_color = gl.FLOAT;   
+    // T: don't normalize the data
+    let normalize_color = false; 
+    // T: 0 = move forward size * sizeof(type) each iteration to get the next position
+    let stride_color = 0;
+    // T: start at the beginning of the buffer        
+    let offset_color = 0;        
+    gl.vertexAttribPointer(color_attribute_location, size_color, type_color, normalize_color, stride_color, offset_color);
+    // T: Tell the attribute how to get data out of color_buffer(ARRAY_BUFFER) (END)
+
+
+
+    // T: Helper function to make working the resize of the window
+    webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+    console.log("canvas size: (" + gl.canvas.width + " " + gl.canvas.height + ")");
+    
+    // T: Set uniform for resolution of canvas
+    gl.uniform2f(resolution_uniform_location, gl.canvas.width, gl.canvas.height);
+
+    // T: Tell WebGL how to convert from clip space to pixel
+    gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+    
+     gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    
+
+
+
+    // T: Draw the triangle (START)
+    let primitiveType = gl.TRIANGLES;
+    let offset_ = 0;
+    let count = 6;
+    gl.drawArrays(primitiveType, offset_, count);
+    // T: Draw the triangle (END)
+
+
+
+
+    
+    // // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize
+    // // WebGL in another point of the code    
+    // var gl = gl_glob;
+    // console.log(gl);        
+    // if (gl) {
+    //     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+    //     gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    //     gl.clear(gl.COLOR_BUFFER_BIT);
+    //     //gl.useProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
+    // }
+
+
+
+    // T: NOTES I don't know the purpose of this code
+    // const ctx = ImGui_Impl.ctx;
+    // if (ctx) {
+    //     // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    //     ctx.fillStyle = `rgba(${clear_color.x * 0xff}, ${clear_color.y * 0xff}, ${clear_color.z * 0xff}, ${clear_color.w})`;
+    //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    // }
 
 }
 
@@ -400,22 +393,6 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
 
         loop();
 
-        // // T: NOTES: this gl is taken directly from ImGui_impl, so I don't know if i can inizialize
-        // // WebGL in another point of the code    
-        // // const gl = ImGui_Impl.gl;    
-        // var gl = gl_glob;
-        // if (gl) {
-        //     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
-        //     gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-        //     gl.clear(gl.COLOR_BUFFER_BIT);
-        //     //gl.useProgram(0); // You may want this if using this code in an OpenGL 3+ context where shaders may be bound
-        // }
-        // const ctx = ImGui_Impl.ctx;
-        // if (ctx) {
-        //     // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        //     ctx.fillStyle = `rgba(${clear_color.x * 0xff}, ${clear_color.y * 0xff}, ${clear_color.z * 0xff}, ${clear_color.w})`;
-        //     ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        // }
 
         // T: WARNING: removing this node give us a strange error (START)
         ImGui_Impl.RenderDrawData(ImGui.GetDrawData());
@@ -444,11 +421,6 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
         // T: NOTES: some of the variables that are used in the code are defined directly here
         execute: function () {
             font = null;
-            // Our state
-            // T: these variables are currently useless (START)
-            // show_demo_window = true;
-            // show_another_window = false;
-            // T: these variables are currently useless (END)
 
             boolean_field = false;
 
@@ -505,6 +477,3 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
         }
     };
 });
-
-// T: NOTES: WTF is this piece of shit?
-//# sourceMappingURL=main.js.map
