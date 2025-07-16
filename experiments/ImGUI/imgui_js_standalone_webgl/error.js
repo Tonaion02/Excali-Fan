@@ -1,0 +1,1 @@
+const invalid_value_attrib_location = "Invalid value for location of attribute or uniform";
