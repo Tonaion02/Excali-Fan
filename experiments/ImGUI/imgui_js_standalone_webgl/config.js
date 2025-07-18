@@ -6,15 +6,4 @@ var ImGui, ImGui_Impl;
 var boolean_field, use_font;
 var clear_color = {x: 0, y: 0, z: 0, w: 0}
 
-var imgui_init;
-var imgui_start_frame;
-var imgui_end_frame;
-
-function here() {
-
-    // T: this is a perfect example of how you can directly put code for ImGui out of that file
-    const io = ImGui.GetIO();
-    io.Fonts.AddFontDefault();
-}
-
-var debug = false;
+var debug = true;

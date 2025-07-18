@@ -63,10 +63,10 @@ function assert_attrib_uniform_location(location)
 
 
 
+const gl = gl_glob;    
 
-function loop() 
+function setup()
 {
-    const gl = gl_glob;    
     console.log(gl.getParameter(gl.VERSION));
     if(!gl)
     {   
@@ -83,9 +83,10 @@ function loop()
     } else {
       console.log('WEBGL_debug_renderer_info not supported');
     }
+}
 
-
-
+function loop() 
+{
     // T: Loading shaders (START)
     let vertex_shader_src = document.querySelector("#vertex_shader").text;
     let fragment_shader_src = document.querySelector("#fragment_shader").text;
@@ -183,7 +184,7 @@ function loop()
 
     // T: Helper function to make working the resize of the window
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
-    console.log("canvas size: (" + gl.canvas.width + " " + gl.canvas.height + ")");
+    // console.log("canvas size: (" + gl.canvas.width + " " + gl.canvas.height + ")");
     
     // T: Set uniform for resolution of canvas
     gl.uniform2f(resolution_uniform_location, gl.canvas.width, gl.canvas.height);
@@ -236,11 +237,21 @@ function loop()
 
 
 
-// export function index()
+function index_setup()
+{
+    setup();
+
+    if (typeof window !== "undefined") 
+    {
+        window.requestAnimationFrame(loop);
+    }        
+}
+
 function index()
 {
-    if (typeof window !== "undefined") {
-        window.requestAnimationFrame(loop);
+    if (typeof window !== "undefined") 
+    {
+        window.requestAnimationFrame(index_setup);
     }        
 }
 
@@ -249,7 +260,7 @@ function index()
 
 
 if(debug)
-System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memory_editor.js"], function (exports_1, context_1) {
+System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], function (exports_1, context_1) {
     "use strict";
     
     // T: reset this line of code
@@ -261,7 +272,6 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
     
     async function LoadArrayBuffer(url) {
         const response = await fetch(url);
-        // console.log(response);
         return response.arrayBuffer();
     }
     
@@ -271,23 +281,9 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
         if (typeof window !== "undefined") {
             window.requestAnimationFrame(_init);
         } 
-        /* else {
-            await _init();
-            for (let i = 0; i < 3; ++i) {
-                _loop(1 / 60);
-            }
-            await _done();
-        } */
-    }
-
-    function init_main()
-    {
-        ImGui.default();
-        window.requestAnimationFrame(_init);
     }
 
     exports_1("default", main);
-    // exports_1("default", init_main);
 
     async function AddFontFromFileTTF(url, size_pixels, font_cfg = null, glyph_ranges = null) {
         font_cfg = font_cfg || new ImGui.FontConfig();
@@ -327,14 +323,22 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
         }
 
         if (typeof window !== "undefined") {
-            window.requestAnimationFrame(_loop);
+            window.requestAnimationFrame(_setup);
         }
     }
 
+    function _setup(time)
+    {
+        setup();
+
+        if (typeof window !== "undefined") {
+            window.requestAnimationFrame(_loop);
+        }
+    } 
 
     // Main loop
-    function _loop(time) {
-
+    function _loop(time) 
+    {
         ImGui_Impl.NewFrame(time);
         ImGui.NewFrame()
 
@@ -363,8 +367,6 @@ System.register(["imgui-js", "imgui-impl-js", /*"./imgui_demo.js",*/ "imgui_memo
 
             ImGui.Begin("Window Title"); // Create a window called "Hello, world!" and append into it.
             ImGui.Text("Displaying some text"); // Display some text
-            // T: NOTES: this code is useless
-            // ImGui.Checkbox("Demo Window", (value = show_demo_window) => show_demo_window = value); // Edit bools storing our windows open/close state
             ImGui.Checkbox("checkbox", (value = boolean_field) => boolean_field = value); // Edit bools
             ImGui.Checkbox("use_font", (value = use_font) => use_font = value);
 
