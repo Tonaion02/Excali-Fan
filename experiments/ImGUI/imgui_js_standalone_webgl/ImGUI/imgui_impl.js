@@ -195,7 +195,9 @@ System.register(["imgui-js"], function (exports_1, context_1) {
                 // T: NOTES: commented to inject the OpenGL context from the outside through
                 // the gl_glob global variable
                 // value = canvas.getContext("webgl2", { alpha: false }) || canvas.getContext("webgl", { alpha: false }) || canvas.getContext("2d");
-                value = gl_glob;
+                
+                // value = gl_glob;
+                value = Global_State.get().gl_glob;
             }
 
             if (typeof WebGL2RenderingContext !== "undefined" && value instanceof (WebGL2RenderingContext)) {

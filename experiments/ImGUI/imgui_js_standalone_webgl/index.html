@@ -1,9 +1,8 @@
 <html>
   <head>
-    <title>Dear ImGui JavaScript+WebGL example</title>
+    <title>Dear ImGui JavaScript + WebGL example</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <script type="text/javascript" src="../node_modules/@flyover/system/build/system.js"></script> -->
-    <!-- ADDED BY ME-->
+
     <script type="text/javascript" src="config.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/gh/flyover/system.ts/build/system.js"></script>
     <script type="text/javascript" src="system.config.js"></script>
@@ -46,40 +45,35 @@
       }
     </script>
 
+    <script src="global_state.js"></script>
     <script src="index.js"></script>
     
     <script type="text/javascript">
-      var gl_glob;
       document.addEventListener("DOMContentLoaded", load);
 
       // T: This is the loading function (START)
       function load()
       {
-        gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
-                      document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
-                      document.getElementsByTagName("canvas")[0].getContext("2d");
+        Global_State.get().gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
+                    document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
+                    document.getElementsByTagName("canvas")[0].getContext("2d");
 
-        let module;
         if(debug == true)
         {
           console.log("Debug Mode");
 
-          System.import("all")
+          System.import("debug_interface")
           // T: NOTE: I discovered that the name "main" is not mandatory
           // in the past I thinked that this name is mandatory for whatever
           // reason, but it's not. 
           // The unique important thing is that the name must match with the
           // name that is exported in the file interface.js
-          // Probably every other method that is exported can work like that.
+          // PROBABLY every other method that is exported can work like that.
           .then(function (main) 
           { 
               main.default();
           })
           .catch(console.error)
-          .then(() => 
-          {
-              // index();
-          });
         }
         else
         {
