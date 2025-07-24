@@ -11,6 +11,8 @@ class Global_State
     resolution_uniform_location;
 
     triangle_color;
+
+    paths;
     // T: Public fields (END)
 
     static get()
@@ -26,13 +28,27 @@ class Global_State
 
     constructor()
     {
-        // T: Init the Global_State
+        // T: Init the Global_State (START)
         this.field = 0;
 
         this.triangle_color = {x: 0, y: 0, z: 0};
+
+        this.paths = new Map();
+        this.paths.set("path_to_fonts", "fonts");
+        // T: Init the Global_State (END)
     }
 
+    join_path(path_name, string_to_join)
+    {
+        let path = this.paths.get(path_name);
+        if(path == undefined)
+        {
+            console.error(`Error: {path_name} is not mapped to a path`);
+            return undefined;
+        }
 
+        return path + "/" + string_to_join;
+    }
 
     static #instance;
 }

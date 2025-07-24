@@ -44,7 +44,7 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
     "use strict";
     
     // T: reset this line of code
-    var imgui_demo_js_1, imgui_memory_editor_js_1, font, memory_editor, show_sandbox_window, show_gamepad_window, show_movie_window, f, counter, done, source, image_urls, image_url, image_element, image_gl_texture, video_urls, video_url, video_element, video_gl_texture, video_w, video_h, video_time_active, video_time, video_duration;
+    var imgui_memory_editor_js_1, font, memory_editor, f, counter;
     // var ImGui, ImGui_Impl, imgui_demo_js_1, imgui_memory_editor_js_1, font, clear_color, memory_editor, show_sandbox_window, show_gamepad_window, show_movie_window, f, counter, done, source, image_urls, image_url, image_element, image_gl_texture, video_urls, video_url, video_element, video_gl_texture, video_w, video_h, video_time_active, video_time, video_duration;
     
     var __moduleName = context_1 && context_1.id;
@@ -83,7 +83,8 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
         ImGui.StyleColorsDark();
 
         io.Fonts.AddFontDefault();
-        font = await AddFontFromFileTTF("fonts/Roboto-Medium.ttf", 14.0);
+        const path_to_roboto = global_state.join_path("path_to_fonts", "Roboto-Medium.ttf");
+        font = await AddFontFromFileTTF(path_to_roboto, 14.0);
         ImGui.ASSERT(font !== null);
 
         if (typeof window !== "undefined") {
@@ -122,13 +123,7 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
         ImGui_Impl.NewFrame(time);
         ImGui.NewFrame()
 
-        // 2. Show a simple window that we create ourselves. We use a Begin/End pair to created a named window.
         {
-            // T: NOTES: these static variables are commented here and then defined at the end of this file(WTF???)
-            // static float f = 0.0f;
-            // static int counter = 0;
-
-
             // T: Change font (START)
             if (use_font && font) {
                 ImGui.PushFont(font);
@@ -145,9 +140,9 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
             // T: Change font (END)
 
 
-            ImGui.Begin("Window Title"); // Create a window called "Hello, world!" and append into it.
-            ImGui.Text("Displaying some text"); // Display some text
-            ImGui.Checkbox("checkbox", (value = boolean_field) => boolean_field = value); // Edit bools
+            ImGui.Begin("Window Title"); 
+            ImGui.Text("Displaying some text"); // T: Display some text
+            ImGui.Checkbox("checkbox", (value = boolean_field) => boolean_field = value); // T: Edit bools
             ImGui.Checkbox("use_font", (value = use_font) => use_font = value);
 
 
@@ -159,10 +154,10 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
                 ImGui.EndTooltip();
             }
 
-            ImGui.SliderFloat("float", (value = f) => f = value, 0.0, 1.0); // Edit 1 float using a slider from 0.0f to 1.0f
-            ImGui.ColorEdit3("clear color", clear_color); // Edit 3 floats representing a color
+            ImGui.SliderFloat("float", (value = f) => f = value, 0.0, 1.0); 
+            ImGui.ColorEdit3("clear color", clear_color); 
             ImGui.ColorEdit3("triangle color", global_state.triangle_color);
-            if (ImGui.Button("Increment counter")) // Buttons return true when clicked (NB: most widgets return true when edited/activated)
+            if (ImGui.Button("Increment counter")) 
                 counter++;
             ImGui.SameLine();
             ImGui.Text(`counter = ${counter}`);
@@ -176,7 +171,6 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
 
 
         ImGui.EndFrame();
-        // Rendering
         ImGui.Render();
         
 
@@ -199,15 +193,13 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
             function (ImGui_Impl_1) {
                 ImGui_Impl = ImGui_Impl_1;
             },
-            // function (imgui_demo_js_1_1) {
-            //     imgui_demo_js_1 = imgui_demo_js_1_1;
-            // },
+
             function (imgui_memory_editor_js_1_1) {
                 imgui_memory_editor_js_1 = imgui_memory_editor_js_1_1;
             }
         ],
 
-        // T: NOTES: some of the variables that are used in the code are defined directly here
+        // T: Variables can be initialized here (START)
         execute: function () {
             font = null;
 
@@ -218,51 +210,11 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
             clear_color = new ImGui.Vec4(0.45, 0.55, 0.60, 1.00);
             memory_editor = new imgui_memory_editor_js_1.MemoryEditor();
             memory_editor.Open = false;
-            show_sandbox_window = false;
-            show_gamepad_window = false;
-            show_movie_window = false;
-            /* static */ f = 0.0;
-            /* static */ counter = 0;
-            done = false;
-            source = [
-                "ImGui.Text(\"Hello, world!\");",
-                "ImGui.SliderFloat(\"float\",",
-                "\t(value = f) => f = value,",
-                "\t0.0, 1.0);",
-                "",
-            ].join("\n");
-            image_urls = [
-                "https://threejs.org/examples/textures/crate.gif",
-                "https://threejs.org/examples/textures/sprite.png",
-                "https://threejs.org/examples/textures/uv_grid_opengl.jpg",
-            ];
-            image_url = image_urls[0];
-            image_element = null;
-            image_gl_texture = null;
-            video_urls = [
-                "https://threejs.org/examples/textures/sintel.ogv",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
-                "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
-            ];
-            video_url = video_urls[0];
-            video_element = null;
-            video_gl_texture = null;
-            video_w = 640;
-            video_h = 360;
-            video_time_active = false;
-            video_time = 0;
-            video_duration = 0;
+            
+            f = 0.0;
+            counter = 0;
+
         }
+        // T: Variables can be initialized here (END)
     };
 });
