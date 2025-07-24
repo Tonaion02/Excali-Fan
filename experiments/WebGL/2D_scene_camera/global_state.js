@@ -11,7 +11,9 @@ class Global_State
     resolution_uniform_location;
     translation_uniform_location;
     rotation_uniform_location;
+    camera_transform_uniform_location;
 
+    buffer_camera_transform;
     triangle_color;
     triangle_translation;
     angle;
@@ -40,6 +42,17 @@ class Global_State
         this.triangle_color = {x: 0, y: 0, z: 0};
         this.triangle_translation = [0, 0];
         this.angle = 0;
+
+        this.buffer_camera_transform = new Float32Array(3 * 3);
+        this.buffer_camera_transform[0] = 1.0;
+        this.buffer_camera_transform[1] = 0.0;
+        this.buffer_camera_transform[2] = 0.0;
+        this.buffer_camera_transform[3] = 0.0;
+        this.buffer_camera_transform[4] = 1.0;
+        this.buffer_camera_transform[5] = 0.0;
+        this.buffer_camera_transform[6] = 0.0;
+        this.buffer_camera_transform[7] = 0.0;
+        this.buffer_camera_transform[8] = 1.0;
 
         this.paths = new Map();
         this.paths.set("path_to_fonts", "fonts");

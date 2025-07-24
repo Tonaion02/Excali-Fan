@@ -124,11 +124,8 @@ function setup()
     global_state.resolution_uniform_location = gl.getUniformLocation(program, "u_resolution");
     assert_attrib_uniform_location(global_state.resolution_uniform_location);
 
-    global_state.translation_uniform_location = gl.getUniformLocation(program, "u_translation");
-    assert_attrib_uniform_location(global_state.translation_uniform_location);
-
-    global_state.rotation_uniform_location = gl.getUniformLocation(program, "u_rotation");
-    assert_attrib_uniform_location(global_state.rotation_uniform_location);
+    global_state.camera_transform_uniform_location = gl.getUniformLocation(program, "u_camera_transform");
+    assert_attrib_uniform_location(global_state.camera_transform_uniform_location);
     // T: lookup for uniform and attrib locations (END)
 
     // T: Create and select the vertex array
@@ -191,8 +188,7 @@ function setup()
 
 
     // T: Set uniform for translation of elements of the scene
-    gl.uniform2f(global_state.translation_uniform_location, global_state.triangle_translation[0], global_state.triangle_translation[1]);
-
+    gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform);
 
     // T: Helper function to make working the resize of the window
     webglUtils.resizeCanvasToDisplaySize(gl.canvas);
@@ -216,13 +212,15 @@ function loop()
 
 
     // T: Set uniform for translation of elements of the scene
-    gl.uniform2f(global_state.translation_uniform_location, global_state.triangle_translation[0], global_state.triangle_translation[1]);
+    // gl.uniform2f(global_state.translation_uniform_location, global_state.triangle_translation[0], global_state.triangle_translation[1]);
 
     let rotations = [0, 0];
     let angle_in_radians = global_state.angle * Math.PI / 180;
     rotations[0] = Math.sin(angle_in_radians);
     rotations[1] = Math.cos(angle_in_radians);
-    gl.uniform2f(global_state.rotation_uniform_location, rotations[0], rotations[1]);
+    // gl.uniform2f(global_state.rotation_uniform_location, rotations[0], rotations[1]);
+
+    gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform);
 
 
 

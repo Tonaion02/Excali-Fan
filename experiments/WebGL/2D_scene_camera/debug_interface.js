@@ -47,6 +47,9 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
     var imgui_memory_editor_js_1, font, memory_editor, f, counter;
     // var ImGui, ImGui_Impl, imgui_demo_js_1, imgui_memory_editor_js_1, font, clear_color, memory_editor, show_sandbox_window, show_gamepad_window, show_movie_window, f, counter, done, source, image_urls, image_url, image_element, image_gl_texture, video_urls, video_url, video_element, video_gl_texture, video_w, video_h, video_time_active, video_time, video_duration;
     
+    var translation;
+    var scale;
+
     var __moduleName = context_1 && context_1.id;
 
     
@@ -157,9 +160,19 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
             }
 
             // ImGui.SliderFloat("float", (value = f) => f = value, 0.0, 1.0);
-            ImGui.SliderFloat("triangle translation x", (value = global_state.triangle_translation[0]) => global_state.triangle_translation[0] = value, 0.0, canvas.width);
-            ImGui.SliderFloat("triangle translation y", (value = global_state.triangle_translation[1]) => global_state.triangle_translation[1] = value, 0.0, canvas.height); 
-            ImGui.SliderFloat("angle", (value = global_state.angle) => global_state.angle = value, 0.0, 360.0);
+            // ImGui.SliderFloat("triangle translation x", (value = global_state.triangle_translation[0]) => global_state.triangle_translation[0] = value, 0.0, canvas.width);
+            // ImGui.SliderFloat("triangle translation y", (value = global_state.triangle_translation[1]) => global_state.triangle_translation[1] = value, 0.0, canvas.height); 
+            // ImGui.SliderFloat("angle", (value = global_state.angle) => global_state.angle = value, 0.0, 360.0);
+            
+            ImGui.SliderFloat2("translation", translation, 0.0, 100.0);
+            ImGui.SliderFloat2("scale", scale, 1.0, 20.0);
+            global_state.buffer_camera_transform[0] = scale.x;
+            global_state.buffer_camera_transform[4] = scale.y;
+            global_state.buffer_camera_transform[6] = translation.x;
+            global_state.buffer_camera_transform[7] = translation.y;
+
+            
+
             ImGui.ColorEdit3("clear color", clear_color); 
             ImGui.ColorEdit3("triangle color", global_state.triangle_color);
             if (ImGui.Button("Increment counter")) 
@@ -211,6 +224,9 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
             boolean_field = false;
 
             use_font = false;
+
+            translation = new ImGui.Vec2(0.0 , 0.0);
+            scale = new ImGui.Vec2(1.0, 1.0);
 
             clear_color = new ImGui.Vec4(0.45, 0.55, 0.60, 1.00);
             memory_editor = new imgui_memory_editor_js_1.MemoryEditor();
