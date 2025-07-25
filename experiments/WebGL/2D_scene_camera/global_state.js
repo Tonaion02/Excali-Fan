@@ -4,6 +4,7 @@ class Global_State
     // T: Public fields (START)
     field;
     
+    canvas;
     gl_glob;
 
     position_attribute_location;
@@ -11,7 +12,12 @@ class Global_State
     resolution_uniform_location;
     translation_uniform_location;
     rotation_uniform_location;
+    
     camera_transform_uniform_location;
+    camera_movement_acceleration;
+    camera_zoom;
+
+    state_keys;
 
     buffer_camera_transform;
     triangle_color;
@@ -53,6 +59,10 @@ class Global_State
         this.buffer_camera_transform[6] = 0.0;
         this.buffer_camera_transform[7] = 0.0;
         this.buffer_camera_transform[8] = 1.0;
+        this.camera_movement_acceleration = 8.0;
+        this.camera_zoom = 1.0;
+
+        this.state_keys = {};
 
         this.paths = new Map();
         this.paths.set("path_to_fonts", "fonts");

@@ -1,7 +1,7 @@
 "use strict";
 //=============================================================================
 //-----------------------------------------------------------------------------
-// 2D Scene Camera
+// 2D SCENE CAMERA
 //-----------------------------------------------------------------------------
 // This is the main file of this application.
 // In this application the goal is to create a simple working camera that
@@ -13,8 +13,7 @@
 // TO-DO:
 // - Check differences between let and vars.
 // - Change name to this file, something like: application.js.
-// - Move code of fragment and vertex shader in apposite files.
-// - Move part of the loop in the setup function.
+// - Check how the size of the canvas is defined.
 //=============================================================================
 const canvas = document.querySelector("#canvas");
 
@@ -76,6 +75,59 @@ function assert_attrib_uniform_location(location)
 
 
 
+// T: move these variables in the global state
+var vertex_shader_src;
+var fragment_shader_src;
+
+// T: This is the loading function (START)
+function load()
+{
+    // T: Loading of shaders (START)
+    async function load_shaders()
+    {
+        vertex_shader_src = await fetch('shaders/vertex.glsl').then(res => res.text());
+        fragment_shader_src = await fetch('shaders/fragment.glsl').then(res => res.text());
+    }
+    load_shaders();
+    // T: Loading of shaders (END)
+
+
+
+    Global_State.get().canvas = document.getElementsByTagName("canvas")[0];
+    Global_State.get().gl_glob = document.getElementsByTagName("canvas")[0].getContext("webgl2", { alpha: false }) || 
+                    document.getElementsByTagName("canvas")[0].getContext("webgl", { alpha: false }) || 
+                    document.getElementsByTagName("canvas")[0].getContext("2d");
+
+    if(debug == true)
+    {
+      console.log("Debug Mode");
+    
+      System.import("debug_interface")
+      // T: NOTE: I discovered that the name "main" is not mandatory
+      // in the past I thinked that this name is mandatory for whatever
+      // reason, but it's not. 
+      // The unique important thing is that the name must match with the
+      // name that is exported in the file interface.js
+      // PROBABLY every other method that is exported can work like that.
+      .then(function (main) 
+      { 
+          main.default();
+      })
+      .catch(console.error)
+    }
+    else
+    {
+      console.log("Release Mode");
+
+      index();
+    }
+}
+// T: This is the loading function (END)
+
+
+
+
+
 function setup()
 {
     const gl = Global_State.get().gl_glob;
@@ -100,16 +152,89 @@ function setup()
 
 
 
+    
+    // T: attach event listeners(START)
+    // document.addEventListener('keydown', (event) => 
+    // {
+    //     console.log(event);
+
+    //     if (event.key === 'ArrowLeft')
+    //     {
+    //         global_state.buffer_camera_transform[6] += global_state.camera_movement_acceleration;
+    //         // console.log('Left arrow pressed');
+    //     } 
+    //     if (event.key === 'ArrowRight') 
+    //     {
+    //         global_state.buffer_camera_transform[6] -= global_state.camera_movement_acceleration; 
+    //         // console.log('Right arrow pressed');
+    //     }
+    //     if(event.key == "ArrowUp")
+    //     {
+    //         global_state.buffer_camera_transform[7] += global_state.camera_movement_acceleration;
+    //         // console.log("up arrow pressed");
+    //     }
+    //     if(event.key == "ArrowDown")
+    //     {
+    //         global_state.buffer_camera_transform[7] -= global_state.camera_movement_acceleration;
+    //         // console.log("down arrow pressed");
+    //     }
+    // });
+
+    document.addEventListener('keydown', (event) => 
+    {
+        global_state.state_keys[event.key] = true;
+        // console.log(global_state.state_keys);
+
+        if (global_state.state_keys['ArrowLeft'])
+        {
+            global_state.buffer_camera_transform[6] += global_state.camera_movement_acceleration;
+            // console.log('Left arrow pressed');
+        } 
+        if (global_state.state_keys['ArrowRight']) 
+        {
+            global_state.buffer_camera_transform[6] -= global_state.camera_movement_acceleration; 
+            // console.log('Right arrow pressed');
+        }
+        if(global_state.state_keys["ArrowUp"])
+        {
+            global_state.buffer_camera_transform[7] += global_state.camera_movement_acceleration;
+            // console.log("up arrow pressed");
+        }
+        if(global_state.state_keys["ArrowDown"])
+        {
+            global_state.buffer_camera_transform[7] -= global_state.camera_movement_acceleration;
+            // console.log("down arrow pressed");
+        }
+    });
+
+    document.addEventListener('keyup', (event) => 
+    {
+        // console.log(event.key);
+        global_state.state_keys[event.key] = false;
+    });
+
+    window.addEventListener('resize', () => {
+        // console.log('Window resized to:', window.innerWidth, 'x', window.innerHeight);
+        console.log('canvas resized to:', global_state.canvas.width, 'x', global_state.canvas.height);
+    });
+    // T: attach event listeners(END)
+
+
+
     // T: Loading shaders (START)
-    let vertex_shader_src = document.querySelector("#vertex_shader").text;
-    let fragment_shader_src = document.querySelector("#fragment_shader").text;
+    // let vertex_shader_src = document.querySelector("#vertex_shader").text;
+    // let fragment_shader_src = document.querySelector("#fragment_shader").text;
+    // console.log(vertex_shader_src);
+    // console.log(fragment_shader_src);
     // T: Loading shaders (END)
 
     // T: Compiling shaders (START)
+    // T: OPTIMIZE: After this, the string can be cleared, they aren't re-used and occupy potentially
+    // a lot of space.
     let vertex_shader = create_shader(gl, gl.VERTEX_SHADER, vertex_shader_src);
     let fragment_shader = create_shader(gl, gl.FRAGMENT_SHADER, fragment_shader_src);
-    // T: Compiling shaders (END)
 
+    // T: Compiling shaders (END)
     // T: Create program
     let program = create_program(gl, vertex_shader, fragment_shader);
     gl.useProgram(program);
@@ -137,9 +262,9 @@ function setup()
     global_state.position_buffer = position_buffer;
     gl.bindBuffer(gl.ARRAY_BUFFER, position_buffer);
      var positions = [
-      0, 0,
-      100, 0,
-      0, 20,
+      200, 0,
+      300, 0,
+      200, 20,
 
       1, 21,
       101, 21,
@@ -188,6 +313,10 @@ function setup()
 
 
     // T: Set uniform for translation of elements of the scene
+    global_state.buffer_camera_transform[0] = 1.0;
+    global_state.buffer_camera_transform[4] = 1.0;
+    global_state.buffer_camera_transform[6] = 0.0;
+    global_state.buffer_camera_transform[7] = 0.0;
     gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform);
 
     // T: Helper function to make working the resize of the window
@@ -211,20 +340,26 @@ function loop()
     const gl = Global_State.get().gl_glob;
 
 
-    // T: Set uniform for translation of elements of the scene
-    // gl.uniform2f(global_state.translation_uniform_location, global_state.triangle_translation[0], global_state.triangle_translation[1]);
-
-    let rotations = [0, 0];
-    let angle_in_radians = global_state.angle * Math.PI / 180;
-    rotations[0] = Math.sin(angle_in_radians);
-    rotations[1] = Math.cos(angle_in_radians);
-    // gl.uniform2f(global_state.rotation_uniform_location, rotations[0], rotations[1]);
-
+    // T: Set uniform for translation and scaling of matrix
     gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform);
 
 
 
-    // gl.bindBuffer(gl.ARRAY_BUFFER, global_state.color_buffer);
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, global_state.position_buffer);
+    var positions = [
+      200, 0,
+      300, 0,
+      200, 20,
+
+      1, 21,
+      101, 21,
+      101, 1,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, global_state.color_buffer);
     var colors = [
         0.0, 0.0, 1.0, 1.0,
         0.0, 0.0, 1.0, 1.0,
@@ -256,10 +391,6 @@ function loop()
     gl.drawArrays(primitiveType, offset_, count);
     // T: Draw the triangle (END)
 }
-
-
-
-
 
 function index()
 {
