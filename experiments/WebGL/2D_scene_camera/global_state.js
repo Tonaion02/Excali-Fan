@@ -2,32 +2,48 @@
 class Global_State
 {
     // T: Public fields (START)
-    field;
-    
     canvas;
     gl_glob;
 
     position_attribute_location;
     color_attribute_location;
+    coordinates_attribute_location;
+    texcoord_attribute_location;
+    render_texture_image_uniform_location;
     resolution_uniform_location;
-    translation_uniform_location;
-    rotation_uniform_location;
+    render_texture_resolution_uniform_location;
     
     camera_transform_uniform_location;
+    render_texture_camera_transform_uniform_location;
     camera_movement_acceleration;
     camera_zoom;
     camera_translation;
+    buffer_camera_transform;
+
+    texture;
+    texture_data;
+
+    program;
+    render_texture_program;
+
+    position_buffer;
+    color_buffer;
+    render_texture_coordinates_buffer;
+    // render_texture_texcoord_buffer;
+    
+    vao;
+    render_texture_vao;
 
     state_keys;
 
-    buffer_camera_transform;
+    paths;
+
+    field;
     triangle_color;
     triangle_translation;
     angle;
-    position_buffer;
-    color_buffer;
-
-    paths;
+    translation_uniform_location;
+    rotation_uniform_location;
     // T: Public fields (END)
 
     static get()
@@ -44,12 +60,6 @@ class Global_State
     constructor()
     {
         // T: Init the Global_State (START)
-        this.field = 0;
-
-        this.triangle_color = {x: 0, y: 0, z: 0};
-        this.triangle_translation = [0, 0];
-        this.angle = 0;
-
         this.buffer_camera_transform = new Float32Array(3 * 3);
         this.buffer_camera_transform[0] = 1.0;
         this.buffer_camera_transform[1] = 0.0;
@@ -75,10 +85,19 @@ class Global_State
         this.buffer_camera_transform_position[7] = 0.0;
         this.buffer_camera_transform_position[8] = 1.0;
 
+
         this.state_keys = {};
 
         this.paths = new Map();
         this.paths.set("path_to_fonts", "fonts");
+
+
+
+
+        this.field = 0;
+        this.triangle_color = {x: 0, y: 0, z: 0};
+        this.triangle_translation = [0, 0];
+        this.angle = 0;
         // T: Init the Global_State (END)
     }
 

@@ -8,11 +8,13 @@ out vec4 fin_color;
 
 uniform vec2 u_resolution;
 uniform mat3 u_camera_transform;
+// T: TODO: remove useless uniforms
 uniform vec2 u_translation;
 uniform vec2 u_rotation;
 
 void main() 
 {
+    // T: TODO: remove these useless operations
     vec2 rotated_position = vec2(a_position.x * u_rotation.y + a_position.y * u_rotation.x, a_position.y * u_rotation.y - a_position.x * u_rotation.x);
     vec2 position_1 = rotated_position + u_translation;
 
