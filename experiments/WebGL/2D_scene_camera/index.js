@@ -154,32 +154,6 @@ function setup()
 
     
     // T: attach event listeners(START)
-    // document.addEventListener('keydown', (event) => 
-    // {
-    //     console.log(event);
-
-    //     if (event.key === 'ArrowLeft')
-    //     {
-    //         global_state.buffer_camera_transform[6] += global_state.camera_movement_acceleration;
-    //         // console.log('Left arrow pressed');
-    //     } 
-    //     if (event.key === 'ArrowRight') 
-    //     {
-    //         global_state.buffer_camera_transform[6] -= global_state.camera_movement_acceleration; 
-    //         // console.log('Right arrow pressed');
-    //     }
-    //     if(event.key == "ArrowUp")
-    //     {
-    //         global_state.buffer_camera_transform[7] += global_state.camera_movement_acceleration;
-    //         // console.log("up arrow pressed");
-    //     }
-    //     if(event.key == "ArrowDown")
-    //     {
-    //         global_state.buffer_camera_transform[7] -= global_state.camera_movement_acceleration;
-    //         // console.log("down arrow pressed");
-    //     }
-    // });
-
     document.addEventListener('keydown', (event) => 
     {
         global_state.state_keys[event.key] = true;
@@ -354,7 +328,7 @@ function loop()
 
       1, 21,
       101, 21,
-      101, 1,
+      101, 1,  
     ];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
     
@@ -376,13 +350,8 @@ function loop()
 
 
 
-
     gl.clearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-
-    
-
-
 
     // T: Draw the triangle (START)
     let primitiveType = gl.TRIANGLES;
@@ -390,6 +359,53 @@ function loop()
     let count = 6;
     gl.drawArrays(primitiveType, offset_, count);
     // T: Draw the triangle (END)
+
+
+
+
+
+
+    
+    
+    // T: Temporary to draw the point of the camera (START)
+    gl.bindBuffer(gl.ARRAY_BUFFER, global_state.position_buffer);
+    var positions = [
+      955, 454,
+      960, 454,
+      955, 459,
+      955, 459,
+      960, 459,
+      960, 454,    
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+    
+    
+    gl.bindBuffer(gl.ARRAY_BUFFER, global_state.color_buffer);
+    var colors = [
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+        1.0, 0.0, 0.0, 1.0,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+
+    gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform_position);    
+
+
+    primitiveType = gl.TRIANGLES;
+    offset_ = 0;
+    count = 6;
+    gl.drawArrays(primitiveType, offset_, count);
+    // T: Temporary to draw the point of the camera (END)
+
+
+
+
+
+
+
 }
 
 function index()

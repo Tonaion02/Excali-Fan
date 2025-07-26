@@ -147,7 +147,7 @@ System.register(["imgui-js", "imgui-impl-js", "imgui_memory_editor.js"], functio
 
             ImGui.Begin("Window Title"); 
             ImGui.Text(`translation (x = ${global_state.buffer_camera_transform[6]}, y = ${global_state.buffer_camera_transform[7]})`);
-            ImGui.SliderFloat("camera zoom", (value = global_state.camera_zoom) => global_state.camera_zoom = value, 1.0, 100.0);
+            ImGui.SliderFloat("camera zoom", (value = global_state.camera_zoom) => global_state.camera_zoom = value, 1.0, 5.0);
             global_state.buffer_camera_transform[0] = global_state.camera_zoom;
             global_state.buffer_camera_transform[4] = global_state.camera_zoom;            
             ImGui.SliderFloat("camera movement acceleration", (value = global_state.camera_movement_acceleration) => global_state.camera_movement_acceleration = value, 8.0, 20.0);

@@ -62,6 +62,17 @@ class Global_State
         this.camera_movement_acceleration = 8.0;
         this.camera_zoom = 1.0;
 
+        this.buffer_camera_transform_position = new Float32Array(3 * 3);
+        this.buffer_camera_transform_position[0] = 1.0;
+        this.buffer_camera_transform_position[1] = 0.0;
+        this.buffer_camera_transform_position[2] = 0.0;
+        this.buffer_camera_transform_position[3] = 0.0;
+        this.buffer_camera_transform_position[4] = 1.0;
+        this.buffer_camera_transform_position[5] = 0.0;
+        this.buffer_camera_transform_position[6] = 0.0;
+        this.buffer_camera_transform_position[7] = 0.0;
+        this.buffer_camera_transform_position[8] = 1.0;
+
         this.state_keys = {};
 
         this.paths = new Map();
