@@ -16,6 +16,7 @@ class Global_State
     camera_transform_uniform_location;
     camera_movement_acceleration;
     camera_zoom;
+    camera_translation;
 
     state_keys;
 
@@ -61,6 +62,7 @@ class Global_State
         this.buffer_camera_transform[8] = 1.0;
         this.camera_movement_acceleration = 8.0;
         this.camera_zoom = 1.0;
+        this.camera_translation = [0, 0];
 
         this.buffer_camera_transform_position = new Float32Array(3 * 3);
         this.buffer_camera_transform_position[0] = 1.0;

@@ -66,6 +66,40 @@ function assert_attrib_uniform_location(location)
     throw new Error(invalid_value_attrib_location);
 }
 
+function update_camera()
+{
+    // T: Reset camera info (START)
+    global_state.buffer_camera_transform[0] = 1.0;
+    global_state.buffer_camera_transform[4] = 1.0;
+    global_state.buffer_camera_transform[6] = 0.0;
+    global_state.buffer_camera_transform[7] = 0.0;
+    // T: Reset camera info (END)
+
+    global_state.buffer_camera_transform[6] = global_state.camera_translation[0];
+    global_state.buffer_camera_transform[7] = global_state.camera_translation[1];
+
+    // T: Zoom in/out camera (START)
+    // T: NOTES: This function adjust the position of objects after the zoom.
+    // T: To have a working zoom, we need to translate the position of the distance that
+    // that the focus point(reference point, middle of the screen) is moved for scaling. 
+    // T: TODO: Move this function in the class Camera
+    function zoom()
+    {
+        global_state.buffer_camera_transform[0] = global_state.camera_zoom;
+        global_state.buffer_camera_transform[4] = global_state.camera_zoom;
+        global_state.buffer_camera_transform[6] = global_state.camera_translation[0] * global_state.camera_zoom;
+        global_state.buffer_camera_transform[7] = global_state.camera_translation[1] * global_state.camera_zoom;
+        let screen_center = [global_state.canvas.width / 2.0, global_state.canvas.height / 2.0];
+        console.log(screen_center);
+        let screen_center_translated_for_zoom = [screen_center[0] * global_state.camera_zoom, screen_center[1] * global_state.camera_zoom];
+        global_state.buffer_camera_transform[6] -= screen_center_translated_for_zoom[0] - screen_center[0];
+        global_state.buffer_camera_transform[7] -= screen_center_translated_for_zoom[1] - screen_center[1];
+    }
+    // T: Zoom in/out camera (START)
+
+
+    zoom();
+}
 
 
 
@@ -161,22 +195,26 @@ function setup()
 
         if (global_state.state_keys['ArrowLeft'])
         {
-            global_state.buffer_camera_transform[6] += global_state.camera_movement_acceleration;
+            // global_state.buffer_camera_transform[6] += global_state.camera_movement_acceleration;
+            global_state.camera_translation[0] += global_state.camera_movement_acceleration;
             // console.log('Left arrow pressed');
         } 
         if (global_state.state_keys['ArrowRight']) 
         {
-            global_state.buffer_camera_transform[6] -= global_state.camera_movement_acceleration; 
+            // global_state.buffer_camera_transform[6] -= global_state.camera_movement_acceleration;
+            global_state.camera_translation[0] -= global_state.camera_movement_acceleration; 
             // console.log('Right arrow pressed');
         }
         if(global_state.state_keys["ArrowUp"])
         {
-            global_state.buffer_camera_transform[7] += global_state.camera_movement_acceleration;
+            global_state.camera_translation[1] += global_state.camera_movement_acceleration;
+            // global_state.buffer_camera_transform[7] += global_state.camera_movement_acceleration;
             // console.log("up arrow pressed");
         }
         if(global_state.state_keys["ArrowDown"])
         {
-            global_state.buffer_camera_transform[7] -= global_state.camera_movement_acceleration;
+            global_state.camera_translation[1] -= global_state.camera_movement_acceleration;
+            // global_state.buffer_camera_transform[7] -= global_state.camera_movement_acceleration;
             // console.log("down arrow pressed");
         }
     });
@@ -190,6 +228,16 @@ function setup()
     window.addEventListener('resize', () => {
         // console.log('Window resized to:', window.innerWidth, 'x', window.innerHeight);
         console.log('canvas resized to:', global_state.canvas.width, 'x', global_state.canvas.height);
+
+        // T: NOTES: There is a little bit of code duplication here
+        // T: Helper function to make working the resize of the window
+        webglUtils.resizeCanvasToDisplaySize(gl.canvas);
+    
+        // T: Set uniform for resolution of canvas
+        gl.uniform2f(global_state.resolution_uniform_location, gl.canvas.width, gl.canvas.height);
+
+        // T: Tell WebGL how to convert from clip space to pixel
+        gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
     });
     // T: attach event listeners(END)
 
@@ -315,11 +363,15 @@ function loop()
 
 
     // T: Set uniform for translation and scaling of matrix
+    update_camera();
     gl.uniformMatrix3fv(global_state.camera_transform_uniform_location, false, global_state.buffer_camera_transform);
 
 
 
     
+    // T: OPTIMIZATION: I already made a split for the buffer, this is not really healthy for the
+    // performance, I can always make a singular buffer, a single load and multiple draw calls
+    // with different settings.
     gl.bindBuffer(gl.ARRAY_BUFFER, global_state.position_buffer);
     var positions = [
       200, 0,
@@ -399,13 +451,6 @@ function loop()
     count = 6;
     gl.drawArrays(primitiveType, offset_, count);
     // T: Temporary to draw the point of the camera (END)
-
-
-
-
-
-
-
 }
 
 function index()
