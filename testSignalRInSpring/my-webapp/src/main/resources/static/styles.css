@@ -205,7 +205,7 @@ header {
     color: #e0e0e0;
 }
 
-#add-group-button {
+.add-group-button {
     padding: 5px 10px;
     border: none;
     background-color: #a8a5ff;
