@@ -546,8 +546,8 @@ function addToGroup() {
     ).
     then((response) => console.log("adding to group: " + response.status))
 
-    // T: disable the button to save the boards when you are guest in a board
-    // document.getElementById("export-image").setAttribute("disabled", "true");
+    // T: disable the button to save on cloud the board when you are a guest
+    document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
 }
 
 
@@ -594,7 +594,7 @@ function loadBoard(boardId) {
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
             // T: re-activate the download button when you are not a guest
-            document.getElementById("export-image").removeAttribute("disabled");
+            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
 
             setupLoadBoardWindow();
             
