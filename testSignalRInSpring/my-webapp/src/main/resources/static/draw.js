@@ -824,31 +824,44 @@ const uploadButton = document.querySelector('#upload-image');
 const fileInput = document.querySelector('#file-input');
 
 uploadButton.addEventListener('click', () => {
+    console.log("starting uploading the file");
+    
     fileInput.click();
 });
 
 fileInput.addEventListener("change", (event) => 
 {
-    const file = event.target.files[0];
-    if (!file) 
-    {
-        return;
-    }
-        
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const contents = e.target.result;
-        console.log(contents);
-        output.textContent = contents; 
-    };
-
-    reader.onerror = function(err) {
-        console.error("Errore nella lettura del file:", err);
-    };
-
-    reader.readAsText(file);
+    console.log("execute change listner");
 });
+
+
+
+// uploadButton.addEventListener('click', () => {
+//     fileInput.click();
+// });
+
+// fileInput.addEventListener("change", (event) => 
+// {
+//     const file = event.target.files[0];
+//     if (!file) 
+//     {
+//         return;
+//     }
+        
+//     const reader = new FileReader();
+
+//     reader.onload = function(e) {
+//         const contents = e.target.result;
+//         console.log(contents);
+//         output.textContent = contents; 
+//     };
+
+//     reader.onerror = function(err) {
+//         console.error("Errore nella lettura del file:", err);
+//     };
+
+//     reader.readAsText(file);
+// });
 
 let loginButton = document.getElementById("login");
 loginButton.addEventListener('click', login);
