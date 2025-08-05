@@ -800,7 +800,7 @@ saveOnCloudButton.addEventListener("click", () => {
     let fileName = fileNameTextBox.value; 
 
     saveOnCloud(data.groupId, fileName);
-
+ 
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
 });
@@ -811,11 +811,14 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     let fileNameTextBox = document.getElementById("file-name");
     let fileName = fileNameTextBox.value;
 
-    saveOnLocalFiles(fileName);
+    let content = {lines: listLines, ownerUserId: data.userId};
+    content = JSON.stringify(content);
+    console.log(content);
+    saveOnLocalFiles(fileName, content);
 
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
-});
+})
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
