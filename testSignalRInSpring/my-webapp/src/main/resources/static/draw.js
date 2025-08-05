@@ -546,8 +546,8 @@ function addToGroup() {
     ).
     then((response) => console.log("adding to group: " + response.status))
 
-    // T: disable the button to save the boards when you are guest in a board
-    document.getElementById("export-image").setAttribute("disabled", "true");
+    // T: disable the button to save on cloud the board when you are a guest
+    document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
 }
 
 
@@ -594,7 +594,7 @@ function loadBoard(boardId) {
             boardStorageIdTextBox.value = data.currentBoardStorageId;
     
             // T: re-activate the download button when you are not a guest
-            document.getElementById("export-image").removeAttribute("disabled");
+            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
 
             setupLoadBoardWindow();
             
@@ -609,12 +609,32 @@ function loadBoard(boardId) {
 
 
 
+
+
 // T: Save Board on Cloud (START)
 // T: This function permits to save a bord in cloud
 function saveOnCloud(boardSessionId, boardName)
 {
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
+
+    // T: check if the boardName is already in use (START)
+    let founded = false;
+    if(boardName != data.currentBoardStorageId) {
+        for(let boardStorageIdIndex in boardStorageIdsConst) {
+            let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+            if(boardStorageId == boardName) {
+                founded = true;
+            }
+        }
+    }
+    
+    if(founded) {
+        // T: TODO display this message
+        console.log("boardId already in use");
+        return;
+    }
+    // T: check if the boardName is already in use (END)
 
     axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
         { 
@@ -630,6 +650,11 @@ function saveOnCloud(boardSessionId, boardName)
             }
         })
         .then(response => {
+
+            if(response.status != 200) {
+                return;
+            }
+
             console.log("Response status: " + response.status);
 
             if(boardName != data.currentBoardStorageId) {
@@ -674,6 +699,30 @@ function saveOnCloud(boardSessionId, boardName)
         });
 }
 // T: Save Board on Cloud (END)
+
+
+
+// T: Save in local files the board (START)
+async function saveOnLocalFiles(filename, content) {
+  try {
+    // Prompt the user to select a directory
+    const handle = await window.showDirectoryPicker();
+
+    // Create or open the file in the chosen directory
+    const fileHandle = await handle.getFileHandle(filename, { create: true });
+
+    // Create a writable stream and write the content
+    const writable = await fileHandle.createWritable();
+    await writable.write(content);
+    await writable.close();
+
+    console.log("File saved successfully!");
+
+  } catch (err) {
+    console.error("Error saving file:", err);
+  }
+}
+// T: Save in local files the board (END)
 
 
 
@@ -751,10 +800,25 @@ saveOnCloudButton.addEventListener("click", () => {
     let fileName = fileNameTextBox.value; 
 
     saveOnCloud(data.groupId, fileName);
-
+ 
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
 });
+
+let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button");
+saveOnLocalFilesButton.addEventListener("click", () => 
+{
+    let fileNameTextBox = document.getElementById("file-name");
+    let fileName = fileNameTextBox.value;
+
+    let content = {lines: listLines, ownerUserId: data.userId};
+    content = JSON.stringify(content);
+    console.log(content);
+    saveOnLocalFiles(fileName, content);
+
+    let windowFileManager = document.getElementById("save-modal");
+    windowFileManager.style.display = "none";
+})
 
 let loginButton = document.getElementById("login")
 loginButton.addEventListener('click', login)
