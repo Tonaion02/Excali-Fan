@@ -856,6 +856,7 @@ fileInput.addEventListener("change", (event) =>
     if(isAlreadyInUse(file.name))
     {
         // T: TODO display an error message
+        alert("There is already a board with this name");
         return;
     }
 
