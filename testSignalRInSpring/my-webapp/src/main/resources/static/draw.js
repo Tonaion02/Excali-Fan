@@ -611,13 +611,8 @@ function loadBoard(boardId) {
 
 
 
-// T: Save Board on Cloud (START)
-// T: This function permits to save a bord in cloud
-function saveOnCloud(boardSessionId, boardName)
+function isAlreadyInUse(boardName)
 {
-    let accessToken = retrieveToken();
-    let email = extractEmailFromToken(accessToken);
-
     // T: check if the boardName is already in use (START)
     let founded = false;
     if(boardName != data.currentBoardStorageId) {
@@ -630,11 +625,28 @@ function saveOnCloud(boardSessionId, boardName)
     }
     
     if(founded) {
-        // T: TODO display this message
         console.log("boardId already in use");
-        return;
+        return true;
     }
     // T: check if the boardName is already in use (END)
+
+    return false;
+}
+
+// T: Save Board on Cloud (START)
+// T: This function permits to save a bord in cloud
+function saveOnCloud(boardSessionId, boardName)
+{
+    let accessToken = retrieveToken();
+    let email = extractEmailFromToken(accessToken);
+
+
+    if(isAlreadyInUse(boardName))
+    {
+        // T: TODO display the error message
+        alert("There is already a board with this name"); 
+        return;
+    }
 
     axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
         { 
@@ -836,9 +848,17 @@ fileInput.addEventListener("change", (event) =>
     const file = event.target.files[0];
     if (!file) 
     {
+        // T: Display an allert
         console.log("Error file not found");
         return;
     }
+
+    if(isAlreadyInUse(file.name))
+    {
+        // T: TODO display an error message
+        return;
+    }
+
     
     const reader = new FileReader();
 
@@ -850,11 +870,7 @@ fileInput.addEventListener("change", (event) =>
         console.log("filename: " + file.name);
         console.log(contents);
 
-        // let board = JSON.parse(contents);
-        // console.log(board);
-
         let accessToken = retrieveToken();
-        // let email = extractEmailFromToken(accessToken);
 
         axios.post("https://excalifun-java-serverless.azurewebsites.net/api/uploadBoard", {boardStorageId: file.name, boardJson: contents}, 
             {
