@@ -883,6 +883,26 @@ fileInput.addEventListener("change", (event) =>
         ).then(response => {
             // T: TODO display a possible error
             console.log(response.status);
+
+            if(response.status == 200)
+            {
+                // T: update the list of boardStorageIds (START)
+                let found = false;
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId == file.name) {
+                        found = true;
+                    }
+                }
+
+                if(! found) {
+                    boardStorageIdsConst.push(file.name);
+                }
+                // T: update the list of boardStorageIds (END)
+
+                setupLoadBoardWindow();
+            }
         });
     };
 
