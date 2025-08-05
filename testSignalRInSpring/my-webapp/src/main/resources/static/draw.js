@@ -881,7 +881,6 @@ fileInput.addEventListener("change", (event) =>
                 }
             }
         ).then(response => {
-            // T: TODO display a possible error
             console.log(response.status);
 
             if(response.status == 200)
@@ -903,12 +902,15 @@ fileInput.addEventListener("change", (event) =>
 
                 setupLoadBoardWindow();
             }
+            else
+            {
+                alert("Error during uploading of the file");
+            }
         });
     };
 
     reader.onerror = function(err) {
-        // T: TODO display the error
-        console.error("Errore nella lettura del file:", err);
+        alert("Error during loading of the file");
     };
 
     reader.readAsText(file);
@@ -921,3 +923,13 @@ let joinGroupButton = document.getElementById("add-group-button");
 joinGroupButton.addEventListener('click', addToGroup);
 
 console.log("You can start to draw");
+
+document.getElementById("copy-group-button").addEventListener("click", function () {
+    if (data.groupId && data.groupId !== "None") {
+        navigator.clipboard.writeText(data.groupId)
+            .catch(err => alert("Errore durante la copia: " + err));
+    } 
+    else {
+        console.error("No groupId to copy");
+    }
+});

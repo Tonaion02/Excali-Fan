@@ -187,7 +187,7 @@ header {
 }
 
 #current-group-label {
-    display: block;
+    display: inline;
     margin-bottom: 10px;
     color: #e0e0e0;
     font-family: 'Roboto', sans-serif;
