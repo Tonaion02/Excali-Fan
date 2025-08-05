@@ -832,36 +832,55 @@ uploadButton.addEventListener('click', () => {
 fileInput.addEventListener("change", (event) => 
 {
     console.log("execute change listner");
+
+    const file = event.target.files[0];
+    if (!file) 
+    {
+        console.log("Error file not found");
+        return;
+    }
+    
+    const reader = new FileReader();
+
+    console.log("Created the reader");
+
+    reader.onload = function(e) {
+        console.log("Executed onload");
+        const contents = e.target.result;
+        console.log(contents);
+        output.textContent = contents; 
+    };
+
+    reader.onerror = function(err) {
+        console.error("Errore nella lettura del file:", err);
+    };
+
+    reader.readAsText(file);
 });
 
 
-
-// uploadButton.addEventListener('click', () => {
-//     fileInput.click();
-// });
-
-// fileInput.addEventListener("change", (event) => 
-// {
-//     const file = event.target.files[0];
-//     if (!file) 
-//     {
-//         return;
-//     }
+fileInput.addEventListener("change", (event) => 
+{
+    const file = event.target.files[0];
+    if (!file) 
+    {
+        return;
+    }
         
-//     const reader = new FileReader();
+    const reader = new FileReader();
 
-//     reader.onload = function(e) {
-//         const contents = e.target.result;
-//         console.log(contents);
-//         output.textContent = contents; 
-//     };
+    reader.onload = function(e) {
+        const contents = e.target.result;
+        console.log(contents);
+        output.textContent = contents; 
+    };
 
-//     reader.onerror = function(err) {
-//         console.error("Errore nella lettura del file:", err);
-//     };
+    reader.onerror = function(err) {
+        console.error("Errore nella lettura del file:", err);
+    };
 
-//     reader.readAsText(file);
-// });
+    reader.readAsText(file);
+});
 
 let loginButton = document.getElementById("login");
 loginButton.addEventListener('click', login);
