@@ -820,10 +820,40 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     windowFileManager.style.display = "none";
 })
 
-let loginButton = document.getElementById("login")
-loginButton.addEventListener('click', login)
+const uploadButton = document.querySelector('#upload-image');
+const fileInput = document.querySelector('#file-input');
 
-let joinGroupButton = document.getElementById("add-group-button")
-joinGroupButton.addEventListener('click', addToGroup)
+uploadButton.addEventListener('click', () => {
+    fileInput.click();
+});
 
-console.log("You can start to draw")
+fileInput.addEventListener("change", (event) => 
+{
+    const file = event.target.files[0];
+    if (!file) 
+    {
+        return;
+    }
+        
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+        const contents = e.target.result;
+        console.log(contents);
+        output.textContent = contents; 
+    };
+
+    reader.onerror = function(err) {
+        console.error("Errore nella lettura del file:", err);
+    };
+
+    reader.readAsText(file);
+});
+
+let loginButton = document.getElementById("login");
+loginButton.addEventListener('click', login);
+
+let joinGroupButton = document.getElementById("add-group-button");
+joinGroupButton.addEventListener('click', addToGroup);
+
+console.log("You can start to draw");
