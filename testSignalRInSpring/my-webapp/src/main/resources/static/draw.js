@@ -847,10 +847,30 @@ fileInput.addEventListener("change", (event) =>
     reader.onload = function(e) {
         console.log("Executed onload");
         const contents = e.target.result;
+        console.log("filename: " + file.name);
         console.log(contents);
+
+        let board = JSON.parse(contents);
+        console.log(board);
+
+        let accessToken = retrieveToken();
+        // let email = extractEmailFromToken(accessToken);
+
+        axios.post("https://excalifun-java-serverless.azurewebsites.net/api/uploadBoard", {boardStorageId: file.name, boardJson: contents}, 
+            {
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json"
+                }
+            }
+        ).then(response => {
+            // T: TODO display a possible error
+            console.log(response.status);
+        });
     };
 
     reader.onerror = function(err) {
+        // T: TODO display the error
         console.error("Errore nella lettura del file:", err);
     };
 
