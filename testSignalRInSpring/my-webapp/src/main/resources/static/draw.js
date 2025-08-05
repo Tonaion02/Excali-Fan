@@ -609,6 +609,8 @@ function loadBoard(boardId) {
 
 
 
+
+
 // T: Save Board on Cloud (START)
 // T: This function permits to save a bord in cloud
 function saveOnCloud(boardSessionId, boardName)
@@ -628,6 +630,7 @@ function saveOnCloud(boardSessionId, boardName)
     }
     
     if(founded) {
+        // T: TODO display this message
         console.log("boardId already in use");
         return;
     }
@@ -696,6 +699,30 @@ function saveOnCloud(boardSessionId, boardName)
         });
 }
 // T: Save Board on Cloud (END)
+
+
+
+// T: Save in local files the board (START)
+async function saveOnLocalFiles(filename, content) {
+  try {
+    // Prompt the user to select a directory
+    const handle = await window.showDirectoryPicker();
+
+    // Create or open the file in the chosen directory
+    const fileHandle = await handle.getFileHandle(filename, { create: true });
+
+    // Create a writable stream and write the content
+    const writable = await fileHandle.createWritable();
+    await writable.write(content);
+    await writable.close();
+
+    console.log("File saved successfully!");
+
+  } catch (err) {
+    console.error("Error saving file:", err);
+  }
+}
+// T: Save in local files the board (END)
 
 
 
@@ -773,6 +800,18 @@ saveOnCloudButton.addEventListener("click", () => {
     let fileName = fileNameTextBox.value; 
 
     saveOnCloud(data.groupId, fileName);
+
+    let windowFileManager = document.getElementById("save-modal");
+    windowFileManager.style.display = "none";
+});
+
+let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button");
+saveOnLocalFilesButton.addEventListener("click", () => 
+{
+    let fileNameTextBox = document.getElementById("file-name");
+    let fileName = fileNameTextBox.value;
+
+    saveOnLocalFiles(fileName);
 
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
