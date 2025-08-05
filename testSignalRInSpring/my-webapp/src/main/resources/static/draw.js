@@ -547,7 +547,7 @@ function addToGroup() {
     then((response) => console.log("adding to group: " + response.status))
 
     // T: disable the button to save the boards when you are guest in a board
-    document.getElementById("export-image").setAttribute("disabled", "true");
+    // document.getElementById("export-image").setAttribute("disabled", "true");
 }
 
 
