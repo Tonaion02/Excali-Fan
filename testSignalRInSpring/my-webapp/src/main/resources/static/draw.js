@@ -809,7 +809,7 @@ let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button")
 saveOnLocalFilesButton.addEventListener("click", () => 
 {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value;
+    let fileName = fileNameTextBox.value + ".json";
 
     let content = {lines: listLines, ownerUserId: data.userId};
     content = JSON.stringify(content);
@@ -848,7 +848,6 @@ fileInput.addEventListener("change", (event) =>
         console.log("Executed onload");
         const contents = e.target.result;
         console.log(contents);
-        output.textContent = contents; 
     };
 
     reader.onerror = function(err) {
