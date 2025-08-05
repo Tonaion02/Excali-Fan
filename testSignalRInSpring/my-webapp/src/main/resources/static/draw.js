@@ -850,8 +850,8 @@ fileInput.addEventListener("change", (event) =>
         console.log("filename: " + file.name);
         console.log(contents);
 
-        let board = JSON.parse(contents);
-        console.log(board);
+        // let board = JSON.parse(contents);
+        // console.log(board);
 
         let accessToken = retrieveToken();
         // let email = extractEmailFromToken(accessToken);
@@ -871,30 +871,6 @@ fileInput.addEventListener("change", (event) =>
 
     reader.onerror = function(err) {
         // T: TODO display the error
-        console.error("Errore nella lettura del file:", err);
-    };
-
-    reader.readAsText(file);
-});
-
-
-fileInput.addEventListener("change", (event) => 
-{
-    const file = event.target.files[0];
-    if (!file) 
-    {
-        return;
-    }
-        
-    const reader = new FileReader();
-
-    reader.onload = function(e) {
-        const contents = e.target.result;
-        console.log(contents);
-        output.textContent = contents; 
-    };
-
-    reader.onerror = function(err) {
         console.error("Errore nella lettura del file:", err);
     };
 
