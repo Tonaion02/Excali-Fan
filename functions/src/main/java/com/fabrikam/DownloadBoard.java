@@ -86,14 +86,16 @@ public class DownloadBoard {
             SignedJWT signedJwt = SignedJWT.parse(loginToken);
             email = signedJwt.getJWTClaimsSet().getStringClaim("email");
         } catch(Exception e) {
-            System.out.println("signedJwt exception: " + e.getMessage());
-            e.printStackTrace();
+            context.getLogger().info("signedJwt exception: " + e.getMessage());
+            for(Object o : e.getStackTrace()) {
+                context.getLogger().info(o.toString());
+            }            
         }
         if(email == null) {
-            System.out.println("email retrieved is null");
+            context.getLogger().info("email retrieved is null");
             return null;
         }
-        System.out.println("email of user retrieved from token: " + email);
+        context.getLogger().info("email of user retrieved from token: " + email);
         // T: retrieve email from token (END)
         
 
@@ -110,8 +112,6 @@ public class DownloadBoard {
             containerClient.create();
         }
 
-        context.getLogger().info("porco1");
-
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
         parameter par = null;
@@ -126,24 +126,17 @@ public class DownloadBoard {
         }
         String boardStorageId = par.boardStorageId;
 
-        context.getLogger().info("porco2");
-
         byte[] fileData = null;
         try {
             BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
-            context.getLogger().info("blobClient: " + blobClient);
             BinaryData binaryData = blobClient.downloadContent();
-            context.getLogger().info("binaryData: " + binaryData);
-            fileData = binaryData.toBytes();
-            context.getLogger().info("fileData: " + fileData);    
+            fileData = binaryData.toBytes(); 
         } catch(Exception e) {
             context.getLogger().info("Error: " + e.getMessage());
             for(Object o : e.getStackTrace()) {
                 context.getLogger().info(o.toString());
             }
         }
-
-        context.getLogger().info("porco3");
 
         return request.
         createResponseBuilder(HttpStatus.OK).
