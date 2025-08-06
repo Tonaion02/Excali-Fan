@@ -207,6 +207,18 @@ public class UploadBoard {
 
             result.forEach(a -> System.out.println(a));
 
+            for(var s : result)
+            {
+                if(s.equals(boardStorageId))
+                {
+                    System.out.println("Error: the name of the board is already used");
+                    
+                    return request.createResponseBuilder(HttpStatus.IM_USED)
+                    .body("Error: the name of the board is already used")
+                    .build();
+                }
+            }
+
         } catch (Exception e) {
             context.getLogger().severe("Error calling API: " + e.getMessage());
             return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
