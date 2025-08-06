@@ -109,6 +109,7 @@ public class UploadBoard {
 
 
         // T: Connect to Azure (START)
+        System.out.println("Arrived to connection");
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
@@ -116,17 +117,22 @@ public class UploadBoard {
                 .buildClient();
         // T: Connect to Azure (END)
 
+        System.out.println("Created client");
         // T: Check if the container exist (START)
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
         
         if (!containerClient.exists()) {
             containerClient.create();
         }
+
+        System.out.println("Created connection");
         // T: Check if the container exist (END)
 
         
 
         // T: Retrieve name of file and content of file (START)
+        System.out.println("Started parsing");
+
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
         parameter par = null;
