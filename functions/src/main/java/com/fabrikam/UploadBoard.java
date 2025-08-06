@@ -19,6 +19,12 @@ import com.microsoft.azure.functions.HttpResponseMessage;
 import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.HttpRequestMessage;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
@@ -154,42 +160,44 @@ public class UploadBoard {
 
         // T: Board name validation (START)
         // T: Check if the name of the board is already used
+
+        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (START)
+        // context.getLogger().info("arrivato all recupero boards");   
+
+        // ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
+        // PagedIterable<BlobItem> blobs = containerClient.listBlobs();
+
+        // for (BlobItem blobItem : blobs) {
+        //     context.getLogger().info("Blob: " + blobItem.getName());
+        //     if (blobItem.getName().equals(par.boardStorageId)) {
+        //         context.getLogger().info("SALAMEEEEEEEEEEEEE");
+        //         return request.createResponseBuilder(HttpStatus.IM_USED)
+        //             .body("name of the board already used")
+        //             .build();
+        //     }
+        // }
+        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (END)
+
         try {
-            context.getLogger().info("arrivato all recupero boards");   
+            HttpClient client = HttpClient.newHttpClient();
 
-            ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
-            PagedIterable<BlobItem> blobs = containerClient.listBlobs();
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
+                .timeout(Duration.ofSeconds(10))
+                .header("Authorization", loginToken)
+                .header("Accept", "application/json")
+                .GET()
+                .build();
 
-            for (BlobItem blobItem : blobs) {
-                context.getLogger().info("Blob: " + blobItem.getName());
-                if (blobItem.getName().equals(par.boardStorageId)) {
-                    context.getLogger().info("SALAMEEEEEEEEEEEEE");
-                    return request.createResponseBuilder(HttpStatus.IM_USED)
-                        .body("name of the board already used")
-                        .build();
-                }
-            }
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
+            context.getLogger().info("Response from API: " + response.body());
 
-
-            // context.getLogger().info("arrivato all recupero boards");   
-            // String delimiter = "/";
-            // ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
-            // PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
-            // for(BlobItem blobItem : blobs)
-            // {
-            //     context.getLogger().info("DIO INFAME: " + blobItem.getName());
-            //     if(blobItem.getName().equals(par.boardStorageId))
-            //     {
-            //         context.getLogger().info("SALAMEEEEEEEEEEEEE");
-            //         return request.createResponseBuilder(HttpStatus.IM_USED).body("name of the board already used").build();
-            //     }
-            // }
-        }
-        catch(Exception e)
-        {
-            System.out.println("Errore recupero board: " + e.getMessage());
-            e.printStackTrace();
+        } catch (Exception e) {
+            context.getLogger().severe("Error calling API: " + e.getMessage());
+            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Failed to call external API")
+                .build();
         }
         // T: Board name validation (END)
 
