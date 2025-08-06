@@ -28,6 +28,7 @@ import java.time.Duration;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -70,6 +71,7 @@ public class UploadBoard {
         public String boardStorageId;
         public String boardJson;
     }
+
 
 
     
@@ -179,6 +181,8 @@ public class UploadBoard {
         // }
         // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (END)
 
+
+
         try {
             HttpClient client = HttpClient.newHttpClient();
 
@@ -197,6 +201,11 @@ public class UploadBoard {
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
             context.getLogger().info("Response from API: " + response.body());
+
+            objectMapper = new ObjectMapper();
+            List<String> result = objectMapper.readValue(response.body(), List.class);
+
+            result.forEach(a -> System.out.println(a));
 
         } catch (Exception e) {
             context.getLogger().severe("Error calling API: " + e.getMessage());
