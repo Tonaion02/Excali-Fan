@@ -147,6 +147,7 @@ public class UploadBoard {
 
         // T: Board name validation (START)
         // T: Check if the name of the board is already used
+        context.getLogger().info("arrivato all recupero boards");   
         String delimiter = "/";
         ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
         PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
