@@ -153,18 +153,25 @@ public class UploadBoard {
 
         // T: Board name validation (START)
         // T: Check if the name of the board is already used
-        context.getLogger().info("arrivato all recupero boards");   
-        String delimiter = "/";
-        ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
-        PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
-        for(BlobItem blobItem : blobs)
-        {
-            context.getLogger().info("DIO INFAME: " + blobItem.getName());
-            if(blobItem.getName().equals(par.boardStorageId))
+        try {
+            context.getLogger().info("arrivato all recupero boards");   
+            String delimiter = "/";
+            ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
+            PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
+            for(BlobItem blobItem : blobs)
             {
-                context.getLogger().info("SALAMEEEEEEEEEEEEE");
-                return request.createResponseBuilder(HttpStatus.IM_USED).body("name of the board already used").build();
+                context.getLogger().info("DIO INFAME: " + blobItem.getName());
+                if(blobItem.getName().equals(par.boardStorageId))
+                {
+                    context.getLogger().info("SALAMEEEEEEEEEEEEE");
+                    return request.createResponseBuilder(HttpStatus.IM_USED).body("name of the board already used").build();
+                }
             }
+        }
+        catch(Exception e)
+        {
+            System.out.println("Errore recupero board: " + e.getMessage());
+            e.printStackTrace();
         }
         // T: Board name validation (END)
 
