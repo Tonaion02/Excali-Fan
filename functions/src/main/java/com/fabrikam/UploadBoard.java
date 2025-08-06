@@ -152,7 +152,7 @@ public class UploadBoard {
         PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
         for(BlobItem blobItem : blobs)
         {
-            context.getLogger().info("DIO INFAME: " + blobItem.getName())
+            context.getLogger().info("DIO INFAME: " + blobItem.getName());
             if(blobItem.getName().equals(par.boardStorageId))
             {
                 context.getLogger().info("SALAMEEEEEEEEEEEEE");
