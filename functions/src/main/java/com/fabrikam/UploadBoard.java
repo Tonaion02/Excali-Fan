@@ -157,7 +157,7 @@ public class UploadBoard {
             context.getLogger().info("arrivato all recupero boards");   
 
             ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
-            PagedIterable<BlobItem> blobs = containerClient.listBlobs(options, null);
+            PagedIterable<BlobItem> blobs = containerClient.listBlobs();
 
             for (BlobItem blobItem : blobs) {
                 context.getLogger().info("Blob: " + blobItem.getName());
