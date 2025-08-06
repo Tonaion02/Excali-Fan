@@ -155,18 +155,35 @@ public class UploadBoard {
         // T: Check if the name of the board is already used
         try {
             context.getLogger().info("arrivato all recupero boards");   
-            String delimiter = "/";
-            ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
-            PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
-            for(BlobItem blobItem : blobs)
-            {
-                context.getLogger().info("DIO INFAME: " + blobItem.getName());
-                if(blobItem.getName().equals(par.boardStorageId))
-                {
+
+            ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
+            PagedIterable<BlobItem> blobs = containerClient.listBlobs(options, null);
+
+            for (BlobItem blobItem : blobs) {
+                context.getLogger().info("Blob: " + blobItem.getName());
+                if (blobItem.getName().equals(par.boardStorageId)) {
                     context.getLogger().info("SALAMEEEEEEEEEEEEE");
-                    return request.createResponseBuilder(HttpStatus.IM_USED).body("name of the board already used").build();
+                    return request.createResponseBuilder(HttpStatus.IM_USED)
+                        .body("name of the board already used")
+                        .build();
                 }
             }
+
+
+
+            // context.getLogger().info("arrivato all recupero boards");   
+            // String delimiter = "/";
+            // ListBlobsOptions options = new ListBlobsOptions().setPrefix(email);
+            // PagedIterable<BlobItem> blobs = containerClient.listBlobsByHierarchy(delimiter, options, null);
+            // for(BlobItem blobItem : blobs)
+            // {
+            //     context.getLogger().info("DIO INFAME: " + blobItem.getName());
+            //     if(blobItem.getName().equals(par.boardStorageId))
+            //     {
+            //         context.getLogger().info("SALAMEEEEEEEEEEEEE");
+            //         return request.createResponseBuilder(HttpStatus.IM_USED).body("name of the board already used").build();
+            //     }
+            // }
         }
         catch(Exception e)
         {
