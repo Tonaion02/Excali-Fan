@@ -22,6 +22,7 @@ import com.microsoft.azure.functions.HttpRequestMessage;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 
@@ -181,13 +182,17 @@ public class UploadBoard {
         try {
             HttpClient client = HttpClient.newHttpClient();
 
+            String jsonBody = 
+            "{}";
+
             HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
-                .timeout(Duration.ofSeconds(10))
-                .header("Authorization", loginToken)
-                .header("Accept", "application/json")
-                .GET()
-                .build();
+            .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
+            .timeout(Duration.ofSeconds(10))
+            .header("Authorization", loginToken)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .POST(BodyPublishers.ofString(jsonBody))
+            .build();
 
             HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
 
