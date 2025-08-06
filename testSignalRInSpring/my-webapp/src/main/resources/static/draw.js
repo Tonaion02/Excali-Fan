@@ -853,12 +853,12 @@ fileInput.addEventListener("change", (event) =>
         return;
     }
 
-    if(isAlreadyInUse(file.name))
-    {
-        // T: TODO display an error message
-        alert("There is already a board with this name");
-        return;
-    }
+    // if(isAlreadyInUse(file.name))
+    // {
+    //     // T: TODO display an error message
+    //     alert("There is already a board with this name");
+    //     return;
+    // }
 
     
     const reader = new FileReader();
