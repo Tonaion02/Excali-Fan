@@ -611,13 +611,8 @@ function loadBoard(boardId) {
 
 
 
-// T: Save Board on Cloud (START)
-// T: This function permits to save a bord in cloud
-function saveOnCloud(boardSessionId, boardName)
+function isAlreadyInUse(boardName)
 {
-    let accessToken = retrieveToken();
-    let email = extractEmailFromToken(accessToken);
-
     // T: check if the boardName is already in use (START)
     let founded = false;
     if(boardName != data.currentBoardStorageId) {
@@ -630,11 +625,28 @@ function saveOnCloud(boardSessionId, boardName)
     }
     
     if(founded) {
-        // T: TODO display this message
         console.log("boardId already in use");
-        return;
+        return true;
     }
     // T: check if the boardName is already in use (END)
+
+    return false;
+}
+
+// T: Save Board on Cloud (START)
+// T: This function permits to save a bord in cloud
+function saveOnCloud(boardSessionId, boardName)
+{
+    let accessToken = retrieveToken();
+    let email = extractEmailFromToken(accessToken);
+
+
+    if(isAlreadyInUse(boardName))
+    {
+        // T: TODO display the error message
+        alert("There is already a board with this name"); 
+        return;
+    }
 
     axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
         { 
@@ -809,7 +821,7 @@ let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button")
 saveOnLocalFilesButton.addEventListener("click", () => 
 {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value;
+    let fileName = fileNameTextBox.value + ".json";
 
     let content = {lines: listLines, ownerUserId: data.userId};
     content = JSON.stringify(content);
@@ -820,10 +832,104 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     windowFileManager.style.display = "none";
 })
 
-let loginButton = document.getElementById("login")
-loginButton.addEventListener('click', login)
+const uploadButton = document.querySelector('#upload-image');
+const fileInput = document.querySelector('#file-input');
 
-let joinGroupButton = document.getElementById("add-group-button")
-joinGroupButton.addEventListener('click', addToGroup)
+uploadButton.addEventListener('click', () => {
+    console.log("starting uploading the file");
+    
+    fileInput.click();
+});
 
-console.log("You can start to draw")
+fileInput.addEventListener("change", (event) => 
+{
+    console.log("execute change listner");
+
+    const file = event.target.files[0];
+    if (!file) 
+    {
+        // T: Display an allert
+        console.log("Error file not found");
+        return;
+    }
+
+    if(isAlreadyInUse(file.name))
+    {
+        // T: TODO display an error message
+        alert("There is already a board with this name");
+        return;
+    }
+
+    
+    const reader = new FileReader();
+
+    console.log("Created the reader");
+
+    reader.onload = function(e) {
+        console.log("Executed onload");
+        const contents = e.target.result;
+        console.log("filename: " + file.name);
+        console.log(contents);
+
+        let accessToken = retrieveToken();
+
+        axios.post("https://excalifun-java-serverless.azurewebsites.net/api/uploadBoard", {boardStorageId: file.name, boardJson: contents}, 
+            {
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json"
+                }
+            }
+        ).then(response => {
+            console.log(response.status);
+
+            if(response.status == 200)
+            {
+                // T: update the list of boardStorageIds (START)
+                let found = false;
+                for(let boardStorageIdIndex in boardStorageIdsConst) {
+                    let boardStorageId = boardStorageIdsConst[boardStorageIdIndex];
+
+                    if(boardStorageId == file.name) {
+                        found = true;
+                    }
+                }
+
+                if(! found) {
+                    boardStorageIdsConst.push(file.name);
+                }
+                // T: update the list of boardStorageIds (END)
+
+                setupLoadBoardWindow();
+            }
+            else
+            {
+                alert("Error during uploading of the file");
+            }
+        });
+    };
+
+    reader.onerror = function(err) {
+        alert("Error during loading of the file");
+    };
+
+    reader.readAsText(file);
+});
+
+let loginButton = document.getElementById("login");
+loginButton.addEventListener('click', login);
+
+let joinGroupButton = document.getElementById("add-group-button");
+joinGroupButton.addEventListener('click', addToGroup);
+
+console.log("You can start to draw");
+
+document.getElementById("copy-group-button").addEventListener("click", function () {
+    if (data.groupId && data.groupId !== "None") {
+        navigator.clipboard.writeText(data.groupId)
+            .catch(err => alert("Errore durante la copia: " + err));
+    } 
+    else {
+        console.error("No groupId to copy");
+    }
+});
