@@ -2,19 +2,16 @@ package com.example.restservice.serviceSignalR;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.sql.Wrapper;
 import java.util.Date;
 import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.http.impl.bootstrap.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.jsonwebtoken.JwtBuilder;
@@ -48,7 +45,7 @@ import java.text.ParseException;
 public class SignalRController {
 
     private final BoardsRuntimeStorage boards;
-    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // example: https://foo.service.signalr.net
+    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net";
     private String hubName = "board";
 
 
@@ -211,10 +208,7 @@ public class SignalRController {
         board.setOwnerUserId(email);
         boards.boards.put(boardId, board);     
 
-
-
-        // T: TODO check if the user is already "registered" in the database
-        // T: TODO in the case is not already registered, register him
+        
 
         return boardId;
     }
