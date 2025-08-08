@@ -5,6 +5,12 @@
         "vaults_testkeyvault10000_name": {
             "defaultValue": "keyvaultexcalifan",
             "type": "String"
+        },
+        "keyForSignalR_value": {
+            "type": "secureString",
+            "metadata": {
+            "description": "Value for the SignalR access key"
+            }
         }
     },
     "variables": {},
@@ -62,7 +68,7 @@
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_testkeyvault10000_name'))]"
             ],
             "properties": {
-                "value": "aaaaaaaaaa",
+                "value": "[parameters('keyForSignalR_value')]",
                 "attributes": {
                     "enabled": true
                 }

@@ -21,9 +21,6 @@ public class Application {
 
     public static void main(String[] args) {
         
-        // T: URL of Azure Key Vault
-        // String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/"; // T: TODO: substitute_constant
-
         // T: Create a SecretClient using DefaultAzureCredential
         SecretClient secretClient = new SecretClientBuilder()
                 .vaultUrl(Keys.keyVaultUrl)
@@ -37,7 +34,8 @@ public class Application {
         System.out.println("Azure SignalR Key: " + secretValueForSignalR);
         // T: Retrieve the key for Azure SignalR (END)
 
-        /*
+        
+
         // T: Retrieve the key for Azure Blob Storage (START)
         String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.secretNameBlobStorageAccount).getValue();
         Keys.accountKeyBlobStorage = secretValueForAzureBlobStorage;
@@ -45,9 +43,7 @@ public class Application {
         System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
         // T: Retrieve the key for Azure Blob Storage (END)
 
-        */
-
-
+        
 
         var context = SpringApplication.run(Application.class, args);
     }

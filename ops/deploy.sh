@@ -36,6 +36,11 @@ az deployment group create \
     --template-file arm_key_vault.json \
     --parameters arm_key_vault_parameters.json
 
+az deployment group create \
+  --resource-group ExcalifunKeyVaultGroup \
+  --template-file arm_key_vault.json \
+  --parameters keyForSignalR_value=""
+
 
 
 # Create resource group for App Service

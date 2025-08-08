@@ -45,7 +45,6 @@ import java.text.ParseException;
 public class SignalRController {
 
     private final BoardsRuntimeStorage boards;
-    // private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // T: TODO: substitute_constant
     private String hubName = "board";
 
 
