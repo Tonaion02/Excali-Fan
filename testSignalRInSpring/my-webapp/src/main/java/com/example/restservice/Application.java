@@ -18,6 +18,7 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 public class Application {
 
     public static void main(String[] args) {
+        /*
         // T: URL of Azure Key Vault
         String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
 
@@ -42,7 +43,7 @@ public class Application {
         System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
         // T: Retrieve the key for Azure Blob Storage (END)
 
-
+        */
 
 
 

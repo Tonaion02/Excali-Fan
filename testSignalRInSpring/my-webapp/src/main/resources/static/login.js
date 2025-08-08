@@ -3,7 +3,7 @@ const const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
 
 const msalConfig = {
   auth: {
-    clientId: clientId, 
+    clientId: const_clientId, 
     authority: "https://login.microsoftonline.com/common",
     redirectUri: const_redirectUri, // T: TODO:substitute_constant
   },
