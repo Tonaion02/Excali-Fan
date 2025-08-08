@@ -1,4 +1,4 @@
-var const_appservice = "https://rest-service-1735827345127.azurewebsites.net";
+var const_appservice = "https://rest-service-2.azurewebsites.net";
 
 // T: this will become the synced list
 let listLines = []
