@@ -1,5 +1,7 @@
 package com.example.restservice;
 
+// import com.example.*;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -18,13 +20,13 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 public class Application {
 
     public static void main(String[] args) {
-        /*
+        
         // T: URL of Azure Key Vault
-        String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/"; // T: TODO: substitute_constant
+        // String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/"; // T: TODO: substitute_constant
 
         // T: Create a SecretClient using DefaultAzureCredential
         SecretClient secretClient = new SecretClientBuilder()
-                .vaultUrl(keyVaultUrl)
+                .vaultUrl(Keys.keyVaultUrl)
                 .credential(new DefaultAzureCredentialBuilder().build())
                 .buildClient();
 
@@ -35,7 +37,7 @@ public class Application {
         System.out.println("Azure SignalR Key: " + secretValueForSignalR);
         // T: Retrieve the key for Azure SignalR (END)
 
-
+        /*
         // T: Retrieve the key for Azure Blob Storage (START)
         String secretValueForAzureBlobStorage = secretClient.getSecret(Keys.secretNameBlobStorageAccount).getValue();
         Keys.accountKeyBlobStorage = secretValueForAzureBlobStorage;
