@@ -1,8 +1,11 @@
+const const_redirectUri = "https://rest-service-1735827345127.azurewebsites.net/" 
+const const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
+
 const msalConfig = {
   auth: {
-    clientId: "b1453203-8719-4a2a-8cc6-96bf883a7e65",
+    clientId: clientId, 
     authority: "https://login.microsoftonline.com/common",
-    redirectUri: "https://rest-service-1735827345127.azurewebsites.net/",
+    redirectUri: const_redirectUri, // T: TODO:substitute_constant
   },
   cache: {
     cacheLocation: "sessionStorage",
@@ -39,12 +42,12 @@ import("https://alcdn.msauth.net/browser/2.38.2/js/msal-browser.min.js").then(()
 });
 
 const loginRequest = {
-  scopes: ["openid", "profile", "email", "api://b1453203-8719-4a2a-8cc6-96bf883a7e65/loginScope"],
+  scopes: ["openid", "profile", "email", "api://" + const_clientId + "/loginScope"],
   prompt: "select_account",
 };
 
 const tokenRequest = {
-  scopes: ["openid", "profile", "email", "api://b1453203-8719-4a2a-8cc6-96bf883a7e65/loginScope"],
+  scopes: ["openid", "profile", "email", "api://" + const_clientId + "/loginScope"],
   prompt: "select_account",
 };
 
@@ -111,7 +114,9 @@ async function login() {
     // T: verify if the token is valid (START)
     // T: TODO remove the email from the request, bad practice for the security
     // T: NOTE: we use mic to say microsoft
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
+    // T: TODO: substitute_constant
+    // axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
+    axios.post(const_redirectUri + "/publicApi/login", {"email" : email}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"
