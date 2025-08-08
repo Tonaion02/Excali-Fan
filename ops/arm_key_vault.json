@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "vaults_testkeyvault10000_name": {
-            "defaultValue": "testkeyvault10000",
+            "defaultValue": "keyvaultexcalifan",
             "type": "String"
         }
     },
@@ -47,6 +47,7 @@
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_testkeyvault10000_name'))]"
             ],
             "properties": {
+                "value": "bbbbbbbbbb",
                 "attributes": {
                     "enabled": true
                 }
@@ -61,6 +62,7 @@
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_testkeyvault10000_name'))]"
             ],
             "properties": {
+                "value": "aaaaaaaaaa",
                 "attributes": {
                     "enabled": true
                 }
