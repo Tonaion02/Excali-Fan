@@ -1,4 +1,5 @@
-var const_redirectUri = "https://rest-service-1735827345127.azurewebsites.net/" 
+// var const_redirectUri = "https://rest-service-1735827345127.azurewebsites.net/" 
+var const_redirectUri = "https://rest-service-2.azurewebsites.net/" 
 var const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
 
 const msalConfig = {
