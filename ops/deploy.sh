@@ -1,8 +1,15 @@
-# Create resource group for signalr
+
+
+
+
+
+
+# Create resource group for SignalR
 az group create \
     --name ExcalifunSignalRGroup \
     --location westeurope
 
+# Create the resource for SignalR
 az deployment group create \
     --resource-group ExcalifunSignalRGroup \
     --template-file arm_signalr.json \

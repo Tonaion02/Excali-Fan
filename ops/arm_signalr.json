@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "SignalR_SignalRResourceForSpring_name": {
-            "defaultValue": "excalifan_signalr",
+            "defaultValue": "excalifansignalr",
             "type": "String"
         }
     },
