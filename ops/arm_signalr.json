@@ -83,7 +83,7 @@
                     "clientConnectionCountRules": [],
                     "clientTrafficControlRules": []
                 },
-                "publicNetworkAccess": "Disabled",
+                
                 "disableLocalAuth": false,
                 "disableAadAuth": false,
                 "regionEndpointEnabled": "Enabled",
