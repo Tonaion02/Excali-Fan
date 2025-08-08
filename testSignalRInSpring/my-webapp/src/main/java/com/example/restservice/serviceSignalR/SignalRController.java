@@ -45,7 +45,7 @@ import java.text.ParseException;
 public class SignalRController {
 
     private final BoardsRuntimeStorage boards;
-    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // T: TODO: substitute_constant
+    // private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // T: TODO: substitute_constant
     private String hubName = "board";
 
 
@@ -58,7 +58,7 @@ public class SignalRController {
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
-        String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserSessionID: " + userId);
         String accessKey = generateJwt(hubUrl, userId);   
 
@@ -76,7 +76,7 @@ public class SignalRController {
 
 
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
@@ -104,7 +104,7 @@ public class SignalRController {
         
 
         System.out.println("timestamp of last line: " + command.line.timestamp);
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
@@ -296,7 +296,7 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
         String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
@@ -528,7 +528,7 @@ public class SignalRController {
 
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
             String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
@@ -543,7 +543,7 @@ public class SignalRController {
 
     @GetMapping("/publicApi/isingroup")
     public void isUserInGroup(@RequestParam String groupId, @RequestParam String userId) {
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
         String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.get(hubUrl)
