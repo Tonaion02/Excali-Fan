@@ -21,6 +21,12 @@
 
 
 # Create resource group for storage
+az group create \
+    --name ExcalifunStorageGroup \
+    --location westeurope
+
+
+
 # Create storage account
 # Create a container for the storage
 az deployment group create \
