@@ -24,6 +24,6 @@
 # Create storage account
 # Create a container for the storage
 az deployment group create \
-    --resource-group NOME_RG \
-    --template-file template.json \
-    --parameters parameters.json
+    --resource-group ExcalifunStorageGroup \
+    --template-file arm_blob_storage.json \
+    --parameters arm_blob_storage_parameters.json
