@@ -2,7 +2,8 @@ package com.example.restservice;
 
 public class Keys {
     public static final String keyVaultUrl = "https://keyvaultexcalifan.vault.azure.net/";
-    public static final String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // T: TODO: substitute_constant
+    // public static final String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // T: TODO: substitute_constant
+    public static final String signalRServiceBaseEndpoint = "https://excalifansignalr.service.signalr.net";
 
 
     public static String keySignalR = null; 
