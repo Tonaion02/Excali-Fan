@@ -1,4 +1,10 @@
+# Create resource group for App Service
+az group create \
+    --name ExcalifunSignalRGroup \
+    --location westeurope
 
+
+# Create the app service resource
 
 
 

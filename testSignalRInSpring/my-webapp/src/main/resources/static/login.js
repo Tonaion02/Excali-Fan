@@ -6,7 +6,7 @@ const msalConfig = {
   auth: {
     clientId: const_clientId, 
     authority: "https://login.microsoftonline.com/common",
-    redirectUri: const_redirectUri, // T: TODO:substitute_constant
+    redirectUri: const_redirectUri,
   },
   cache: {
     cacheLocation: "sessionStorage",
@@ -115,9 +115,8 @@ async function login() {
     // T: verify if the token is valid (START)
     // T: TODO remove the email from the request, bad practice for the security
     // T: NOTE: we use mic to say microsoft
-    // T: TODO: substitute_constant
-    // axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
     axios.post(const_redirectUri + "/publicApi/login", {"email" : email}, {
+    // axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"

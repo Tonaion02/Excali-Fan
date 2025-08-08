@@ -20,7 +20,7 @@ public class Application {
     public static void main(String[] args) {
         /*
         // T: URL of Azure Key Vault
-        String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/";
+        String keyVaultUrl = "https://testkeyvault10000.vault.azure.net/"; // T: TODO: substitute_constant
 
         // T: Create a SecretClient using DefaultAzureCredential
         SecretClient secretClient = new SecretClientBuilder()
