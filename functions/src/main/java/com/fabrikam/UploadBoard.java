@@ -1,9 +1,13 @@
 package com.fabrikam;
 
+import com.azure.core.http.rest.PagedIterable;
+
 import com.azure.storage.blob.BlobClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
+import com.azure.storage.blob.models.BlobItem;
+import com.azure.storage.blob.models.ListBlobsOptions;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
@@ -15,8 +19,16 @@ import com.microsoft.azure.functions.HttpResponseMessage;
 import com.microsoft.azure.functions.HttpStatus;
 import com.microsoft.azure.functions.HttpRequestMessage;
 
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpRequest.BodyPublishers;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -61,6 +73,7 @@ public class UploadBoard {
     }
 
 
+
     
     @FunctionName("uploadBoard")
     public HttpResponseMessage run(
@@ -71,8 +84,6 @@ public class UploadBoard {
             HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
         
-
-
         // T: Token validation (START)
         String loginToken = request.getHeaders().get("authorization");
         for(String key : request.getHeaders().keySet()) {   
@@ -86,6 +97,8 @@ public class UploadBoard {
             context.getLogger().info("Valid token");
         }
         // T: Token validation (END)
+
+
 
         // T: retrieve email from token (START)
         String email = null;
@@ -105,18 +118,31 @@ public class UploadBoard {
 
 
 
+        // T: Connect to Azure (START)
+        System.out.println("Arrived to connection");
         String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
+        // T: Connect to Azure (END)
 
+        System.out.println("Created client");
+        // T: Check if the container exist (START)
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
         
         if (!containerClient.exists()) {
             containerClient.create();
         }
+
+        System.out.println("Created connection");
+        // T: Check if the container exist (END)
+
         
+
+        // T: Retrieve name of file and content of file (START)
+        System.out.println("Started parsing");
+
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
         parameter par = null;
@@ -131,7 +157,79 @@ public class UploadBoard {
         }        
         String boardStorageId = par.boardStorageId;
         String boardJson = par.boardJson;
+        // T: Retrieve name of file and content of file (END)
         
+
+
+        // T: Board name validation (START)
+        // T: Check if the name of the board is already used
+
+        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (START)
+        // context.getLogger().info("arrivato all recupero boards");   
+
+        // ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
+        // PagedIterable<BlobItem> blobs = containerClient.listBlobs();
+
+        // for (BlobItem blobItem : blobs) {
+        //     context.getLogger().info("Blob: " + blobItem.getName());
+        //     if (blobItem.getName().equals(par.boardStorageId)) {
+        //         context.getLogger().info("SALAMEEEEEEEEEEEEE");
+        //         return request.createResponseBuilder(HttpStatus.IM_USED)
+        //             .body("name of the board already used")
+        //             .build();
+        //     }
+        // }
+        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (END)
+
+
+
+        try {
+            HttpClient client = HttpClient.newHttpClient();
+
+            String jsonBody = 
+            "{}";
+
+            HttpRequest httpRequest = HttpRequest.newBuilder()
+            .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
+            .timeout(Duration.ofSeconds(10))
+            .header("Authorization", loginToken)
+            .header("Content-Type", "application/json")
+            .header("Accept", "application/json")
+            .POST(BodyPublishers.ofString(jsonBody))
+            .build();
+
+            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+
+            context.getLogger().info("Response from API: " + response.body());
+
+            objectMapper = new ObjectMapper();
+            List<String> result = objectMapper.readValue(response.body(), List.class);
+
+            result.forEach(a -> System.out.println(a));
+
+            for(var s : result)
+            {
+                if(s.equals(boardStorageId))
+                {
+                    System.out.println("Error: the name of the board is already used");
+                    
+                    return request.createResponseBuilder(HttpStatus.IM_USED)
+                    .body("Error: the name of the board is already used")
+                    .build();
+                }
+            }
+
+        } catch (Exception e) {
+            context.getLogger().severe("Error calling API: " + e.getMessage());
+            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Failed to call external API")
+                .build();
+        }
+        // T: Board name validation (END)
+
+
+
+        // T: Effectively upload the file (START)
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
         try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
             blobClient.upload(dataStream, boardJson.length(), true);
@@ -142,6 +240,7 @@ public class UploadBoard {
             }
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
         }
+        // T: Effectively upload the file (END)
 
         return request.createResponseBuilder(HttpStatus.OK).body("default return").build();
     }
