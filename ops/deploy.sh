@@ -1,3 +1,19 @@
+# Parameters to pass to the script
+resource_signalr="excalifansignalr"
+resource_group_signalr="ExcalifunSignalRGroup"
+resource_storage="excalifanstorage"
+resource_group_storage="ExcalifunStorageGroup"
+resource_key_vault="keyvaultexcalifan"
+resource_group_key_vault="ExcalifunKeyVaultGroup"
+resource_app_service="rest-service-2"
+resource_group_app_service="rest-service-2-rg"
+resource_function_app_service="excalifun-java-serverless-2"
+resource_group_function_app_service="excalifun-serverless-functions-2"
+
+
+
+
+
 # Create resource group and create resources for Azure Functions
 cd functions &&
 mvn clean package &&
@@ -6,14 +22,14 @@ mvn azure-functions:deploy
 # Assign an identity to azure functions
 # TODO: change name and resource group (conflict)
 az functionapp identity assign \
-  --name excalifun-java-serverless-2 \
-  --resource-group excalifun-serverless-functions-2 \
+  --name "$resource_function_app_service" \
+  --resource-group "$resource_group_function_app_service" \
   --debug
 
 # Retrieve the principalId of the function app
 principalIdFunctionAppService=$(az functionapp identity show \
-  --name excalifun-java-serverless-2 \
-  --resource-group excalifun-serverless-functions-2 \
+  --name "$resource_function_app_service" \
+  --resource-group "$resource_group_function_app_service" \
   --query principalId \
   -o tsv)
 
@@ -32,7 +48,7 @@ done
 az role assignment create \
   --assignee "$principalIdFunctionAppService" \
   --role "Key Vault Secrets User" \
-  --scope $(az keyvault show --name keyvaultexcalifan --query id -o tsv) \
+  --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
 
 
@@ -46,14 +62,14 @@ az role assignment create \
 
 # Create resource group for storage
 az group create \
-    --name ExcalifunStorageGroup \
+    --name "$resource_group_storage" \
     --location westeurope \
     --debug
 
 # Create storage account
 # Create a container for the storage
 az deployment group create \
-    --resource-group ExcalifunStorageGroup \
+    --resource-group "$resource_group_storage" \
     --template-file arm_blob_storage.json \
     --parameters arm_blob_storage_parameters.json \
     --debug
@@ -65,13 +81,13 @@ az deployment group create \
 # TESTED HERE (START)
 # Create resource group for SignalR
 az group create \
-    --name ExcalifunSignalRGroup \
+    --name "$resource_group_signalr" \
     --location westeurope \
     --debug
 
 # Create the resource for SignalR
 az deployment group create \
-    --resource-group ExcalifunSignalRGroup \
+    --resource-group "$resource_group_signalr" \
     --template-file arm_signalr.json \
     --parameters arm_signalr_parameters.json \
     --debug
@@ -81,21 +97,21 @@ az deployment group create \
 
 # Create resource group for keyvault
 az group create \
-    --name ExcalifunKeyVaultGroup \
+    --name "$resource_group_key_vault" \
     --location westeurope \
     --debug
 
 # Wait until the SignalR resource is created, and so the primary key is available
 az signalr wait \
-  --name excalifansignalr \
-  --resource-group ExcalifunSignalRGroup \
+  --name "$resource_signalr" \
+  --resource-group "$resource_group_signalr" \
   --created \
   --debug
 
 # Retrieve secret from SignalR
 signalRsecret=$(az signalr key list \
-  --name excalifansignalr \
-  --resource-group ExcalifunSignalRGroup \
+  --name "$resource_signalr" \
+  --resource-group "$resource_group_signalr" \
   --query primaryKey \
   -o tsv )
 
@@ -103,15 +119,15 @@ echo "SignalR primary key: $signalRsecret"
 
 # Wait until the storage account is created, and so the primary access key is available
 az storage account wait \
-  --name excalifanstorage \
-  --resource-group ExcalifunStorageGroup \
+  --name "$resource_storage" \
+  --resource-group "$resource_group_storage" \
   --created \
   --debug
 
 # Retrieve the primary access key from storage account
 blobStoragePrimaryAccessKey=$(az storage account keys list \
-  --account-name excalifanstorage \
-  --resource-group ExcalifunStorageGroup \
+  --account-name "$resource_storage" \
+  --resource-group "$resource_group_storage" \
   --query "[0].value" \
   -o tsv)
 
@@ -119,7 +135,7 @@ echo "Storage account primary key: $blobStoragePrimaryAccessKey"
 
 # Create the resources for the deployment
 az deployment group create \
-  --resource-group ExcalifunKeyVaultGroup \
+  --resource-group "$resource_group_key_vault" \
   --template-file arm_key_vault.json \
   --parameters keyForSignalR_value="$signalRsecret" keyForStorage_value="$blobStoragePrimaryAccessKey" \
   --debug
@@ -137,14 +153,14 @@ cd ../../
 
 # Assign the identity to app service
 az webapp identity assign \
-  --name rest-service-2 \
-  --resource-group rest-service-2-rg \
+  --name "$resource_app_service" \
+  --resource-group "$resource_group_app_service" \
   --debug
 
 # Retrieve the principalId of the deployed app
 principalIdAppService=$(az webapp show \
-  --name rest-service-2 \
-  --resource-group rest-service-2-rg \
+  --name "$resource_app_service" \
+  --resource-group "$resource_group_app_service" \
   --query identity.principalId \
   -o tsv)
 
@@ -163,7 +179,7 @@ done
 az role assignment create \
   --assignee "$principalIdAppService" \
   --role "Key Vault Secrets User" \
-  --scope $(az keyvault show --name keyvaultexcalifan --query id -o tsv) \
+  --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
 
 # TESTED HERE (END) 
