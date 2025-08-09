@@ -1,4 +1,4 @@
-# Parameters to pass to the script
+# Parameters to pass to the script (START)
 resource_signalr="excalifansignalr"
 resource_group_signalr="ExcalifunSignalRGroup"
 resource_storage="excalifanstorage"
@@ -9,6 +9,7 @@ resource_app_service="rest-service-2"
 resource_group_app_service="rest-service-2-rg"
 resource_function_app_service="excalifun-java-serverless-2"
 resource_group_function_app_service="excalifun-serverless-functions-2"
+# Parameters to pass to the script (END)
 
 
 
@@ -16,8 +17,8 @@ resource_group_function_app_service="excalifun-serverless-functions-2"
 
 # Create resource group and create resources for Azure Functions
 cd functions &&
-mvn clean package &&
-mvn azure-functions:deploy
+mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
+mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service"
 
 # Assign an identity to azure functions
 # TODO: change name and resource group (conflict)
@@ -68,10 +69,11 @@ az group create \
 
 # Create storage account
 # Create a container for the storage
+#     --parameters arm_blob_storage_parameters.json \
 az deployment group create \
     --resource-group "$resource_group_storage" \
     --template-file arm_blob_storage.json \
-    --parameters arm_blob_storage_parameters.json \
+    --parameters storageAccounts_excalifunstorage_name="$resource_storage" \
     --debug
 
 
@@ -86,10 +88,11 @@ az group create \
     --debug
 
 # Create the resource for SignalR
+#     --parameters arm_signalr_parameters.json \
 az deployment group create \
     --resource-group "$resource_group_signalr" \
     --template-file arm_signalr.json \
-    --parameters arm_signalr_parameters.json \
+    --parameters SignalR_SignalRResourceForSpring_name="$resource_signalr" \
     --debug
 
 
@@ -137,7 +140,7 @@ echo "Storage account primary key: $blobStoragePrimaryAccessKey"
 az deployment group create \
   --resource-group "$resource_group_key_vault" \
   --template-file arm_key_vault.json \
-  --parameters keyForSignalR_value="$signalRsecret" keyForStorage_value="$blobStoragePrimaryAccessKey" \
+  --parameters keyForSignalR_value="$signalRsecret" keyForStorage_value="$blobStoragePrimaryAccessKey" vaults_testkeyvault10000_name="$resource_key_vault" \
   --debug
 
 
@@ -147,8 +150,8 @@ az deployment group create \
 # Create resource group for App Service
 # Create Spring server with App Service
 cd ../testSignalRInSpring/my-webapp &&
-mvn clean package &&
-mvn azure-webapp:deploy &&
+mvn clean package -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
+mvn azure-webapp:deploy -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 cd ../../
 
 # Assign the identity to app service

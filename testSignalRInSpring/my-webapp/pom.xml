@@ -14,6 +14,8 @@
 	<description>RESTful web application</description>
 	<properties>
 		<java.version>17</java.version>
+		<appName>rest-service-2</appName>
+		<resourceGroupName>rest-service-2</resourceGroupName>
 	</properties>
 
 	<!--Added now-->
@@ -194,8 +196,9 @@
 		        <version>2.13.0</version>
 		        <configuration>
 		            <schemaVersion>v2</schemaVersion>
-		            <resourceGroup>rest-service-2-rg</resourceGroup>
-		            <appName>rest-service-2</appName>
+		            
+					<resourceGroup>${resourceGroupName}</resourceGroup>
+		            <appName>${appName}</appName>
 		            <pricingTier>F1</pricingTier>
 		            <region>centralus</region>
 		            <runtime>
