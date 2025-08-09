@@ -6,15 +6,15 @@ mvn azure-functions:deploy
 # Assign an identity to azure functions
 # TODO: change name and resource group (conflict)
 az functionapp identity assign \
-  --name excalifun-java-serverless \ 
-  --resource-group excalifun-serverless-functions \
+  --name excalifun-java-serverless-2 \
+  --resource-group excalifun-serverless-functions-2 \
   --debug
 
 # Retrieve the principalId of the function app
 principalIdFunctionAppService=$(az functionapp identity show \
-  --name excalifun-java-serverless \
-  --resource-group excalifun-serverless-functions \
-  --query identity.principalId \
+  --name excalifun-java-serverless-2 \
+  --resource-group excalifun-serverless-functions-2 \
+  --query principalId \
   -o tsv)
 
 # Wait for the managed identity of Function App Service to be available
@@ -121,7 +121,7 @@ echo "Storage account primary key: $blobStoragePrimaryAccessKey"
 az deployment group create \
   --resource-group ExcalifunKeyVaultGroup \
   --template-file arm_key_vault.json \
-  --parameters keyForSignalR_value="$signalRsecret"  \
+  --parameters keyForSignalR_value="$signalRsecret" keyForStorage_value="$blobStoragePrimaryAccessKey" \
   --debug
 
 

@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.nimbusds.jose.shaded.ow2asm.ConstantDynamic;
 import com.nimbusds.jwt.SignedJWT;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -30,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import com.fabrikam.Constants;
 
 
 
@@ -190,7 +192,7 @@ public class UploadBoard {
             "{}";
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-            .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
+            .uri(new URI(Constants.appService + "api/listBoards"))
             .timeout(Duration.ofSeconds(10))
             .header("Authorization", loginToken)
             .header("Content-Type", "application/json")

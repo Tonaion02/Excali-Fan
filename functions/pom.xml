@@ -14,7 +14,7 @@
         <java.version>17</java.version>
         <azure.functions.maven.plugin.version>1.24.0</azure.functions.maven.plugin.version>
         <azure.functions.java.library.version>3.0.0</azure.functions.java.library.version>
-        <functionAppName>excalifun-java-serverless</functionAppName>
+        <functionAppName>excalifun-java-serverless-2</functionAppName>
     </properties>
 
     <dependencies>
@@ -104,7 +104,7 @@
                     <!-- function app name -->
                     <appName>${functionAppName}</appName>
                     <!-- function app resource group -->
-                    <resourceGroup>excalifun-serverless-functions</resourceGroup>
+                    <resourceGroup>excalifun-serverless-functions-2</resourceGroup>
                     <!-- function app service plan name -->
                     <appServicePlanName>java-functions-app-service-plan</appServicePlanName>
                     <!-- function app region-->

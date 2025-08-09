@@ -523,6 +523,7 @@ public class SignalRController {
 
 
     @GetMapping("/api/addgroup")
+    // T: This function create the association between a userId and a group with a put request
     public void addToGroup(@RequestParam String groupId, @RequestParam String userId) {
 
         System.out.println("adding to group");
@@ -554,6 +555,10 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getStatus());
         System.out.println("userInGroup: " + response.getBody());
     }
+
+
+
+
 
     // T: TEMPORARY for testing of blobStorage (START)
     @PostMapping("/publicApi/testBlobStorage")

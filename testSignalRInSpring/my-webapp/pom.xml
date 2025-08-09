@@ -194,8 +194,8 @@
 		        <version>2.13.0</version>
 		        <configuration>
 		            <schemaVersion>v2</schemaVersion>
-		            <resourceGroup>rest-service-1735827345127-rg</resourceGroup>
-		            <appName>rest-service-1735827345127</appName>
+		            <resourceGroup>rest-service-2-rg</resourceGroup>
+		            <appName>rest-service-2</appName>
 		            <pricingTier>F1</pricingTier>
 		            <region>centralus</region>
 		            <runtime>
