@@ -11,6 +11,12 @@
             "metadata": {
             "description": "Value for the SignalR access key"
             }
+        },
+        "keyForStorage_value": {
+            "type": "secureString",
+            "metadata": {
+            "description": "Value for the Storage access key"
+            }
         }
     },
     "variables": {},
@@ -53,7 +59,7 @@
                 "[resourceId('Microsoft.KeyVault/vaults', parameters('vaults_testkeyvault10000_name'))]"
             ],
             "properties": {
-                "value": "bbbbbbbbbb",
+                "value": "[parameters('keyForStorage_value')]",
                 "attributes": {
                     "enabled": true
                 }

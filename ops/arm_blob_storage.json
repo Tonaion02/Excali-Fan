@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "storageAccounts_excalifunstorage_name": {
-            "defaultValue": "excalifun_storage",
+            "defaultValue": "excalifanstorage",
             "type": "String"
         }
     },
