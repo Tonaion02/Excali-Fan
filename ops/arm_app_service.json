@@ -1,0 +1,388 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "sites_rest_service_1735827345127_name": {
+            "defaultValue": "rest-service-1735827345127",
+            "type": "String"
+        },
+        "serverfarms_asp_rest_service_1735827345127_externalid": {
+            "defaultValue": "/subscriptions/04dbb77e-2f13-49f3-8645-d4cabe0941f9/resourceGroups/rest-service-1735827345127-rg/providers/Microsoft.Web/serverfarms/asp-rest-service-1735827345127",
+            "type": "String"
+        }
+    },
+    "variables": {},
+    "resources": [
+        {
+            "type": "Microsoft.Web/sites",
+            "apiVersion": "2024-11-01",
+            "name": "[parameters('sites_rest_service_1735827345127_name')]",
+            "location": "Central US",
+            "kind": "app,linux",
+            "identity": {
+                "type": "SystemAssigned"
+            },
+            "properties": {
+                "enabled": true,
+                "hostNameSslStates": [
+                    {
+                        "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Standard"
+                    },
+                    {
+                        "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '.scm.azurewebsites.net')]",
+                        "sslState": "Disabled",
+                        "hostType": "Repository"
+                    }
+                ],
+                "serverFarmId": "[parameters('serverfarms_asp_rest_service_1735827345127_externalid')]",
+                "reserved": true,
+                "isXenon": false,
+                "hyperV": false,
+                "dnsConfiguration": {},
+                "outboundVnetRouting": {
+                    "allTraffic": false,
+                    "applicationTraffic": false,
+                    "contentShareTraffic": false,
+                    "imagePullTraffic": false,
+                    "backupRestoreTraffic": false
+                },
+                "siteConfig": {
+                    "numberOfWorkers": 1,
+                    "linuxFxVersion": "JAVA|17-java17",
+                    "acrUseManagedIdentityCreds": false,
+                    "alwaysOn": false,
+                    "http20Enabled": false,
+                    "functionAppScaleLimit": 0,
+                    "minimumElasticInstanceCount": 0
+                },
+                "scmSiteAlsoStopped": false,
+                "clientAffinityEnabled": true,
+                "clientAffinityProxyEnabled": false,
+                "clientCertEnabled": false,
+                "clientCertMode": "Required",
+                "hostNamesDisabled": false,
+                "ipMode": "IPv4",
+                "customDomainVerificationId": "E4167E0EECFFAD910BA58528815B74130C9897B46D1E7B75C43E1CCEA79E33DD",
+                "containerSize": 0,
+                "dailyMemoryTimeQuota": 0,
+                "httpsOnly": false,
+                "endToEndEncryptionEnabled": false,
+                "redundancyMode": "None",
+                "publicNetworkAccess": "Enabled",
+                "storageAccountRequired": false,
+                "keyVaultReferenceIdentity": "SystemAssigned"
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/ftp')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/basicPublishingCredentialsPolicies",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/scm')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "allow": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/config",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/web')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "numberOfWorkers": 1,
+                "defaultDocuments": [
+                    "Default.htm",
+                    "Default.html",
+                    "Default.asp",
+                    "index.htm",
+                    "index.html",
+                    "iisstart.htm",
+                    "default.aspx",
+                    "index.php",
+                    "hostingstart.html"
+                ],
+                "netFrameworkVersion": "v4.0",
+                "linuxFxVersion": "JAVA|17-java17",
+                "requestTracingEnabled": false,
+                "remoteDebuggingEnabled": false,
+                "httpLoggingEnabled": true,
+                "acrUseManagedIdentityCreds": false,
+                "logsDirectorySizeLimit": 35,
+                "detailedErrorLoggingEnabled": false,
+                "publishingUsername": "$rest-service-1735827345127",
+                "scmType": "None",
+                "use32BitWorkerProcess": true,
+                "webSocketsEnabled": false,
+                "alwaysOn": false,
+                "managedPipelineMode": "Integrated",
+                "virtualApplications": [
+                    {
+                        "virtualPath": "/",
+                        "physicalPath": "site\\wwwroot",
+                        "preloadEnabled": false
+                    }
+                ],
+                "loadBalancing": "LeastRequests",
+                "experiments": {
+                    "rampUpRules": []
+                },
+                "autoHealEnabled": false,
+                "vnetRouteAllEnabled": false,
+                "vnetPrivatePortsCount": 0,
+                "localMySqlEnabled": false,
+                "managedServiceIdentityId": 9269,
+                "ipSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictions": [
+                    {
+                        "ipAddress": "Any",
+                        "action": "Allow",
+                        "priority": 2147483647,
+                        "name": "Allow all",
+                        "description": "Allow all access"
+                    }
+                ],
+                "scmIpSecurityRestrictionsUseMain": false,
+                "http20Enabled": false,
+                "minTlsVersion": "1.2",
+                "scmMinTlsVersion": "1.2",
+                "ftpsState": "FtpsOnly",
+                "preWarmedInstanceCount": 0,
+                "elasticWebAppScaleLimit": 0,
+                "functionsRuntimeScaleMonitoringEnabled": false,
+                "minimumElasticInstanceCount": 0,
+                "azureStorageAccounts": {},
+                "http20ProxyFlag": 0
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/0778a51e-2acc-4efa-ad19-bc29418c27ac')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T16:46:20.6163303Z",
+                "end_time": "2025-08-05T16:46:32.6453012Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/0cb2b211-ff6a-4100-9833-23baf716618e')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-06T14:03:44.5931044Z",
+                "end_time": "2025-08-06T14:03:57.0372665Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/0dbf3891-ee87-4bf0-aa02-11897ba16487')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-07T17:04:58.8662205Z",
+                "end_time": "2025-08-07T17:05:12.9144744Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/1060ad05-f9fc-4b7a-bec7-1090a9a05cf3')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T16:57:23.4602779Z",
+                "end_time": "2025-08-05T16:57:35.5728209Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/2c39f331-8e13-4319-971d-e92c4393b10e')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T15:58:42.8451185Z",
+                "end_time": "2025-08-05T15:58:54.1470758Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/2ea785e8-87a9-4c9b-81ab-98436d89fe2f')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-07T17:15:36.6858371Z",
+                "end_time": "2025-08-07T17:15:49.4248656Z",
+                "active": true
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/39320254-235d-44e0-8121-a97c4be8a238')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T16:34:54.3005027Z",
+                "end_time": "2025-08-05T16:35:05.9666806Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/5f4f8928-046c-4226-87e2-6044d69770d6')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T16:28:27.0669003Z",
+                "end_time": "2025-08-05T16:28:38.6141893Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/96967acb-1951-46c5-8462-443fa62f5d1c')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T16:10:59.0105391Z",
+                "end_time": "2025-08-05T16:11:10.6799779Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/deployments",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/b696d116-3d87-4f39-a5dd-b7bfd01a7ef2')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "status": 4,
+                "author_email": "N/A",
+                "author": "N/A",
+                "deployer": "OneDeploy",
+                "message": "OneDeploy",
+                "start_time": "2025-08-05T15:38:38.4646294Z",
+                "end_time": "2025-08-05T15:38:50.891488Z",
+                "active": false
+            }
+        },
+        {
+            "type": "Microsoft.Web/sites/hostNameBindings",
+            "apiVersion": "2024-11-01",
+            "name": "[concat(parameters('sites_rest_service_1735827345127_name'), '/', parameters('sites_rest_service_1735827345127_name'), '.azurewebsites.net')]",
+            "location": "Central US",
+            "dependsOn": [
+                "[resourceId('Microsoft.Web/sites', parameters('sites_rest_service_1735827345127_name'))]"
+            ],
+            "properties": {
+                "siteName": "rest-service-1735827345127",
+                "hostNameType": "Verified"
+            }
+        }
+    ]
+}

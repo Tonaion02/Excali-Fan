@@ -2,19 +2,16 @@ package com.example.restservice.serviceSignalR;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.sql.Wrapper;
 import java.util.Date;
 import java.util.List;
 
 import javax.crypto.spec.SecretKeySpec;
-import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
-import org.apache.http.impl.bootstrap.HttpServer;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import io.jsonwebtoken.JwtBuilder;
@@ -48,7 +45,6 @@ import java.text.ParseException;
 public class SignalRController {
 
     private final BoardsRuntimeStorage boards;
-    private String signalRServiceBaseEndpoint = "https://signalrresourceforspring.service.signalr.net"; // example: https://foo.service.signalr.net
     private String hubName = "board";
 
 
@@ -61,7 +57,7 @@ public class SignalRController {
 
     @PostMapping("/signalr/negotiate")
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
-        String hubUrl = signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserSessionID: " + userId);
         String accessKey = generateJwt(hubUrl, userId);   
 
@@ -79,7 +75,7 @@ public class SignalRController {
 
 
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
@@ -107,7 +103,7 @@ public class SignalRController {
         
 
         System.out.println("timestamp of last line: " + command.line.timestamp);
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
         String accessKey = generateJwt(hubUrl, command.userId);
 
 
@@ -211,10 +207,7 @@ public class SignalRController {
         board.setOwnerUserId(email);
         boards.boards.put(boardId, board);     
 
-
-
-        // T: TODO check if the user is already "registered" in the database
-        // T: TODO in the case is not already registered, register him
+        
 
         return boardId;
     }
@@ -302,7 +295,7 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
         String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
@@ -534,7 +527,7 @@ public class SignalRController {
 
         System.out.println("adding to group");
 
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
             String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
@@ -549,7 +542,7 @@ public class SignalRController {
 
     @GetMapping("/publicApi/isingroup")
     public void isUserInGroup(@RequestParam String groupId, @RequestParam String userId) {
-        String hubUrl = signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
         String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.get(hubUrl)

@@ -1,3 +1,6 @@
+// var const_appservice = "https://rest-service-1735827345127.azurewebsites.net/";
+var const_appservice = "https://rest-service-2.azurewebsites.net";
+
 // T: this will become the synced list
 let listLines = []
 // T: this is something similar to the forward list,
@@ -199,7 +202,7 @@ function setup() {
 
         // T: Retrieve the list of boards (START) 
         let accessToken = retrieveToken();
-        axios.post("https://rest-service-1735827345127.azurewebsites.net/api/listBoards", {}, {
+        axios.post(const_appservice + "/api/listBoards", {}, {
             headers: {
               "Authorization": accessToken,
               "Content-Type": "application/json"
@@ -422,7 +425,7 @@ function setup() {
                 let accessToken = retrieveToken();
 
                 // T: autojoin the group (START)
-                fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
+                fetch(const_appservice + "/api/addgroup?groupId=" + data.groupId + "&userId=" + data.userId,
                     {
                         method: "GET",
                         headers: {
@@ -444,7 +447,7 @@ function isPointInLine(point, line, tollerance) {
     // T: Handle special case in which we have a single point (START)
     // if(line.points.length == 1)
     // {
-    //     let distance = Math.sqrt((line.points[0].first - point.first) ** 2 + (line.potins[0].second - point.second) ** 2);
+    //     let distance = Math.sqrt((line.points[0].first - point.first) ** 2 + (line.points[0].second - point.second) ** 2);
     //     if(distance < tollerance)
     //         return true
     // }
@@ -535,7 +538,7 @@ function addToGroup() {
 
     let accessToken = retrieveToken();
 
-    fetch("https://rest-service-1735827345127.azurewebsites.net/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
+    fetch(const_appservice + "/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
             method: "GET",
             headers: {
@@ -564,7 +567,7 @@ function loadBoard(boardId) {
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/loadBoard", { "blobName": boardId, "email": email}, 
+    axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "email": email}, 
     {
         headers: {
             "Authorization": accessToken,
@@ -648,7 +651,7 @@ function saveOnCloud(boardSessionId, boardName)
         return;
     }
 
-    axios.post("https://rest-service-1735827345127.azurewebsites.net/api/saveBoard", 
+    axios.post(const_appservice + "/api/saveBoard", 
         { 
             "blobName": boardName, 
             "email": email,
