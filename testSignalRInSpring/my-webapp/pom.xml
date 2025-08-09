@@ -15,7 +15,7 @@
 	<properties>
 		<java.version>17</java.version>
 		<appName>rest-service-2</appName>
-		<resourceGroupName>rest-service-2</resourceGroupName>
+		<resourceGroupName>rest-service-2-rg</resourceGroupName>
 	</properties>
 
 	<!--Added now-->
