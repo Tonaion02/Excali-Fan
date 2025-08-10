@@ -7,6 +7,8 @@ url_key_vault="https://$resource_key_vault.vault.azure.net"
 echo "$url_key_vault"
 url_signalr_service="https://$resource_signalr.service.signalr.net"
 echo "$url_signalr_service"
+url_function_app_service="https://$resource_function_app_service.azurewebsites.net"
+echo "$url_function_app_service"
 
 
 
@@ -108,6 +110,19 @@ echo "storageAccountName=$resource_storage" >> .env
 mv .env ../testSignalRInSpring/my-webapp/src/main/resources/.env
 # Write in the env file some setup information (END)
 
+# Create constants.js file for the single page application (START)
+touch constants.js
+
+> constants.js
+
+echo "var const_appservice = \""$url_app_service"\";"
+echo "var const_serverless_service = \""$url_function_app_service"\";"
+var const_redirectUri = \""$url_app_service"\" 
+var const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
+
+mv constants.js ../testSignalRInSpring/my-webapp/src/main/resources/constants.js
+# Create constants.js file for the single page application (ENV)
+
 # Create resource group for App Service
 # Create Spring server with App Service
 cd ../testSignalRInSpring/my-webapp &&
@@ -146,7 +161,7 @@ az role assignment create \
   --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
 
-# TESTED HERE (END)
+
 
 
 
@@ -171,8 +186,9 @@ mv Constants.java ../functions/src/main/java/com/fabrikam/Constants.java
 # Embed constants in Constants file (END)
 
 
+
 # Create resource group and create resources for Azure Functions
-cd functions &&
+cd ../functions &&
 mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
 mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
 cd ../ops
