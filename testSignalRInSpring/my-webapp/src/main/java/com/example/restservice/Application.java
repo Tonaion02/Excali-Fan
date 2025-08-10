@@ -25,8 +25,11 @@ public class Application {
         Dotenv dotenv = Dotenv.load();
 
         Keys.keyVaultUrl = dotenv.get("keyVaultUrl");
+        System.out.println("keyVaultUrl: " + Keys.keyVaultUrl);
         Keys.signalRServiceBaseEndpoint = dotenv.get("signalRServiceBaseEndpoint");
+        System.out.println("signalRServiceBaseEndpoint: " + Keys.signalRServiceBaseEndpoint);
         Keys.storageAccountName = dotenv.get("storageAccountName");
+        System.out.println("storageAccountName: " + Keys.storageAccountName);
         // T: Load from .env file some basic information (END)
 
 
