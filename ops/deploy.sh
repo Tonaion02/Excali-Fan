@@ -111,7 +111,7 @@ touch .env
 
 echo "keyVaultUrl=$url_key_vault" >> .env
 echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
-echo "storageAccountName=$url_key_vault" >> .env
+echo "storageAccountName=$resource_storage" >> .env
 
 mv .env ../testSignalRInSpring/my-webapp/.env
 # Write in the env file some setup information (END)
