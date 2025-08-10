@@ -14,4 +14,7 @@ az group delete --name rest-service-2-rg --yes --no-wait
 az group delete --name ExcalifunKeyVaultGroup --yes --no-wait
 
 # Remove from the azure functions the constants file
-rm functions/src/main/java/com/fabrikam/Constants.java
+rm ../functions/src/main/java/com/fabrikam/Constants.java
+
+# Remove from the azure app service the .env file
+rm  ../testSignalRInSpring/my-webapp/.env 

@@ -107,6 +107,8 @@ az deployment group create \
 # Write in the env file some setup information (START)
 touch .env
 
+> .env
+
 echo "keyVaultUrl=$url_key_vault" >> .env
 echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
 echo "storageAccountName=$url_key_vault" >> .env
@@ -160,6 +162,8 @@ az role assignment create \
 
 # Embed constants in Constants file (START)
 touch Constants.java
+
+> Constants.java
 
 echo "package com.fabrikam;" >> Constants.java
 echo "public class Constants {" >> Constants.java
