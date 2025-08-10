@@ -224,3 +224,9 @@ az role assignment create \
   --role "Key Vault Secrets User" \
   --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
+
+# Enable Cross Origin (Enable CORS)
+az functionapp cors add \
+  --name "$resource_function_app_service" \
+  --resource-group "$resource_group_function_app_service" \
+  --allowed-origins "$url_app_service"
