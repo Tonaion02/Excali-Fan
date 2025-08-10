@@ -1,6 +1,6 @@
 package com.example.restservice;
 
-// import com.example.*;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +20,17 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 public class Application {
 
     public static void main(String[] args) {
-        
+
+        // T: Load from .env file some basic information (START)
+        Dotenv dotenv = Dotenv.load();
+
+        Keys.keyVaultUrl = dotenv.get("keyVaultUrl");
+        Keys.signalRServiceBaseEndpoint = dotenv.get("signalRServiceBaseEndpoint");
+        Keys.storageAccountName = dotenv.get("storageAccountName");
+        // T: Load from .env file some basic information (END)
+
+
+
         // T: Create a SecretClient using DefaultAzureCredential
         SecretClient secretClient = new SecretClientBuilder()
                 .vaultUrl(Keys.keyVaultUrl)

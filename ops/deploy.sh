@@ -11,56 +11,16 @@ resource_function_app_service="excalifun-java-serverless-2"
 resource_group_function_app_service="excalifun-serverless-functions-2"
 # Parameters to pass to the script (END)
 
+url_app_service="https://$resource_app_service.azurewebsites.net/"
+echo "$url_app_service"
+url_key_vault="https://$resource_key_vault.vault.azure.net"
+echo "$url_key_vault"
+url_signalr_service="https://$resource_signalr.service.signalr.net"
+echo "$url_signalr_service"
 
 
 
-
-# Create resource group and create resources for Azure Functions
-cd functions &&
-mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
-mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service"
-
-# Assign an identity to azure functions
-# TODO: change name and resource group (conflict)
-az functionapp identity assign \
-  --name "$resource_function_app_service" \
-  --resource-group "$resource_group_function_app_service" \
-  --debug
-
-# Retrieve the principalId of the function app
-principalIdFunctionAppService=$(az functionapp identity show \
-  --name "$resource_function_app_service" \
-  --resource-group "$resource_group_function_app_service" \
-  --query principalId \
-  -o tsv)
-
-# Wait for the managed identity of Function App Service to be available
-echo "Waiting for managed identity of Function App Service to be available in AAD..."
-for i in {1..10}; do
-  if az ad sp show --id "$principalIdFunctionAppService" &>/dev/null; then
-    echo "Managed identity is now available."
-    break
-  fi
-  echo "Still waiting for identity to propagate... ($i/10)"
-  sleep 5
-done  
-
-# Assign privileges to function app service to retrieve secrets from KeyVault
-az role assignment create \
-  --assignee "$principalIdFunctionAppService" \
-  --role "Key Vault Secrets User" \
-  --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
-  --debug
-
-
-
-
-
-
-
-
-
-
+# TESTED HERE (START)
 # Create resource group for storage
 az group create \
     --name "$resource_group_storage" \
@@ -78,9 +38,6 @@ az deployment group create \
 
 
 
-
-
-# TESTED HERE (START)
 # Create resource group for SignalR
 az group create \
     --name "$resource_group_signalr" \
@@ -147,6 +104,16 @@ az deployment group create \
 
 
 
+# Write in the env file some setup information (START)
+touch .env
+
+echo "keyVaultUrl=$url_key_vault" >> .env
+echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
+echo "storageAccountName=$url_key_vault" >> .env
+
+mv .env testSignalRInSpring/my-webapp/.env
+# Write in the env file some setup information (END)
+
 # Create resource group for App Service
 # Create Spring server with App Service
 cd ../testSignalRInSpring/my-webapp &&
@@ -185,4 +152,62 @@ az role assignment create \
   --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
 
-# TESTED HERE (END) 
+# TESTED HERE (END)
+
+
+
+
+
+# Embed constants in Constants file (START)
+touch Constants.java
+
+echo "package com.fabrikam;" >> Constants.java
+echo "public class Constants {" >> Constants.java
+echo "public static String secretNameBlobStorageAccount = "keyForBlobStorage";" >> Constants.java
+echo "public static String keyVaultUrl = "$url_key_vault";" >> Constants.java
+echo "public static String containerName = "boardstorage";" >> Constants.java
+echo "public static String accountKeyBlobStorage = "$blobStoragePrimaryAccessKey";" >> Constants.java
+echo "public static String storageAccountName = "$resource_storage";" >> Constants.java
+echo "public static String appService = "$url_app_service";" >> Constants.java
+echo "}" >> Constants.java
+
+mv Constants.java ./functions/src/main/java/com/fabrikam/Constants.java
+# Embed constants in Constants file (END)
+
+
+# Create resource group and create resources for Azure Functions
+cd functions &&
+mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
+mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service"
+
+# Assign an identity to azure functions
+# TODO: change name and resource group (conflict)
+az functionapp identity assign \
+  --name "$resource_function_app_service" \
+  --resource-group "$resource_group_function_app_service" \
+  --debug
+
+# Retrieve the principalId of the function app
+principalIdFunctionAppService=$(az functionapp identity show \
+  --name "$resource_function_app_service" \
+  --resource-group "$resource_group_function_app_service" \
+  --query principalId \
+  -o tsv)
+
+# Wait for the managed identity of Function App Service to be available
+echo "Waiting for managed identity of Function App Service to be available in AAD..."
+for i in {1..10}; do
+  if az ad sp show --id "$principalIdFunctionAppService" &>/dev/null; then
+    echo "Managed identity is now available."
+    break
+  fi
+  echo "Still waiting for identity to propagate... ($i/10)"
+  sleep 5
+done  
+
+# Assign privileges to function app service to retrieve secrets from KeyVault
+az role assignment create \
+  --assignee "$principalIdFunctionAppService" \
+  --role "Key Vault Secrets User" \
+  --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
+  --debug

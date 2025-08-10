@@ -12,3 +12,6 @@ az group delete --name rest-service-2-rg --yes --no-wait
 
 # Delete the resource group for keyvault
 az group delete --name ExcalifunKeyVaultGroup --yes --no-wait
+
+# Remove from the azure functions the constants file
+rm functions/src/main/java/com/fabrikam/Constants.java
