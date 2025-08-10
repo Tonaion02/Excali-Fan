@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.functions.ExecutionContext;
 import com.microsoft.azure.functions.HttpMethod;
 import com.microsoft.azure.functions.annotation.HttpTrigger;
+import com.nimbusds.jose.shaded.ow2asm.ConstantDynamic;
 import com.nimbusds.jwt.SignedJWT;
 import com.microsoft.azure.functions.annotation.AuthorizationLevel;
 import com.microsoft.azure.functions.annotation.FunctionName;
@@ -30,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+import com.fabrikam.Constants;
 
 
 
@@ -37,15 +39,15 @@ import java.util.Optional;
 
 public class UploadBoard {
 
-    public static final String secretNameKeySignalR = "keyForSignalR";
-    public static final String storageAccountName = "excalifunstorage";
-    public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
+    // public static final String secretNameKeySignalR = "keyForSignalR";
+    // public static final String storageAccountName = "excalifunstorage";
+    // public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
+    // public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
 
-    private static final String containerName = "boardstorage";
+    // private static final String containerName = "boardstorage";
 
-    private static String secret;
-    private static String accountKeyBlobStorage = null;
+    // private static String secret;
+    // private static String accountKeyBlobStorage = null;
 
     public static class parameter {
         parameter() {
@@ -120,7 +122,7 @@ public class UploadBoard {
 
         // T: Connect to Azure (START)
         System.out.println("Arrived to connection");
-        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
+        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Constants.storageAccountName + ";AccountKey=" + Constants.accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
@@ -129,7 +131,7 @@ public class UploadBoard {
 
         System.out.println("Created client");
         // T: Check if the container exist (START)
-        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
+        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
         
         if (!containerClient.exists()) {
             containerClient.create();
@@ -190,7 +192,7 @@ public class UploadBoard {
             "{}";
 
             HttpRequest httpRequest = HttpRequest.newBuilder()
-            .uri(new URI("https://rest-service-1735827345127.azurewebsites.net/api/listBoards"))
+            .uri(new URI(Constants.appService + "api/listBoards"))
             .timeout(Duration.ofSeconds(10))
             .header("Authorization", loginToken)
             .header("Content-Type", "application/json")
