@@ -1,15 +1,5 @@
-# Parameters to pass to the script (START)
-resource_signalr="excalifansignalr"
-resource_group_signalr="ExcalifunSignalRGroup"
-resource_storage="excalifanstorage"
-resource_group_storage="ExcalifunStorageGroup"
-resource_key_vault="keyvaultexcalifan2"
-resource_group_key_vault="ExcalifunKeyVaultGroup"
-resource_app_service="rest-service-2"
-resource_group_app_service="rest-service-2-rg"
-resource_function_app_service="excalifun-java-serverless-2"
-resource_group_function_app_service="excalifun-serverless-functions-2"
-# Parameters to pass to the script (END)
+# Include parameters
+source ./parameters.sh
 
 url_app_service="https://$resource_app_service.azurewebsites.net/"
 echo "$url_app_service"
@@ -17,6 +7,8 @@ url_key_vault="https://$resource_key_vault.vault.azure.net"
 echo "$url_key_vault"
 url_signalr_service="https://$resource_signalr.service.signalr.net"
 echo "$url_signalr_service"
+
+
 
 
 
@@ -121,7 +113,7 @@ mv .env ../testSignalRInSpring/my-webapp/src/main/resources/.env
 cd ../testSignalRInSpring/my-webapp &&
 mvn clean package -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 mvn azure-webapp:deploy -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
-cd ../../
+cd ../../ops
 
 # Assign the identity to app service
 az webapp identity assign \
@@ -182,7 +174,8 @@ mv Constants.java ../functions/src/main/java/com/fabrikam/Constants.java
 # Create resource group and create resources for Azure Functions
 cd functions &&
 mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
-mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service"
+mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
+cd ../ops
 
 # Assign an identity to azure functions
 # TODO: change name and resource group (conflict)
