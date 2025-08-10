@@ -1,0 +1,19 @@
+# Deploy All
+git clone https://github.com/Tonaion02/Excali-Fan.git && 
+cd testSignalRInSpring/my-webapp &&
+mvn clean package &&
+mvn azure-webapp:deploy &&
+cd ../functions &&
+mvn clean package &&
+mvn azure-functions:deploy
+
+
+
+
+
+#command for logs
+az webapp log tail --name rest-service-1735827345127 --resource-group rest-service-1735827345127-rg
+az webapp log tail --name rest-service-2 --resource-group rest-service-2-rg
+
+#when there is problem with maven use this
+rm -rf ~/.m2/repository
