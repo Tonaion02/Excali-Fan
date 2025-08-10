@@ -113,7 +113,7 @@ echo "keyVaultUrl=$url_key_vault" >> .env
 echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
 echo "storageAccountName=$resource_storage" >> .env
 
-mv .env ../testSignalRInSpring/my-webapp/.env
+mv .env ../testSignalRInSpring/my-webapp/src/main/resources/.env
 # Write in the env file some setup information (END)
 
 # Create resource group for App Service

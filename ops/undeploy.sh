@@ -17,4 +17,4 @@ az group delete --name ExcalifunKeyVaultGroup --yes --no-wait
 rm ../functions/src/main/java/com/fabrikam/Constants.java
 
 # Remove from the azure app service the .env file
-rm  ../testSignalRInSpring/my-webapp/.env 
+rm  ../testSignalRInSpring/my-webapp/src/main/resources/.env 
