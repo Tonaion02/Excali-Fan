@@ -115,12 +115,12 @@ touch constants.js
 
 > constants.js
 
-echo "var const_appservice = \""$url_app_service"\";"
-echo "var const_serverless_service = \""$url_function_app_service"\";"
-var const_redirectUri = \""$url_app_service"\" 
-var const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
+echo "var const_appservice = \""$url_app_service"\";" >> constants.js
+echo "var const_serverless_service = \""$url_function_app_service"\";" >> constants.js
+echo "var const_redirectUri = \""$url_app_service"\";" >> constants.js
+echo "var const_clientId = \"b1453203-8719-4a2a-8cc6-96bf883a7e65\";" >> constants.js
 
-mv constants.js ../testSignalRInSpring/my-webapp/src/main/resources/constants.js
+mv constants.js ../testSignalRInSpring/my-webapp/src/main/resources/static/constants.js
 # Create constants.js file for the single page application (ENV)
 
 # Create resource group for App Service
