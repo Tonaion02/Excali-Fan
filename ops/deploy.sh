@@ -2,6 +2,7 @@
 source ./parameters.sh
 
 url_app_service="https://$resource_app_service.azurewebsites.net/"
+url_app_service_for_cors="https://$resource_app_service.azurewebsites.net"
 echo "$url_app_service"
 url_key_vault="https://$resource_key_vault.vault.azure.net"
 echo "$url_key_vault"
@@ -229,4 +230,4 @@ az role assignment create \
 az functionapp cors add \
   --name "$resource_function_app_service" \
   --resource-group "$resource_group_function_app_service" \
-  --allowed-origins "$url_app_service"
+  --allowed-origins "$url_app_service_for_cors"
