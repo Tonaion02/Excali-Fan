@@ -111,7 +111,7 @@ echo "keyVaultUrl=$url_key_vault" >> .env
 echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
 echo "storageAccountName=$url_key_vault" >> .env
 
-mv .env testSignalRInSpring/my-webapp/.env
+mv .env ../testSignalRInSpring/my-webapp/.env
 # Write in the env file some setup information (END)
 
 # Create resource group for App Service
@@ -171,7 +171,7 @@ echo "public static String storageAccountName = \""$resource_storage"\";" >> Con
 echo "public static String appService = \""$url_app_service"\";" >> Constants.java
 echo "}" >> Constants.java
 
-mv Constants.java ./functions/src/main/java/com/fabrikam/Constants.java
+mv Constants.java ../functions/src/main/java/com/fabrikam/Constants.java
 # Embed constants in Constants file (END)
 
 
