@@ -1,5 +1,6 @@
 // var const_appservice = "https://rest-service-1735827345127.azurewebsites.net/";
-var const_appservice = "https://rest-service-2.azurewebsites.net";
+// var const_appservice = "https://rest-service-2.azurewebsites.net";
+// var const_serverless_service = "https://excalifun-java-serverless.azurewebsites.net";
 
 // T: this will become the synced list
 let listLines = []
@@ -844,6 +845,7 @@ uploadButton.addEventListener('click', () => {
     fileInput.click();
 });
 
+// T: TODO: move the code that is contained under this listener in a separate function
 fileInput.addEventListener("change", (event) => 
 {
     console.log("execute change listner");
@@ -876,7 +878,7 @@ fileInput.addEventListener("change", (event) =>
 
         let accessToken = retrieveToken();
 
-        axios.post("https://excalifun-java-serverless.azurewebsites.net/api/uploadBoard", {boardStorageId: file.name, boardJson: contents}, 
+        axios.post(const_serverless_service + "/api/uploadBoard", {boardStorageId: file.name, boardJson: contents}, 
             {
                 headers: {
                     "Authorization": accessToken,
