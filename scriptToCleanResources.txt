@@ -1,3 +1,0 @@
-az resource delete --resource-group testSignalRGroup --name testSignalRWithSpring --resource-type Microsoft.SignalRService/SignalR
-
-az webapp delete --name rest-service-1735827345127  --resource-group rest-service-1735827345127-rg
