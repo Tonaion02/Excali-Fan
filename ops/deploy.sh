@@ -163,12 +163,12 @@ touch Constants.java
 
 echo "package com.fabrikam;" >> Constants.java
 echo "public class Constants {" >> Constants.java
-echo "public static String secretNameBlobStorageAccount = "keyForBlobStorage";" >> Constants.java
-echo "public static String keyVaultUrl = "$url_key_vault";" >> Constants.java
-echo "public static String containerName = "boardstorage";" >> Constants.java
-echo "public static String accountKeyBlobStorage = "$blobStoragePrimaryAccessKey";" >> Constants.java
-echo "public static String storageAccountName = "$resource_storage";" >> Constants.java
-echo "public static String appService = "$url_app_service";" >> Constants.java
+echo "public static String secretNameBlobStorageAccount = \"keyForBlobStorage\";" >> Constants.java
+echo "public static String keyVaultUrl = \""$url_key_vault"\";" >> Constants.java
+echo "public static String containerName = \"boardstorage\";" >> Constants.java
+echo "public static String accountKeyBlobStorage = \""$blobStoragePrimaryAccessKey"\";" >> Constants.java
+echo "public static String storageAccountName = \""$resource_storage"\";" >> Constants.java
+echo "public static String appService = \""$url_app_service"\";" >> Constants.java
 echo "}" >> Constants.java
 
 mv Constants.java ./functions/src/main/java/com/fabrikam/Constants.java
