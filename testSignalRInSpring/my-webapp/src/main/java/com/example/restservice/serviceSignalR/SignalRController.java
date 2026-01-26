@@ -92,33 +92,47 @@ public class SignalRController {
 
     @PostMapping("/api/createLine")
     public void createLine(@RequestBody CreateLineCommand command) {
-        try {
+        try {        
+            Board board = boards.boards.get(command.groupId);
+            synchronized (board) {
+                board.lines.add(command.line);
+                System.out.println("number of lines: " + board.lines.size());        
+            }
+            
 
-        
-        Board board = boards.boards.get(command.groupId);
-        synchronized (board) {
-            board.lines.add(command.line);
-            System.out.println("number of lines: " + board.lines.size());        
-        }
-        
-
-        System.out.println("timestamp of last line: " + command.line.timestamp);
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-        String accessKey = generateJwt(hubUrl, command.userId);
+            System.out.println("timestamp of last line: " + command.line.timestamp);
+            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+            String accessKey = generateJwt(hubUrl, command.userId);
 
 
 
-        HttpResponse<String> response =  Unirest.post(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
-            .asString();
+            HttpResponse<String> response =  Unirest.post(hubUrl)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessKey)
+                .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
+                .asString();
 
-        System.out.println("sendMessage: " + response.getStatus());
-        System.out.println("sendMessage: " + response.getBody());
+            System.out.println("sendMessage: " + response.getStatus());
+            System.out.println("sendMessage: " + response.getBody());
         } catch(RuntimeException e) {
             e.printStackTrace();
         }   
+    }
+
+    @PostMapping("/api/downloadBoardFromServer")
+    public Board downloadBoardFromServer(@RequestBody DownloadBoardFromServerCommand command) {
+        try
+        {
+            Board board = boards.boards.get(command.groupId);
+            synchronized (board)
+            {
+                return board;
+            }
+        }
+        catch(RuntimeException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // T: This api is used to test if the validation of the Token works
@@ -255,7 +269,7 @@ public class SignalRController {
     // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
     // like a json and then load it in the "remote boards"(boards stored 
-    // in central memory of the Server) the board.
+    // in central memory of the Server).
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")

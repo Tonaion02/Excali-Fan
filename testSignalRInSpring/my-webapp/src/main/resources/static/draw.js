@@ -43,6 +43,11 @@ let isDrawing = false;
 let isDeleting = false;
 let isDoingAction = false;
 
+// T: This variable is used to indicate when we are loading a board
+// from the server when we join a new board.
+let isJoiningBoard = false;
+
+let waitMessageStack = [];
 
 
 
@@ -331,8 +336,15 @@ function setup() {
             console.log("receiveCreateLine is called");
             console.log(command.line)
             
-            listLines.push(command.line)
-            update(ctx)
+            if(!isJoiningBoard)
+            {
+                listLines.push(command.line)
+                update(ctx)
+            }
+            else
+            {
+
+            }
         }
 
         // T: we don't perform update in this function, because is performed in deleteLineFromList
@@ -529,6 +541,25 @@ function moveCursor(position, cursor) {
 
 
 
+// T: This method load the board directly from the server
+function loadBoardFromServer()
+{
+    
+}
+
+function clearBoard()
+{
+    listLines.splice(0, listLines.length - 1);
+
+    currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
+
+    // T: DEBUG
+    console.log(listLines);
+
+    // T: Update the screen
+    update(canvasContext);
+}
+
 function addToGroup() {
 
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -536,6 +567,11 @@ function addToGroup() {
     
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
+
+
+    // T: Block all other actions setting this boolean value to true
+    isJoiningBoard = true;
+
 
     let accessToken = retrieveToken();
 
@@ -552,6 +588,19 @@ function addToGroup() {
 
     // T: disable the button to save on cloud the board when you are a guest
     document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
+
+    // T: Clear the current board
+    clearBoard();
+
+    // T: Download the current board while you are listening for new messages
+    // T: So, I will need:
+    // - A variable that indicates when I'm loading
+    // - A stack to mantain all the messages that are maintained during the loading
+    // of the board.
+    loadBoardFromServer();
+
+    // T: TODO understand why I want to make something similar here
+    waitMessageStack.splice(0, waitMessageStack.length - 1);
 }
 
 
@@ -596,13 +645,13 @@ function loadBoard(boardId) {
             // T: update the text-box of boardStorageId
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
-    
+
             // T: re-activate the download button when you are not a guest
             document.getElementById("save-option-cloud-button").removeAttribute("disabled");
 
             setupLoadBoardWindow();
-            
-            update(canvasContext);   
+
+            update(canvasContext);
         }
     })
     .catch(error => {
