@@ -555,7 +555,7 @@ function loadBoardFromServer()
     const headers = {"Authorization": accessToken, "Content-Type": "application/json"};
     const data_request = {"groupId": data.groupId};
 
-    return axios.post(const_appservice + "/api/loadBoardFromServer", data_request, {headers: headers});
+    return axios.post(const_appservice + "/api/downloadBoardFromServer", data_request, {headers: headers});
 }
 
 function clearBoard()
