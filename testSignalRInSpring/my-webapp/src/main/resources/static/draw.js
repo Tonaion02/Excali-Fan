@@ -611,7 +611,7 @@ function addToGroup() {
         // T: DEBUG
         console.log(response);
 
-        let parsed_board = JSON.parse(response.body);
+        let parsed_board = JSON.parse(response.data);
 
         // T: DEBUG
         console.log(parsed_board);
