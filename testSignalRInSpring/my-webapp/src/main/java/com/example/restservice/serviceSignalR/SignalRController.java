@@ -143,6 +143,8 @@ public class SignalRController {
         try
         {
             Board board = boards.boards.get(request.groupId);
+            
+            // T: TODO try to optimize this thing
             synchronized (board)
             {
                 return board;

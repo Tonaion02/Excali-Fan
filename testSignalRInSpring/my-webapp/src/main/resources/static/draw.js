@@ -343,7 +343,7 @@ function setup() {
             }
             else
             {
-
+                waitMessageStack.push({type: "createLine", command: command});
             }
         }
 
@@ -352,15 +352,22 @@ function setup() {
         function receiveDeleteLine(command) {
             console.log("receiveDeleteLine is called");
             
-            // T: check if the line to delete is equal to the currentLine, in that case delete it
-            // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
-            // deleteLineFromList
-            if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
-                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
-            }
+            if(!isJoiningBoard)
+            {
+                // T: check if the line to delete is equal to the currentLine, in that case delete it
+                // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
+                // deleteLineFromList
+                if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
+                    currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
+                }
 
-            // T: remove the line from the listLines
-            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+                // T: remove the line from the listLines
+                deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+            }
+            else
+            {
+                waitMessageStack.push({type: "deleteLine", command: command});
+            }
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -544,7 +551,11 @@ function moveCursor(position, cursor) {
 // T: This method load the board directly from the server
 function loadBoardFromServer()
 {
-    
+    const accessToken = retrieveToken();
+    const headers = {"Authorization": accessToken, "Content-Type": "application/json"};
+    const data_request = {"groupId": data.groupId};
+
+    return axios.post(const_appservice + "/api/loadBoardFromServer", data_request, {headers: headers});
 }
 
 function clearBoard()
@@ -560,6 +571,7 @@ function clearBoard()
     update(canvasContext);
 }
 
+// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -593,14 +605,36 @@ function addToGroup() {
     clearBoard();
 
     // T: Download the current board while you are listening for new messages
-    // T: So, I will need:
-    // - A variable that indicates when I'm loading
-    // - A stack to mantain all the messages that are maintained during the loading
-    // of the board.
-    loadBoardFromServer();
+    loadBoardFromServer()
+    .then(response => 
+    {
+        let parsed_board = JSON.parse(response.body);
 
-    // T: TODO understand why I want to make something similar here
-    waitMessageStack.splice(0, waitMessageStack.length - 1);
+        // T: DEBUG
+        console.log(parsed_board);
+
+        listLines = parsed_board.lines;
+
+        // T: Apply all commands that are store in waitMessageStack (START)
+        while(waitMessageStack)
+        {
+            const next_command = waitMessageStack.pop();
+            const command = next_command.command;
+
+            if(next_command.type == "createLine")
+            {
+                listLines.push(command.line);
+            }
+            else // T: In other case is "deleteLine"
+            {
+                deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+            }
+        }
+        // T: Apply all commands that are store in waitMessageStack (END)
+
+        // T: unlock the board through the setting of the boolean field
+        isJoiningBoard = false;
+    });
 }
 
 
