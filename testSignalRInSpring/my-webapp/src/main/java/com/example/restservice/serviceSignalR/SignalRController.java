@@ -125,8 +125,8 @@ public class SignalRController {
 
         public RequestDownloadFromServer(){}
 
-        public RequestDownloadFromServer() {
-
+        public RequestDownloadFromServer(String groupId) {
+            this.groupId = groupId;
         }
 
         public String getGroupId() {
