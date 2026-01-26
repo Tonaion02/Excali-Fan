@@ -92,33 +92,70 @@ public class SignalRController {
 
     @PostMapping("/api/createLine")
     public void createLine(@RequestBody CreateLineCommand command) {
-        try {
+        try {        
+            Board board = boards.boards.get(command.groupId);
+            synchronized (board) {
+                board.lines.add(command.line);
+                System.out.println("number of lines: " + board.lines.size());        
+            }
+            
 
-        
-        Board board = boards.boards.get(command.groupId);
-        synchronized (board) {
-            board.lines.add(command.line);
-            System.out.println("number of lines: " + board.lines.size());        
-        }
-        
-
-        System.out.println("timestamp of last line: " + command.line.timestamp);
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-        String accessKey = generateJwt(hubUrl, command.userId);
+            System.out.println("timestamp of last line: " + command.line.timestamp);
+            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+            String accessKey = generateJwt(hubUrl, command.userId);
 
 
 
-        HttpResponse<String> response =  Unirest.post(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
-            .asString();
+            HttpResponse<String> response =  Unirest.post(hubUrl)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessKey)
+                .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
+                .asString();
 
-        System.out.println("sendMessage: " + response.getStatus());
-        System.out.println("sendMessage: " + response.getBody());
+            System.out.println("sendMessage: " + response.getStatus());
+            System.out.println("sendMessage: " + response.getBody());
         } catch(RuntimeException e) {
             e.printStackTrace();
         }   
+    }
+
+    public static class RequestDownloadFromServer
+    {
+        private String groupId;
+
+        public RequestDownloadFromServer(){}
+
+        public RequestDownloadFromServer(String groupId) {
+            this.groupId = groupId;
+        }
+
+        public String getGroupId() {
+            return this.groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
+        }
+    }
+
+    @PostMapping("/api/downloadBoardFromServer")
+    public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {
+        try
+        {
+            Board board = boards.boards.get(request.groupId);
+            
+            // T: TODO try to optimize this thing
+            synchronized (board)
+            {
+                return board;
+            }
+        }
+        catch(RuntimeException e)
+        {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
     // T: This api is used to test if the validation of the Token works
@@ -255,7 +292,7 @@ public class SignalRController {
     // T: This private api is used to load the Blob of a Board
     // identified by its name. The api return the board formatted
     // like a json and then load it in the "remote boards"(boards stored 
-    // in central memory of the Server) the board.
+    // in central memory of the Server).
     // T: WARNING remember to return the new BoardSessionId or find
     // another solution
     @PostMapping("/api/loadBoard")
@@ -565,9 +602,9 @@ public class SignalRController {
     public TestBlob testBlobStorage() {
         TestBlob testBlob = null;
         try {
-        BoardStorage boardStorage = new BoardStorage();
-        System.out.println("Starting to extract bloab");
-        testBlob = boardStorage.loadTestBlob("t.json");
+            BoardStorage boardStorage = new BoardStorage();
+            System.out.println("Starting to extract bloab");
+            testBlob = boardStorage.loadTestBlob("t.json");
         } catch(RuntimeException e) {
             e.printStackTrace();
             System.out.println("error:" + e.getMessage());

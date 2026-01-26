@@ -19,34 +19,29 @@ import java.util.List;
 
 public class TokenValidatorEntraId {
 
-    // URL per recuperare le chiavi pubbliche di Azure AD v1.0
-    private static final String JWKS_URL_V1 = "https://login.microsoftonline.com/common/discovery/v2.0/keys";
     
-    // Client ID dell'applicazione
-    private static final String EXPECTED_AUDIENCE = "b1453203-8719-4a2a-8cc6-96bf883a7e65"; 
-
     /**
-     * Valida il token JWT eseguendo i seguenti controlli:
-     * 1. Parsing del token
-     * 2. Recupero della chiave pubblica
-     * 3. Verifica della firma
-     * 4. Controllo della scadenza (exp)
-     * 5. Controllo dell'issuer (iss)
-     * 6. Controllo dell'audience (aud)
+     * T: validate token through the following controls:
+     * 1. Parsing of the token
+     * 2. Retrieve the public key
+     * 3. Check sign
+     * 4. Check if is expired (exp)
+     * 5. Check the issuer (iss)
+     * 6. Check for the audience (aud)
      *
-     * @param token Il token JWT da verificare
-     * @return true se il token è valido, false altrimenti
+     * @param token The JWT token to check
+     * @return true if the token is valid, false otherwise
      */
     public static boolean validateToken(String token) {
         try {
-            // Parsing del token JWT
+            // T: parsing of the token
             SignedJWT signedJWT = SignedJWT.parse(token);
             System.out.println("Token parsato con successo.");
 
 
             System.out.println("Algoritmo del token: " + signedJWT.getHeader().getAlgorithm());
 
-            // Recupero della chiave pubblica corretta
+            // T: retrieve the correct public 
             RSAPublicKey publicKey = getPublicKey(signedJWT.getHeader().getKeyID());
             if (publicKey == null) {
                 System.out.println("Chiave pubblica non trovata per il token.");
@@ -101,7 +96,7 @@ public class TokenValidatorEntraId {
      * @throws ParseException Se la risposta del server non è valida
      */
     private static RSAPublicKey getPublicKey(String kid) throws IOException, ParseException {
-        JWKSet jwkSet = JWKSet.load(new URL(JWKS_URL_V1));
+        JWKSet jwkSet = JWKSet.load(new URL(Keys.JWKS_URL_V1));
 
         try {
             for (JWK jwk : jwkSet.getKeys()) {
@@ -153,6 +148,6 @@ public class TokenValidatorEntraId {
      */
     private static boolean isAudienceValid(SignedJWT signedJWT) throws ParseException {
         List<String> audience = signedJWT.getJWTClaimsSet().getAudience();
-        return audience != null && audience.contains(EXPECTED_AUDIENCE);
+        return audience != null && audience.contains(Keys.EXPECTED_AUDIENCE);
     }
 }

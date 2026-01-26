@@ -43,6 +43,11 @@ let isDrawing = false;
 let isDeleting = false;
 let isDoingAction = false;
 
+// T: This variable is used to indicate when we are loading a board
+// from the server when we join a new board.
+let isJoiningBoard = false;
+
+let waitMessageStack = [];
 
 
 
@@ -331,8 +336,15 @@ function setup() {
             console.log("receiveCreateLine is called");
             console.log(command.line)
             
-            listLines.push(command.line)
-            update(ctx)
+            if(!isJoiningBoard)
+            {
+                listLines.push(command.line)
+                update(ctx)
+            }
+            else
+            {
+                waitMessageStack.push({type: "createLine", command: command});
+            }
         }
 
         // T: we don't perform update in this function, because is performed in deleteLineFromList
@@ -340,15 +352,22 @@ function setup() {
         function receiveDeleteLine(command) {
             console.log("receiveDeleteLine is called");
             
-            // T: check if the line to delete is equal to the currentLine, in that case delete it
-            // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
-            // deleteLineFromList
-            if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
-                currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
-            }
+            if(!isJoiningBoard)
+            {
+                // T: check if the line to delete is equal to the currentLine, in that case delete it
+                // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
+                // deleteLineFromList
+                if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
+                    currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
+                }
 
-            // T: remove the line from the listLines
-            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+                // T: remove the line from the listLines
+                deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+            }
+            else
+            {
+                waitMessageStack.push({type: "deleteLine", command: command});
+            }
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -529,6 +548,30 @@ function moveCursor(position, cursor) {
 
 
 
+// T: This method load the board directly from the server
+function loadBoardFromServer()
+{
+    const accessToken = retrieveToken();
+    const headers = {"Authorization": accessToken, "Content-Type": "application/json"};
+    const data_request = {"groupId": data.groupId};
+
+    return axios.post(const_appservice + "/api/downloadBoardFromServer", data_request, {headers: headers});
+}
+
+function clearBoard()
+{
+    listLines.splice(0, listLines.length - 1);
+
+    currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
+
+    // T: DEBUG
+    console.log(listLines);
+
+    // T: Update the screen
+    update(canvasContext);
+}
+
+// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -536,6 +579,11 @@ function addToGroup() {
     
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
+
+
+    // T: Block all other actions setting this boolean value to true
+    isJoiningBoard = true;
+
 
     let accessToken = retrieveToken();
 
@@ -552,6 +600,44 @@ function addToGroup() {
 
     // T: disable the button to save on cloud the board when you are a guest
     document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
+
+    // T: Clear the current board
+    clearBoard();
+
+    // T: Download the current board while you are listening for new messages
+    loadBoardFromServer()
+    .then(response => 
+    {
+        // T: DEBUG
+        console.log(response);
+
+        let parsed_board = response.data;
+
+        // T: DEBUG
+        console.log(parsed_board);
+
+        listLines = parsed_board.lines;
+
+        // T: Apply all commands that are store in waitMessageStack (START)
+        while(waitMessageStack.length > 0)
+        {
+            const next_command = waitMessageStack.pop();
+            const command = next_command.command;
+
+            if(next_command.type == "createLine")
+            {
+                listLines.push(command.line);
+            }
+            else // T: In other case is "deleteLine"
+            {
+                deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+            }
+        }
+        // T: Apply all commands that are store in waitMessageStack (END)
+
+        // T: unlock the board through the setting of the boolean field
+        isJoiningBoard = false;
+    });
 }
 
 
@@ -596,13 +682,13 @@ function loadBoard(boardId) {
             // T: update the text-box of boardStorageId
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.currentBoardStorageId;
-    
+
             // T: re-activate the download button when you are not a guest
             document.getElementById("save-option-cloud-button").removeAttribute("disabled");
 
             setupLoadBoardWindow();
-            
-            update(canvasContext);   
+
+            update(canvasContext);
         }
     })
     .catch(error => {
