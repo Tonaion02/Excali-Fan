@@ -119,11 +119,30 @@ public class SignalRController {
         }   
     }
 
+    public static class RequestDownloadFromServer
+    {
+        private String groupId;
+
+        public RequestDownloadFromServer(){}
+
+        public RequestDownloadFromServer() {
+
+        }
+
+        public String getGroupId() {
+            return this.groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
+        }
+    }
+
     @PostMapping("/api/downloadBoardFromServer")
-    public Board downloadBoardFromServer(@RequestBody DownloadBoardFromServerCommand command) {
+    public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {
         try
         {
-            Board board = boards.boards.get(command.groupId);
+            Board board = boards.boards.get(request.groupId);
             synchronized (board)
             {
                 return board;
@@ -579,9 +598,9 @@ public class SignalRController {
     public TestBlob testBlobStorage() {
         TestBlob testBlob = null;
         try {
-        BoardStorage boardStorage = new BoardStorage();
-        System.out.println("Starting to extract bloab");
-        testBlob = boardStorage.loadTestBlob("t.json");
+            BoardStorage boardStorage = new BoardStorage();
+            System.out.println("Starting to extract bloab");
+            testBlob = boardStorage.loadTestBlob("t.json");
         } catch(RuntimeException e) {
             e.printStackTrace();
             System.out.println("error:" + e.getMessage());
