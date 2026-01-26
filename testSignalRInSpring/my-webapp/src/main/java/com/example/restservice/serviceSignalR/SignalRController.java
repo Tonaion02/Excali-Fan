@@ -152,6 +152,8 @@ public class SignalRController {
         {
             e.printStackTrace();
         }
+
+        return null;
     }
 
     // T: This api is used to test if the validation of the Token works
