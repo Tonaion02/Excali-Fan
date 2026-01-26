@@ -619,7 +619,7 @@ function addToGroup() {
         listLines = parsed_board.lines;
 
         // T: Apply all commands that are store in waitMessageStack (START)
-        while(waitMessageStack)
+        while(waitMessageStack.length > 0)
         {
             const next_command = waitMessageStack.pop();
             const command = next_command.command;
