@@ -608,6 +608,9 @@ function addToGroup() {
     loadBoardFromServer()
     .then(response => 
     {
+        // T: DEBUG
+        console.log(response);
+
         let parsed_board = JSON.parse(response.body);
 
         // T: DEBUG
