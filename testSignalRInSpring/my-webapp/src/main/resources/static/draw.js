@@ -342,7 +342,12 @@ function setup() {
                     "Authorization": accessToken,
                     "Content-Type": "application/json"
                 },
-                keepalive: true
+                keepalive: true,
+                body: {
+                    userId: data.userId,
+                    groupId: data.groupId,
+                    timestamp: 0
+                }
             });
         });
         // T: Set EventListener for window (END)
