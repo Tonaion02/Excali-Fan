@@ -560,6 +560,8 @@ function closeBoard() {
     
     let timestamp = Date.now();
 
+    let accessToken = retrieveToken();
+
     const headers = {
         "Authorization": accessToken,
         "Content-Type": "application/json",
