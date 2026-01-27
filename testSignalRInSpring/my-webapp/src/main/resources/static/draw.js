@@ -621,7 +621,7 @@ function loadBoardFromServer()
 
 function clearBoard()
 {
-    listLines.splice(0, listLines.length - 1);
+    listLines.splice(0, listLines.length);
 
     currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
