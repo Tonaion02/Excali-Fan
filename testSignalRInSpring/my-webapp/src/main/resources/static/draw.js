@@ -344,9 +344,8 @@ function setup() {
                 },
                 keepalive: true,
                 body: {
-                    userId: data.userId,
                     groupId: data.groupId,
-                    timestamp: 0
+                    userId: data.userId
                 }
             });
         });

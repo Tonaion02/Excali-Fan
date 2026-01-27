@@ -119,8 +119,37 @@ public class SignalRController {
         }   
     }
 
+    public static class RequestCloseBoard
+    {
+        private String groupId;
+        private String userId;
+
+        public RequestCloseBoard(){}
+
+        public RequestCloseBoard(String groupId, String userId) {
+            this.groupId = groupId;
+            this.userId = userId;
+        }
+
+        public String getGroupId() {
+            return this.groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
+        }
+
+        public String getUserId() {
+            return this.userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+    }
+
     @PostMapping("/api/closeBoard")
-    public void closeBoard(@RequestBody CloseBoardCommand command) {
+    public void closeBoard(@RequestBody RequestCloseBoard command) {
 
         System.out.println("Close the board");
 
