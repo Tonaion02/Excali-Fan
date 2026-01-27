@@ -854,54 +854,54 @@ function setupLoadBoardWindow() {
 
 
 
-    boardStorageIdsConst.forEach(name => {
-
-        if(name != data.currentBoardStorageId)
+    boardStorageIdsConst.forEach(name => 
         {
-            const wrapper = document.createElement('div');
-            wrapper.style.display = 'flex';
-            wrapper.style.alignItems = 'center';
-    
-            const colorDiv = document.createElement('div');
-            colorDiv.style.width = '4px';
-            colorDiv.style.height = '17px';
-            colorDiv.style.backgroundColor = '#8a87ff';
-            colorDiv.style.marginRight = '5px';
-            colorDiv.style.borderRadius = '4px';
-    
-            // Create the download button
-            const downloadButton = document.createElement('button');
-            downloadButton.style.backgroundColor = 'transparent';
-            downloadButton.style.border = 'none';
-            downloadButton.style.cursor = 'pointer';
-            downloadButton.style.marginRight = '10px';
-            downloadButton.style.width = '20px'; // Add some space between the buttons
-    
-            const downloadIcon = document.createElement('img');
-            downloadIcon.src = 'logo-dw.png';
-            downloadIcon.alt = 'Download';
-            downloadIcon.style.height = '20px'; // Adjust the size as needed
-    
-            downloadButton.appendChild(downloadIcon);
-    
-            downloadButton.addEventListener('click', () => {
-                alert(`Download ${name}`);
-            });
-    
-            const button = document.createElement('button');
-            button.textContent = name;
-            button.style.flexGrow = '1'; 
-            button.style.whiteSpace = 'nowrap';
-            button.addEventListener('click', () => {
-                loadBoard(name);
-            });
-    
-            wrapper.appendChild(colorDiv);
-            wrapper.appendChild(downloadButton); // Add the download button to the wrapper
-            wrapper.appendChild(button);
-            lodeBoardDropdown.appendChild(wrapper);
-        }
-    });
+            if(name != data.currentBoardStorageId)
+            {
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+        
+                const colorDiv = document.createElement('div');
+                colorDiv.style.width = '4px';
+                colorDiv.style.height = '17px';
+                colorDiv.style.backgroundColor = '#8a87ff';
+                colorDiv.style.marginRight = '5px';
+                colorDiv.style.borderRadius = '4px';
+        
+                // Create the download button
+                const downloadButton = document.createElement('button');
+                downloadButton.style.backgroundColor = 'transparent';
+                downloadButton.style.border = 'none';
+                downloadButton.style.cursor = 'pointer';
+                downloadButton.style.marginRight = '10px';
+                downloadButton.style.width = '20px'; // Add some space between the buttons
+        
+                const downloadIcon = document.createElement('img');
+                downloadIcon.src = 'logo-dw.png';
+                downloadIcon.alt = 'Download';
+                downloadIcon.style.height = '20px'; // Adjust the size as needed
+        
+                downloadButton.appendChild(downloadIcon);
+        
+                downloadButton.addEventListener('click', () => {
+                    alert(`Download ${name}`);
+                });
+        
+                const button = document.createElement('button');
+                button.textContent = name;
+                button.style.flexGrow = '1'; 
+                button.style.whiteSpace = 'nowrap';
+                button.addEventListener('click', () => {
+                    loadBoard(name);
+                });
+        
+                wrapper.appendChild(colorDiv);
+                wrapper.appendChild(downloadButton); // Add the download button to the wrapper
+                wrapper.appendChild(button);
+                lodeBoardDropdown.appendChild(wrapper);
+            }
+        });
 }
 // T: setup the window to load the board (END)
 

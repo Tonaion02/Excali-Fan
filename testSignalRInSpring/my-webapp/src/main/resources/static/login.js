@@ -1,7 +1,3 @@
-// var const_redirectUri = "https://rest-service-1735827345127.azurewebsites.net/" 
-// var const_redirectUri = "https://rest-service-2.azurewebsites.net/" 
-// var const_clientId = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
-
 const msalConfig = {
   auth: {
     clientId: const_clientId, 
@@ -114,7 +110,6 @@ async function login() {
 
     // T: verify if the token is valid (START)
     // T: TODO remove the email from the request, bad practice for the security
-    // T: NOTE: we use mic to say microsoft
     axios.post(const_redirectUri + "/publicApi/login", {"email" : email}, {
     // axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
       headers: {
@@ -130,14 +125,11 @@ async function login() {
           console.log("BoardSessionId: " + boardSessionid);
           
           data.groupId = boardSessionid;
-          // T: WARNING for now we don't have a different UserId for each user
-          // so we simply copy the groupId
           data.userId = email;
           
-
-
           const loginContainer = document.getElementById("login-container");
           loginContainer.style.display = "none";
+
           setup();
         }
       })
