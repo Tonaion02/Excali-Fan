@@ -184,7 +184,7 @@ public class SignalRController {
         }
     
         public String getUserId() {
-            return email;
+            return userId;
         }
     
         public void setUserId(String userId) {
@@ -359,7 +359,7 @@ public class SignalRController {
         // T: parse the board in a board object from json (END)
 
         
-        
+
         // T: Set the right hostUserId
         board.setHostUserId(requestBody.userId);
 
