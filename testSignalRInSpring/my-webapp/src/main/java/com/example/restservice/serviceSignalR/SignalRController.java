@@ -174,28 +174,28 @@ public class SignalRController {
         }
     }
 
-    public static class WrapperEmail {
-        private String email;
+    public static class LoginRequest {
+        private String userId;
     
-        public WrapperEmail() {}
+        public LoginRequest() {}
     
-        public WrapperEmail(String email) {
-            this.email = email;
+        public LoginRequest(String userId) {
+            this.userId = userId;
         }
     
-        public String getEmail() {
+        public String getUserId() {
             return email;
         }
     
-        public void setEmail(String email) {
-            this.email = email;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
     }
 
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
-    public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
+    public String Login(@RequestBody LoginRequest lr, HttpServletRequest request, HttpServletResponse response) {
                 
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
@@ -242,6 +242,7 @@ public class SignalRController {
         // to the global hashmap
         Board board = new Board();
         board.setOwnerUserId(email);
+        board.setHostUserId(lr.userId);
         boards.boards.put(boardId, board);     
 
         
@@ -357,7 +358,10 @@ public class SignalRController {
         }
         // T: parse the board in a board object from json (END)
 
-
+        
+        
+        // T: Set the right hostUserId
+        board.setHostUserId(requestBody.userId);
 
         // T: Add board to the collection of boards
         boards.boards.put(boardSessionId, board);
