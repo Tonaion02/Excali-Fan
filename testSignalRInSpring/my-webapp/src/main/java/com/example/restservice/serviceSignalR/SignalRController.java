@@ -59,7 +59,7 @@ public class SignalRController {
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
         String hubUrl = Keys.signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserSessionID: " + userId);
-        String accessKey = generateJwt(hubUrl, userId);   
+        String accessKey = generateJwt(hubUrl, userId);
 
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
@@ -333,7 +333,7 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + requestBody.userId;
         String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
