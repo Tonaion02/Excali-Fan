@@ -574,12 +574,16 @@ function clearBoard()
 // T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
-    // T: Put the loading screen
+    // T: Put the loading screen (START)
+    // T: TODO substitute this, with a proper loading screen
     const div_loading_screen = document.createElement("div");
     const body_html = document.getElementsByTagName("body")[0];
     body_html.appendChild(div_loading_screen);
     div_loading_screen.className = "loadingscreen";
+    // T: Put the loading screen (START)
 
+
+    
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
     
@@ -645,7 +649,7 @@ function addToGroup() {
         isJoiningBoard = false;
 
         // T: Remove the loading screen
-        // body_html.removeChild(div_loading_screen);
+        body_html.removeChild(div_loading_screen);
 
         // T: Update the canvas
         update(canvasContext);
