@@ -330,11 +330,8 @@ function setup() {
 
         // T: Set EventListener for window (START)
         window.addEventListener("beforeunload", (event) => {
-            // if(!foraignBoard)
-            // {
-            //     // T: Use an api to close the board
-            //     closeBoard();
-            // }
+
+            // T: TODO Add the check on the fact that the user isn't in a foraign board
 
             fetch(const_appservice + endPointForCloseBoard, {
                 method: "POST",
@@ -393,10 +390,13 @@ function setup() {
         }
 
         function receiveCloseBoard(command) {
+            // T: DEBUG
             console.log("receiveCloseBoard is called");
 
-            // T: TODO understand what is necessary to do to effectively disconnect from a board
-            // T: Show that the board is closed
+            // T: TODO create a new board when you close the current board
+            data.groupId = "";
+
+            clearBoard();
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -581,6 +581,7 @@ function moveCursor(position, cursor) {
 
 
 // T: This method is used to close the board
+// T: TODO Check if this method can be directly used during close
 function closeBoard() {
     
     let timestamp = Date.now();
@@ -597,9 +598,6 @@ function closeBoard() {
         groupId: data.groupId,
         timestamp: timestamp,
     }
-
-    // axios.post(const_appservice + endPointForCloseBoard, data, {headers: headers})
-    // .then((response) => console.log("Response of close board: " + response));
 
     fetch(const_appservice + endPointForCloseBoard, {
         method: "POST",
