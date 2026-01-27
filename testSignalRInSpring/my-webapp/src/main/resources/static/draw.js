@@ -578,6 +578,7 @@ function addToGroup() {
     const div_loading_screen = document.createElement("div");
     const body_html = document.getElementsByTagName("body")[0];
     body_html.appendChild(div_loading_screen);
+    div_loading_screen.style.width = "100%";
     div_loading_screen.style.backgroundColor = "red";
     div_loading_screen.style.zIndex = 999;
 
