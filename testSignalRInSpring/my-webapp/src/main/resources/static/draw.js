@@ -330,11 +330,20 @@ function setup() {
 
         // T: Set EventListener for window (START)
         window.addEventListener("beforeunload", (event) => {
-            if(!foraignBoard)
-            {
-                // T: Use an api to close the board
-                closeBoard();
-            }
+            // if(!foraignBoard)
+            // {
+            //     // T: Use an api to close the board
+            //     closeBoard();
+            // }
+
+            fetch(const_appservice + endPointForCloseBoard, {
+                method: "POST",
+                headers: {        
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json"
+                },
+                keepalive: true
+            });
         });
         // T: Set EventListener for window (END)
 
