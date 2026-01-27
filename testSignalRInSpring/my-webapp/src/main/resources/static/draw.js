@@ -397,6 +397,8 @@ function setup() {
             data.groupId = "";
 
             clearBoard();
+
+            // T: TODO display for some time that the board is disconnected
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -580,6 +582,23 @@ function moveCursor(position, cursor) {
 
 
 
+// T: This method is used to create a new board
+function newBoard() {
+
+    let accessToken = retrieveToken();
+
+    const headers = {
+        "Authorization": accessToken,
+        "Content-Type": "application/json",
+    };
+
+    const data = {
+        userId: data.userId
+    }
+
+    axios.post(const_appservice + "/api/newBoard", data, {headers: headers});
+}
+
 // T: This method is used to close the board
 // T: TODO Check if this method can be directly used during close
 function closeBoard() {
@@ -603,7 +622,7 @@ function closeBoard() {
         method: "POST",
         headers: headers,
         keepalive: true,
-        body: data
+        body: JSON.stringify(data)
     });
 
     // T: TODO undestand what to do when the board is closed

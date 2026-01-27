@@ -185,6 +185,56 @@ public class SignalRController {
         }
     }
 
+    public static class RequestNewBoard {
+        public String userId;
+
+        public RequestNewBoard() {}
+
+        public RequestNewBoard(String userId) {
+            this.userId = userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+    }
+
+    @PostMapping("/api/newBoard")
+    public String newBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestNewBoard request) {
+        // T: DEBUG
+        System.out.println("New board");
+
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved from token is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+
+        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+        String boardId = Integer.toString(randomNumericBoardId);
+
+        Board board = new Board();
+        board.setOwnerUserId(email);
+        board.setHostUserId(request.userId);
+        boards.boards.put(boardId, board);     
+
+        return boardId;
+    }
+
     public static class RequestDownloadFromServer
     {
         private String groupId;
@@ -295,7 +345,7 @@ public class SignalRController {
         
 
 
-        // T: generate a randomic number to identify the board
+        // T: generate a randomic identifier to identify the board
         // T: NOTE: we use this number to identify the board in persistence and like session
         // to exchange messages from clients
         // T: WARNING: you can substitute that with UserId(email) + timestamp
@@ -304,8 +354,6 @@ public class SignalRController {
         
 
 
-        // T: WARNING temporary, we are adding the new board
-        // to the global hashmap
         Board board = new Board();
         board.setOwnerUserId(email);
         board.setHostUserId(lr.userId);
