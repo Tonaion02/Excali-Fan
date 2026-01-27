@@ -15,6 +15,14 @@ body {
     color: #e0e0e0;
 }
 
+.loadingscreen {
+    width: 100%;
+    min-height: 100vh;
+    background-color: red;
+    z-index: 999;
+    position: relative;
+}
+
 header {
     user-select: none;
     display: flex;

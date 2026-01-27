@@ -574,6 +574,16 @@ function clearBoard()
 // T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
+    // T: Put the loading screen (START)
+    // T: TODO substitute this, with a proper loading screen
+    const div_loading_screen = document.createElement("div");
+    const body_html = document.getElementsByTagName("body")[0];
+    body_html.appendChild(div_loading_screen);
+    div_loading_screen.className = "loadingscreen";
+    // T: Put the loading screen (START)
+
+
+    
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
     
@@ -637,6 +647,12 @@ function addToGroup() {
 
         // T: unlock the board through the setting of the boolean field
         isJoiningBoard = false;
+
+        // T: Remove the loading screen
+        body_html.removeChild(div_loading_screen);
+
+        // T: Update the canvas
+        update(canvasContext);
     });
 }
 
@@ -838,54 +854,54 @@ function setupLoadBoardWindow() {
 
 
 
-    boardStorageIdsConst.forEach(name => {
-
-        if(name != data.currentBoardStorageId)
+    boardStorageIdsConst.forEach(name => 
         {
-            const wrapper = document.createElement('div');
-            wrapper.style.display = 'flex';
-            wrapper.style.alignItems = 'center';
-    
-            const colorDiv = document.createElement('div');
-            colorDiv.style.width = '4px';
-            colorDiv.style.height = '17px';
-            colorDiv.style.backgroundColor = '#8a87ff';
-            colorDiv.style.marginRight = '5px';
-            colorDiv.style.borderRadius = '4px';
-    
-            // Create the download button
-            const downloadButton = document.createElement('button');
-            downloadButton.style.backgroundColor = 'transparent';
-            downloadButton.style.border = 'none';
-            downloadButton.style.cursor = 'pointer';
-            downloadButton.style.marginRight = '10px';
-            downloadButton.style.width = '20px'; // Add some space between the buttons
-    
-            const downloadIcon = document.createElement('img');
-            downloadIcon.src = 'logo-dw.png';
-            downloadIcon.alt = 'Download';
-            downloadIcon.style.height = '20px'; // Adjust the size as needed
-    
-            downloadButton.appendChild(downloadIcon);
-    
-            downloadButton.addEventListener('click', () => {
-                alert(`Download ${name}`);
-            });
-    
-            const button = document.createElement('button');
-            button.textContent = name;
-            button.style.flexGrow = '1'; 
-            button.style.whiteSpace = 'nowrap';
-            button.addEventListener('click', () => {
-                loadBoard(name);
-            });
-    
-            wrapper.appendChild(colorDiv);
-            wrapper.appendChild(downloadButton); // Add the download button to the wrapper
-            wrapper.appendChild(button);
-            lodeBoardDropdown.appendChild(wrapper);
-        }
-    });
+            if(name != data.currentBoardStorageId)
+            {
+                const wrapper = document.createElement('div');
+                wrapper.style.display = 'flex';
+                wrapper.style.alignItems = 'center';
+        
+                const colorDiv = document.createElement('div');
+                colorDiv.style.width = '4px';
+                colorDiv.style.height = '17px';
+                colorDiv.style.backgroundColor = '#8a87ff';
+                colorDiv.style.marginRight = '5px';
+                colorDiv.style.borderRadius = '4px';
+        
+                // Create the download button
+                const downloadButton = document.createElement('button');
+                downloadButton.style.backgroundColor = 'transparent';
+                downloadButton.style.border = 'none';
+                downloadButton.style.cursor = 'pointer';
+                downloadButton.style.marginRight = '10px';
+                downloadButton.style.width = '20px'; // Add some space between the buttons
+        
+                const downloadIcon = document.createElement('img');
+                downloadIcon.src = 'logo-dw.png';
+                downloadIcon.alt = 'Download';
+                downloadIcon.style.height = '20px'; // Adjust the size as needed
+        
+                downloadButton.appendChild(downloadIcon);
+        
+                downloadButton.addEventListener('click', () => {
+                    alert(`Download ${name}`);
+                });
+        
+                const button = document.createElement('button');
+                button.textContent = name;
+                button.style.flexGrow = '1'; 
+                button.style.whiteSpace = 'nowrap';
+                button.addEventListener('click', () => {
+                    loadBoard(name);
+                });
+        
+                wrapper.appendChild(colorDiv);
+                wrapper.appendChild(downloadButton); // Add the download button to the wrapper
+                wrapper.appendChild(button);
+                lodeBoardDropdown.appendChild(wrapper);
+            }
+        });
 }
 // T: setup the window to load the board (END)
 
