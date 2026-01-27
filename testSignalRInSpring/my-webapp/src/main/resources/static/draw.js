@@ -394,7 +394,7 @@ function setup() {
             console.log("receiveCloseBoard is called");
 
             // T: TODO create a new board when you close the current board
-            data.groupId = "";
+            data.groupId = newBoard();
 
             clearBoard();
 
@@ -583,7 +583,7 @@ function moveCursor(position, cursor) {
 
 
 // T: This method is used to create a new board
-function newBoard() {
+async function newBoard() {
 
     let accessToken = retrieveToken();
 
@@ -596,7 +596,7 @@ function newBoard() {
         userId: data.userId
     }
 
-    axios.post(const_appservice + "/api/newBoard", data, {headers: headers});
+    return await axios.post(const_appservice + "/api/newBoard", data, {headers: headers});
 }
 
 // T: This method is used to close the board
