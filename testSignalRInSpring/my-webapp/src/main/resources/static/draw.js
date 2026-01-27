@@ -43,6 +43,7 @@ let isDoingAction = false;
 // T: This variable is used to indicate when we are loading a board
 // from the server when we join a new board.
 let isJoiningBoard = false;
+let foraignBoard = false;
 
 let waitMessageStack = [];
 
@@ -325,6 +326,17 @@ function setup() {
         });
         // Set EventListener for mouse that goes out of the canvas (END)
 
+
+
+        // T: Set EventListener for window (START)
+        window.addEventListener("beforeunload", (event) => {
+            if(!foraignBoard)
+            {
+                // T: Use an api to close the board
+                closeBoard();
+            }
+        });
+        // T: Set EventListener for window (END)
 
     
 
