@@ -1,7 +1,3 @@
-// var const_appservice = "https://rest-service-1735827345127.azurewebsites.net/";
-// var const_appservice = "https://rest-service-2.azurewebsites.net";
-// var const_serverless_service = "https://excalifun-java-serverless.azurewebsites.net";
-
 // T: this will become the synced list
 let listLines = []
 // T: this is something similar to the forward list,
@@ -604,7 +600,7 @@ function addToGroup() {
                 "Authorization": accessToken,
                 "Content-Type": "application/json",
             }
-        }        
+        }
     ).
     then((response) => console.log("adding to group: " + response.status))
 
@@ -670,7 +666,7 @@ function loadBoard(boardId) {
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
-    axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "email": email}, 
+    axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "userId": data.userId},
     {
         headers: {
             "Authorization": accessToken,

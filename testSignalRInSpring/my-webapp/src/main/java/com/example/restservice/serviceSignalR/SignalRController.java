@@ -59,7 +59,7 @@ public class SignalRController {
     public SignalRConnectionInfo negotiate(@RequestParam String userId) {
         String hubUrl = Keys.signalRServiceBaseEndpoint + "/client/?hub=" + hubName;
         System.out.println("UserSessionID: " + userId);
-        String accessKey = generateJwt(hubUrl, userId);   
+        String accessKey = generateJwt(hubUrl, userId);
 
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
@@ -174,28 +174,28 @@ public class SignalRController {
         }
     }
 
-    public static class WrapperEmail {
-        private String email;
+    public static class LoginRequest {
+        private String userId;
     
-        public WrapperEmail() {}
+        public LoginRequest() {}
     
-        public WrapperEmail(String email) {
-            this.email = email;
+        public LoginRequest(String userId) {
+            this.userId = userId;
         }
     
-        public String getEmail() {
-            return email;
+        public String getUserId() {
+            return userId;
         }
     
-        public void setEmail(String email) {
-            this.email = email;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
     }
 
     // T: This api permits to make the login the first time during
     // a session of using the application.
     @PostMapping("/publicApi/login")
-    public String Login(@RequestBody WrapperEmail we, HttpServletRequest request, HttpServletResponse response) {
+    public String Login(@RequestBody LoginRequest lr, HttpServletRequest request, HttpServletResponse response) {
                 
         // T: verify if the token is valid (START)
         String loginToken = request.getHeader("Authorization");
@@ -242,6 +242,7 @@ public class SignalRController {
         // to the global hashmap
         Board board = new Board();
         board.setOwnerUserId(email);
+        board.setHostUserId(lr.userId);
         boards.boards.put(boardId, board);     
 
         
@@ -254,9 +255,9 @@ public class SignalRController {
 
 
     public static class RequestBodyBlobToLoad {
-        public RequestBodyBlobToLoad(String blobName, String email) {
+        public RequestBodyBlobToLoad(String blobName, String userId) {
             this.blobName = blobName;
-            this.email = email;
+            this.userId = userId;
         }
 
         public String getBlobName() {
@@ -267,16 +268,16 @@ public class SignalRController {
             this.blobName = blobName;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
-        public String getEmail() {
-            return email;
+        public String getUserId() {
+            return userId;
         }
 
         private String blobName;
-        private String email;
+        private String userId;
     }
 
     public static class LoadBoardResult {
@@ -332,7 +333,7 @@ public class SignalRController {
         // T: autojoin the new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + email;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + requestBody.userId;
         String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
@@ -357,7 +358,10 @@ public class SignalRController {
         }
         // T: parse the board in a board object from json (END)
 
+        
 
+        // T: Set the right hostUserId
+        board.setHostUserId(requestBody.userId);
 
         // T: Add board to the collection of boards
         boards.boards.put(boardSessionId, board);

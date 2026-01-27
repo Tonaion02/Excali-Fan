@@ -110,8 +110,11 @@ async function login() {
 
     // T: verify if the token is valid (START)
     // T: TODO remove the email from the request, bad practice for the security
-    axios.post(const_redirectUri + "/publicApi/login", {"email" : email}, {
-    // axios.post("https://rest-service-1735827345127.azurewebsites.net/publicApi/login", {"email" : email}, {
+    const MAX_RAND = 1238945210;
+    const random_num = Math.random() * MAX_RAND;
+    data.userId = email + random_num.toString();
+
+    axios.post(const_redirectUri + "/publicApi/login", {"userId" : data.userId}, {
       headers: {
         "Authorization": tokenResponse.accessToken,
         "Content-Type": "application/json"
@@ -125,7 +128,6 @@ async function login() {
           console.log("BoardSessionId: " + boardSessionid);
           
           data.groupId = boardSessionid;
-          data.userId = email;
           
           const loginContainer = document.getElementById("login-container");
           loginContainer.style.display = "none";

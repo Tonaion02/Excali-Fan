@@ -9,9 +9,10 @@ public class Board {
         this.lines = new ArrayList<>();
     }
 
-    public Board(List<Line> lines, String ownerUserId) {
+    public Board(List<Line> lines, String ownerUserId, String hostUserId) {
         this.lines = lines;
         this.ownerUserId = ownerUserId;
+        this.hostUserId = hostUserId;
     }
 
     public void setLines(List<Line> lines) {
@@ -30,6 +31,17 @@ public class Board {
         this.ownerUserId = ownerUserId;
     }
 
+    public String getHostUserId() {
+        return this.hostUserId;
+    }
+
+    public void setHostUserId(String hostUserId) {
+        this.hostUserId = hostUserId;
+    }
+
     public List<Line> lines;
+    // T: It is the email of the user that created the board
     public String ownerUserId;
+    // T: It is the userId(email + random number generated from client)
+    public String hostUserId;
 }
