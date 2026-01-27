@@ -343,10 +343,10 @@ function setup() {
                     "Content-Type": "application/json"
                 },
                 keepalive: true,
-                body: {
+                body: JSON.stringify({
                     groupId: data.groupId,
                     userId: data.userId
-                }
+                })
             });
         });
         // T: Set EventListener for window (END)
