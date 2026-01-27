@@ -119,6 +119,72 @@ public class SignalRController {
         }   
     }
 
+    // T: TODO Substitute this objcet with a real command to close the board
+    public static class RequestCloseBoard
+    {
+        private String groupId;
+        private String userId;
+
+        public RequestCloseBoard(){}
+
+        public RequestCloseBoard(String groupId, String userId) {
+            this.groupId = groupId;
+            this.userId = userId;
+        }
+
+        public String getGroupId() {
+            return this.groupId;
+        }
+
+        public void setGroupId(String groupId) {
+            this.groupId = groupId;
+        }
+
+        public String getUserId() {
+            return this.userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+    }
+
+    @PostMapping("/api/closeBoard")
+    public void closeBoard(@RequestBody RequestCloseBoard command) {
+
+        // T: DEBUG
+        System.out.println("Close the board");
+
+        try {
+            Board board = boards.boards.get(command.groupId);
+            if(board != null) {                
+                synchronized(board) {
+                    // T: DEBUG
+                    System.out.println("Trying to close the board: " + command.groupId);
+
+                    String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+                    String accessKey = generateJwt(hubUrl, command.userId);
+
+                    HttpResponse<String> response =  Unirest.post(hubUrl)
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + accessKey)
+                        .body(new SignalRMessage("receiveCloseBoard", new Object[] { command }))
+                        .asString();
+                    
+                    // T: DEBUG
+                    System.out.println("result of trying to send the receiveCloseBoard message: " + response.getStatus());
+
+                    // T: Remove the board, because is disconnect
+                    boards.boards.remove(command.groupId);
+
+                    // T: TODO evaluate if it's useful to save the board like a temporary board...
+                }
+            }
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static class RequestDownloadFromServer
     {
         private String groupId;

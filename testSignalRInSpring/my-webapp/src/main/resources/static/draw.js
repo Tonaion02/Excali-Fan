@@ -32,6 +32,7 @@ let boardStorageIdsConst = [];
 
 const endPointForCreateLine = `/api/createLine`;
 const endPointForDeleteLine = `/api/deleteLine`;
+const endPointForCloseBoard = `/api/closeBoard`;
 
 
 
@@ -42,6 +43,7 @@ let isDoingAction = false;
 // T: This variable is used to indicate when we are loading a board
 // from the server when we join a new board.
 let isJoiningBoard = false;
+let foraignBoard = false;
 
 let waitMessageStack = [];
 
@@ -325,6 +327,27 @@ function setup() {
         // Set EventListener for mouse that goes out of the canvas (END)
 
 
+
+        // T: Set EventListener for window (START)
+        window.addEventListener("beforeunload", (event) => {
+
+            // T: TODO Add the check on the fact that the user isn't in a foraign board
+
+            fetch(const_appservice + endPointForCloseBoard, {
+                method: "POST",
+                headers: {        
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json"
+                },
+                keepalive: true,
+                body: JSON.stringify({
+                    groupId: data.groupId,
+                    userId: data.userId
+                })
+            });
+        });
+        // T: Set EventListener for window (END)
+
     
 
 
@@ -366,12 +389,22 @@ function setup() {
             }
         }
 
+        function receiveCloseBoard(command) {
+            // T: DEBUG
+            console.log("receiveCloseBoard is called");
+
+            // T: TODO create a new board when you close the current board
+            data.groupId = "";
+
+            clearBoard();
+        }
+
         function sendDeleteLine(lineToDelete) {
             let timestamp = Date.now();
             
             let accessToken = retrieveToken();
 
-            axios.post(endPointForDeleteLine, 
+            axios.post(endPointForDeleteLine,
             {
                 userId: data.userId,
                 groupId: data.groupId,
@@ -428,6 +461,8 @@ function setup() {
         // T: Set the listener to the receiveing message (START)
         connection.on('receiveCreateLine', receiveCreateLine);
         connection.on('receiveDeleteLine', receiveDeleteLine);
+
+        connection.on("receiveCloseBoard", receiveCloseBoard);
         // T: Set the listener to the receiveing message (END)
 
         // T: Started connection with Azure SignalR(START)
@@ -543,6 +578,36 @@ function moveCursor(position, cursor) {
 
 
 
+
+
+// T: This method is used to close the board
+// T: TODO Check if this method can be directly used during close
+function closeBoard() {
+    
+    let timestamp = Date.now();
+
+    let accessToken = retrieveToken();
+
+    const headers = {
+        "Authorization": accessToken,
+        "Content-Type": "application/json",
+    };
+
+    const data = {
+        userId: data.userId,
+        groupId: data.groupId,
+        timestamp: timestamp,
+    }
+
+    fetch(const_appservice + endPointForCloseBoard, {
+        method: "POST",
+        headers: headers,
+        keepalive: true,
+        body: data
+    });
+
+    // T: TODO undestand what to do when the board is closed
+}
 
 // T: This method load the board directly from the server
 function loadBoardFromServer()
