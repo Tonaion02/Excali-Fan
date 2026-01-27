@@ -670,7 +670,7 @@ function loadBoard(boardId) {
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
 
-    axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "email": email}, 
+    axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "userId": data.userId},
     {
         headers: {
             "Authorization": accessToken,

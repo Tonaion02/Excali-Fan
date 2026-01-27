@@ -255,9 +255,9 @@ public class SignalRController {
 
 
     public static class RequestBodyBlobToLoad {
-        public RequestBodyBlobToLoad(String blobName, String email) {
+        public RequestBodyBlobToLoad(String blobName, String userId) {
             this.blobName = blobName;
-            this.email = email;
+            this.userId = userId;
         }
 
         public String getBlobName() {
@@ -268,16 +268,16 @@ public class SignalRController {
             this.blobName = blobName;
         }
 
-        public void setEmail(String email) {
-            this.email = email;
+        public void setUserId(String userId) {
+            this.userId = userId;
         }
 
-        public String getEmail() {
-            return email;
+        public String getUserId() {
+            return userId;
         }
 
         private String blobName;
-        private String email;
+        private String userId;
     }
 
     public static class LoadBoardResult {
