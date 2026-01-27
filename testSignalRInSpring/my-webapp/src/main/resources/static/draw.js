@@ -32,6 +32,7 @@ let boardStorageIdsConst = [];
 
 const endPointForCreateLine = `/api/createLine`;
 const endPointForDeleteLine = `/api/deleteLine`;
+const endPointForCloseBoard = `/api/closeBoard`;
 
 
 
@@ -366,12 +367,19 @@ function setup() {
             }
         }
 
+        function receiveCloseBoard(command) {
+            console.log("receiveCloseBoard is called");
+
+            // T: TODO understand what is necessary to do to effectively disconnect from a board
+            // T: Show that the board is closed
+        }
+
         function sendDeleteLine(lineToDelete) {
             let timestamp = Date.now();
             
             let accessToken = retrieveToken();
 
-            axios.post(endPointForDeleteLine, 
+            axios.post(endPointForDeleteLine,
             {
                 userId: data.userId,
                 groupId: data.groupId,
@@ -428,6 +436,8 @@ function setup() {
         // T: Set the listener to the receiveing message (START)
         connection.on('receiveCreateLine', receiveCreateLine);
         connection.on('receiveDeleteLine', receiveDeleteLine);
+
+        connection.on("receiveCloseBoard", receiveCloseBoard);
         // T: Set the listener to the receiveing message (END)
 
         // T: Started connection with Azure SignalR(START)
@@ -543,6 +553,29 @@ function moveCursor(position, cursor) {
 
 
 
+
+
+// T: This method is used to close the board
+function closeBoard() {
+    
+    let timestamp = Date.now();
+
+    const headers = {
+        "Authorization": accessToken,
+        "Content-Type": "application/json",
+    };
+
+    const data = {
+        userId: data.userId,
+        groupId: data.groupId,
+        timestamp: timestamp,
+    }
+
+    axios.post(const_appservice + endPointForCloseBoard, data, {headers: headers})
+    .then((response) => console.log("Response of close board: " + response));
+
+    // T: TODO undestand what to do when the board is closed
+}
 
 // T: This method load the board directly from the server
 function loadBoardFromServer()

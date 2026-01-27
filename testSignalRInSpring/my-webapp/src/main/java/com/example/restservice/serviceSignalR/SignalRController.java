@@ -119,6 +119,37 @@ public class SignalRController {
         }   
     }
 
+    @PostMapping("/api/closeBoard")
+    public void closeBoard(@RequestBody CloseBoardCommand command) {
+        try {
+
+            Board board = boards.boards.get(command.groupId);
+            if(board != null) {                
+                synchronized(board) {
+                    // T: DEBUG
+                    System.out.println("Trying to close the board: " + command.groupId);
+
+                    String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+                    String accessKey = generateJwt(hubUrl, command.userId);
+
+
+                    HttpResponse<String> response =  Unirest.post(hubUrl)
+                        .header("Content-Type", "application/json")
+                        .header("Authorization", "Bearer " + accessKey)
+                        .body(new SignalRMessage("receiveCloseBoard", new Object[] { command }))
+                        .asString();
+
+                    System.out.println("result of trying to send the receiveCloseBoard message" + response.getStatus());
+
+                    // T: TODO remove from the ConcurrentHashMap the board
+                }
+            }
+
+        } catch(RuntimeException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static class RequestDownloadFromServer
     {
         private String groupId;
