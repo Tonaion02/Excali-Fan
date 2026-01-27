@@ -15,9 +15,9 @@ body {
     color: #e0e0e0;
 }
 
-#loadingscreen {
+.loadingscreen {
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     background-color: red;
     z-index: 999;
     position: relative;
