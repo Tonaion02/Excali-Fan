@@ -578,9 +578,7 @@ function addToGroup() {
     const div_loading_screen = document.createElement("div");
     const body_html = document.getElementsByTagName("body")[0];
     body_html.appendChild(div_loading_screen);
-    div_loading_screen.style.width = "100%";
-    div_loading_screen.style.backgroundColor = "red";
-    div_loading_screen.style.zIndex = 999;
+    div_loading_screen.className = "loadingscreen";
 
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
@@ -647,7 +645,7 @@ function addToGroup() {
         isJoiningBoard = false;
 
         // T: Remove the loading screen
-        body_html.removeChild(div_loading_screen);
+        // body_html.removeChild(div_loading_screen);
 
         // T: Update the canvas
         update(canvasContext);
