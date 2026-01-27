@@ -585,8 +585,15 @@ function closeBoard() {
         timestamp: timestamp,
     }
 
-    axios.post(const_appservice + endPointForCloseBoard, data, {headers: headers})
-    .then((response) => console.log("Response of close board: " + response));
+    // axios.post(const_appservice + endPointForCloseBoard, data, {headers: headers})
+    // .then((response) => console.log("Response of close board: " + response));
+
+    fetch(const_appservice + endPointForCloseBoard, {
+        method: "POST",
+        headers: headers,
+        keepalive: true,
+        body: data
+    });
 
     // T: TODO undestand what to do when the board is closed
 }

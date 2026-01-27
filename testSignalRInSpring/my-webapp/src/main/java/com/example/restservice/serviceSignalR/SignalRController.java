@@ -121,6 +121,9 @@ public class SignalRController {
 
     @PostMapping("/api/closeBoard")
     public void closeBoard(@RequestBody CloseBoardCommand command) {
+
+        System.out.println("Close the board");
+
         try {
 
             Board board = boards.boards.get(command.groupId);
