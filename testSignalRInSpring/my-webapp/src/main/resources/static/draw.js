@@ -611,8 +611,7 @@ async function newBoard() {
     }
 
     const response = await axios.post(const_appservice + "/api/newBoard", data_request, {headers: headers});
-    console.log(response);
-    return response.groupId;
+    return response.data.toString();
 }
 
 // T: This method is used to close the board
