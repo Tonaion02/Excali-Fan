@@ -20,7 +20,7 @@ body {
     min-height: 20px;
     z-index: 999;
     position: fixed;
-    left: 0px;
+    left: 60px;
     top: 10px;
     color: purple;
     background-color: rgba(0, 0, 0, 0);

@@ -389,12 +389,12 @@ function setup() {
             }
         }
 
-        function receiveCloseBoard(command) {
+        async function receiveCloseBoard(command) {
             // T: DEBUG
             console.log("receiveCloseBoard is called");
 
             // T: TODO create a new board when you close the current board
-            data.groupId = newBoard();
+            data.groupId = await newBoard();
 
             // T: TODO update the box where the groupId is displayed
             const currentGroupLabel = document.getElementById('current-group-label');
