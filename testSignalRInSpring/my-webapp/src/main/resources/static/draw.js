@@ -599,11 +599,11 @@ async function newBoard() {
         "Content-Type": "application/json",
     };
 
-    const data = {
+    const data_request = {
         userId: data.userId
     }
 
-    return await axios.post(const_appservice + "/api/newBoard", data, {headers: headers});
+    return await axios.post(const_appservice + "/api/newBoard", data_request, {headers: headers});
 }
 
 // T: This method is used to close the board
@@ -619,7 +619,7 @@ function closeBoard() {
         "Content-Type": "application/json",
     };
 
-    const data = {
+    const data_request = {
         userId: data.userId,
         groupId: data.groupId,
         timestamp: timestamp,
@@ -629,7 +629,7 @@ function closeBoard() {
         method: "POST",
         headers: headers,
         keepalive: true,
-        body: JSON.stringify(data)
+        body: JSON.stringify(data_request)
     });
 
     // T: TODO undestand what to do when the board is closed
