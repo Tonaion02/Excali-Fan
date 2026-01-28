@@ -43,6 +43,7 @@ let isDoingAction = false;
 // T: This variable is used to indicate when we are loading a board
 // from the server when we join a new board.
 let isJoiningBoard = false;
+// T: TODO use effectively this variable
 let foraignBoard = false;
 
 let waitMessageStack = [];
@@ -393,10 +394,8 @@ function setup() {
             // T: DEBUG
             console.log("receiveCloseBoard is called");
 
-            // T: TODO create a new board when you close the current board
             data.groupId = await newBoard();
 
-            // T: TODO update the box where the groupId is displayed
             const currentGroupLabel = document.getElementById('current-group-label');
             currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
@@ -408,7 +407,10 @@ function setup() {
             const body_html = document.getElementsByTagName("body")[0];
             body_html.appendChild(div_disconnect_write);
 
-            // T: TODO make a timer for the write disconnected
+            setTimeout(() => 
+            {
+                body_html.removeChild(div_disconnect_write);
+            }, 500);
         }
 
         function sendDeleteLine(lineToDelete) {
