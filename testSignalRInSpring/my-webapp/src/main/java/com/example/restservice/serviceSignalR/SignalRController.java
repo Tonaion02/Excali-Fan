@@ -242,7 +242,7 @@ public class SignalRController {
         // T: Autojoin a new group (START)
         System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + request.userId;
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardId + "/users/" + request.userId;
         String accessKey = generateJwt(hubUrl, email);
 
         HttpResponse<String> response = Unirest.put(hubUrl)
