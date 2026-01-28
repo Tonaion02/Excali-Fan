@@ -402,10 +402,13 @@ function setup() {
 
             clearBoard();
 
-            // T: TODO display for some time that the board is disconnected
             const div_disconnect_write = document.createElement("div");
             div_disconnect_write.innerHTML = "disconnected";
             div_disconnect_write.className = "disconnect";
+            const body_html = document.getElementsByTagName("body")[0];
+            body_html.appendChild(div_disconnect_write);
+
+            // T: TODO make a timer for the write disconnected
         }
 
         function sendDeleteLine(lineToDelete) {
