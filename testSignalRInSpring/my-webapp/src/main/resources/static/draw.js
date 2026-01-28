@@ -611,7 +611,7 @@ async function newBoard() {
     }
 
     const response = await axios.post(const_appservice + "/api/newBoard", data_request, {headers: headers});
-    console.log(`${response}`);
+    console.log(response);
     return response.groupId;
 }
 
