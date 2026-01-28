@@ -235,6 +235,21 @@ public class SignalRController {
         System.out.println("email of user retrieved from token: " + email);
         // T: Retrieve email from token (END)
 
+        // T: Autojoin a new group (START)
+        System.out.println("adding to group");
+
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardSessionId + "/users/" + request.userId;
+        String accessKey = generateJwt(hubUrl, email);
+
+        HttpResponse<String> response = Unirest.put(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .asString();
+
+        System.out.println("addgroup: " + response.getStatus());
+        System.out.println("addgroup: " + response.getBody());
+        // T: Autojoin a new group (END)
+
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = Integer.toString(randomNumericBoardId);
 
