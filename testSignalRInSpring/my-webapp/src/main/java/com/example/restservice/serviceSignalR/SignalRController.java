@@ -162,7 +162,7 @@ public class SignalRController {
                 synchronized(board) {
                     // T: DEBUG
                     System.out.println("Trying to close the board: " + command.groupId);
-                    System.out.prinltn("hostUserId: " + board.getHostUserId());
+                    System.out.println("hostUserId: " + board.getHostUserId());
                     System.out.println("userId: " + command.userId);
 
                     if(command.userId.equals(board.getHostUserId()))
