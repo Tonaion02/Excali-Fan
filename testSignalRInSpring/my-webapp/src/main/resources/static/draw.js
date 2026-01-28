@@ -1007,6 +1007,19 @@ document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
 
+const newBoardButton = document.getElementById("newBoardButton");
+async function new_board_button()
+{
+    // T: Create a new board
+    data.groupId = await newBoard();
+
+    const currentGroupLabel = document.getElementById('current-group-label');
+    currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
+
+    clearBoard();
+}
+newBoardButton.addEventListener("click", new_board_button);
+
 let saveOnCloudButton = document.getElementById("save-option-cloud-button");
 saveOnCloudButton.addEventListener("click", () => {
     let fileNameTextBox = document.getElementById("file-name");
