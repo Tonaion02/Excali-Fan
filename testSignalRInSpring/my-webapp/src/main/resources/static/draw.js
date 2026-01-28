@@ -396,9 +396,16 @@ function setup() {
             // T: TODO create a new board when you close the current board
             data.groupId = newBoard();
 
+            // T: TODO update the box where the groupId is displayed
+            const currentGroupLabel = document.getElementById('current-group-label');
+            currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
+
             clearBoard();
 
             // T: TODO display for some time that the board is disconnected
+            const div_disconnect_write = document.createElement("div");
+            div_disconnect_write.innerHTML = "disconnected";
+            div_disconnect_write.className = "disconnect";
         }
 
         function sendDeleteLine(lineToDelete) {
