@@ -157,32 +157,109 @@ public class SignalRController {
 
         try {
             Board board = boards.boards.get(command.groupId);
-            if(board != null) {                
+
+            if(board != null) {
                 synchronized(board) {
                     // T: DEBUG
                     System.out.println("Trying to close the board: " + command.groupId);
+                    System.out.println("hostUserId: " + board.getHostUserId());
+                    System.out.println("userId: " + command.userId);
 
-                    String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-                    String accessKey = generateJwt(hubUrl, command.userId);
-
-                    HttpResponse<String> response =  Unirest.post(hubUrl)
-                        .header("Content-Type", "application/json")
-                        .header("Authorization", "Bearer " + accessKey)
-                        .body(new SignalRMessage("receiveCloseBoard", new Object[] { command }))
-                        .asString();
-                    
-                    // T: DEBUG
-                    System.out.println("result of trying to send the receiveCloseBoard message: " + response.getStatus());
-
-                    // T: Remove the board, because is disconnect
-                    boards.boards.remove(command.groupId);
-
-                    // T: TODO evaluate if it's useful to save the board like a temporary board...
+                    if(command.userId.equals(board.getHostUserId()))
+                    {
+                        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+                        String accessKey = generateJwt(hubUrl, command.userId);
+    
+                        HttpResponse<String> response =  Unirest.post(hubUrl)
+                            .header("Content-Type", "application/json")
+                            .header("Authorization", "Bearer " + accessKey)
+                            .body(new SignalRMessage("receiveCloseBoard", new Object[] { command }))
+                            .asString();
+                        
+                        // T: DEBUG
+                        System.out.println("result of trying to send the receiveCloseBoard message: " + response.getStatus());
+    
+                        // T: Remove the board, because is disconnect
+                        boards.boards.remove(command.groupId);
+    
+                        // T: TODO evaluate if it's useful to save the board like a temporary board...
+                    }
+                    else
+                    {
+                        // T: DEBUG
+                        System.out.println("Failed to close the board: " + command.groupId);
+                    }
                 }
             }
         } catch(RuntimeException e) {
             e.printStackTrace();
         }
+    }
+
+    public static class RequestNewBoard {
+        public String userId;
+
+        public RequestNewBoard() {}
+
+        public RequestNewBoard(String userId) {
+            this.userId = userId;
+        }
+
+        public void setUserId(String userId) {
+            this.userId = userId;
+        }
+
+        public String getUserId() {
+            return userId;
+        }
+    }
+
+    @PostMapping("/api/newBoard")
+    public String newBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestNewBoard request) {
+        // T: DEBUG
+        System.out.println("New board");
+
+        // T: Retrieve email from token (START)
+        String email = null;
+        try {
+            SignedJWT signedJwt = SignedJWT.parse(accessToken);
+            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+        } catch(Exception e) {
+            System.out.println("signedJwt exception: " + e.getMessage());
+            e.printStackTrace();
+        }
+        if(email == null) {
+            System.out.println("email retrieved from token is null");
+            return null;
+        }
+        System.out.println("email of user retrieved from token: " + email);
+        // T: Retrieve email from token (END)
+
+        // T: Create the new board
+        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+        String boardId = Integer.toString(randomNumericBoardId);
+
+        // T: Autojoin a new group (START)
+        System.out.println("adding to group");
+
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardId + "/users/" + request.userId;
+        String accessKey = generateJwt(hubUrl, email);
+
+        HttpResponse<String> response = Unirest.put(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .asString();
+
+        System.out.println("addgroup: " + response.getStatus());
+        System.out.println("addgroup: " + response.getBody());
+        // T: Autojoin a new group (END)
+
+        Board board = new Board();
+        board.setOwnerUserId(email);
+        board.setHostUserId(request.userId);
+        boards.boards.put(boardId, board);     
+
+        return boardId;
     }
 
     public static class RequestDownloadFromServer
@@ -295,7 +372,7 @@ public class SignalRController {
         
 
 
-        // T: generate a randomic number to identify the board
+        // T: generate a randomic identifier to identify the board
         // T: NOTE: we use this number to identify the board in persistence and like session
         // to exchange messages from clients
         // T: WARNING: you can substitute that with UserId(email) + timestamp
@@ -304,8 +381,6 @@ public class SignalRController {
         
 
 
-        // T: WARNING temporary, we are adding the new board
-        // to the global hashmap
         Board board = new Board();
         board.setOwnerUserId(email);
         board.setHostUserId(lr.userId);

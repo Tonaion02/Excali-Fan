@@ -11,8 +11,7 @@ let currentColor = defaultColor;
 const canvas = document.getElementById("drawingCanvas");
 const canvasContext = canvas.getContext("2d");
 // Settings of canvas (START)
-// T: WARNING remember to set a fixed size for the
-// canvas
+// T: WARNING remember to set a fixed size for the canvas
 canvasContext.canvas.width  = 2000;
 canvasContext.canvas.height = 2000;
 canvasContext.canvas.style.backgroundColor = "#121212";
@@ -43,6 +42,7 @@ let isDoingAction = false;
 // T: This variable is used to indicate when we are loading a board
 // from the server when we join a new board.
 let isJoiningBoard = false;
+// T: TODO use effectively this variable
 let foraignBoard = false;
 
 let waitMessageStack = [];
@@ -374,8 +374,7 @@ function setup() {
             if(!isJoiningBoard)
             {
                 // T: check if the line to delete is equal to the currentLine, in that case delete it
-                // T: WARNING: it's necessary to clean first the currentLine because we call only an update in
-                // deleteLineFromList
+                // T: WARNING: it's necessary to clean first the currentLine because we call only an update in deleteLineFromList
                 if(currentLine.userId == command.userIdOfLine && currentLine.timestamp == command.timestampOfLine) {
                     currentLine = {color: currentColor,  userId: data.userId, timestamp: null, points: []};
                 }
@@ -389,14 +388,31 @@ function setup() {
             }
         }
 
-        function receiveCloseBoard(command) {
+        async function receiveCloseBoard(command) {
             // T: DEBUG
             console.log("receiveCloseBoard is called");
 
-            // T: TODO create a new board when you close the current board
-            data.groupId = "";
+            // T: Create a new board
+            data.groupId = await newBoard();
+
+            const currentGroupLabel = document.getElementById('current-group-label');
+            currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
             clearBoard();
+
+            // T: Make appear the write "disconnected" (START)
+            const div_disconnect_write = document.createElement("div");
+            div_disconnect_write.innerHTML = "disconnected";
+            div_disconnect_write.className = "disconnect";
+            const body_html = document.getElementsByTagName("body")[0];
+            body_html.appendChild(div_disconnect_write);
+            // T: Make appear the write "disconnected" (END)
+            
+            setTimeout(() => 
+            {
+                // T: Remove the write "disconnected"
+                body_html.removeChild(div_disconnect_write);
+            }, 500);
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -580,6 +596,24 @@ function moveCursor(position, cursor) {
 
 
 
+// T: This method is used to create a new board
+async function newBoard() {
+
+    const accessToken = retrieveToken();
+
+    const headers = {
+        "Authorization": accessToken,
+        "Content-Type": "application/json",
+    };
+
+    const data_request = {
+        userId: data.userId
+    }
+
+    const response = await axios.post(const_appservice + "/api/newBoard", data_request, {headers: headers});
+    return response.data.toString();
+}
+
 // T: This method is used to close the board
 // T: TODO Check if this method can be directly used during close
 function closeBoard() {
@@ -593,7 +627,7 @@ function closeBoard() {
         "Content-Type": "application/json",
     };
 
-    const data = {
+    const data_request = {
         userId: data.userId,
         groupId: data.groupId,
         timestamp: timestamp,
@@ -603,10 +637,10 @@ function closeBoard() {
         method: "POST",
         headers: headers,
         keepalive: true,
-        body: data
+        body: JSON.stringify(data_request)
     });
 
-    // T: TODO undestand what to do when the board is closed
+    // T: TODO understand what to do when the board is closed
 }
 
 // T: This method load the board directly from the server
@@ -644,10 +678,10 @@ function addToGroup() {
     // T: Put the loading screen (START)
 
 
-    
+
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
-    
+
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 

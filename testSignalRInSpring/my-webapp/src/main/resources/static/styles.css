@@ -15,6 +15,17 @@ body {
     color: #e0e0e0;
 }
 
+.disconnect {
+    width: 100px;
+    min-height: 20px;
+    z-index: 999;
+    position: fixed;
+    left: 60px;
+    top: 10px;
+    color: #a8a5ff;
+    background-color: rgba(0, 0, 0, 0);
+}
+
 .loadingscreen {
     width: 100%;
     min-height: 100vh;
