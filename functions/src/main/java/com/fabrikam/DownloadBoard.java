@@ -23,21 +23,21 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fabrikam.Constants; 
+
 
 
 
 
 public class DownloadBoard {
         
-    public static final String storageAccountName = "excalifunstorage";
-    public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
+    // public static final String storageAccountName = "excalifunstorage";
+    // public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
+    // public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
 
-    private static final String containerName = "boardstorage";
+    // private static final String containerName = "boardstorage";
 
-    private static final String accountKeyBlobStorage = null;
-
-
+    // private static final String accountKeyBlobStorage = null;
 
     public static class parameter {
         parameter() {
