@@ -100,13 +100,13 @@ public class DownloadBoard {
         
 
 
-        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
+        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Constants.storageAccountName + ";AccountKey=" + Constants.accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
 
-        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
+        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
 
         if(!containerClient.exists()) {
             containerClient.create();
