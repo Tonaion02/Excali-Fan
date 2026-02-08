@@ -834,6 +834,7 @@ function downloadBoardServerless(boardId) {
         // T: DEBUG
         console.log("Response from serverless download service");
         console.log(response);
+        console.log(JSON.stringify(response.data));
     });
 }
 
