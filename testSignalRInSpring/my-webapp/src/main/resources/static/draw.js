@@ -571,8 +571,8 @@ function isPointInLines(point, lines, tollerance) {
 
 
 
-// T: function to compute the distance beetween a point:p and the segment 
-// between two points v and w
+// T: function to compute the distance beetween a point:p and
+// the segment between two points v and w
 function pointToSegmentDistance(p, v, w) {
     const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
     if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
@@ -834,7 +834,32 @@ function downloadBoardServerless(boardId) {
         // T: DEBUG
         console.log("Response from serverless download service");
         console.log(response);
-        console.log(JSON.stringify(response.data));
+
+        let json_content = JSON.stringify(response.data);
+        console.log(json_content);
+
+        // T: Maybe this part is shit (START)
+        const blob = new Blob([content], { type: contentType });
+
+        // 2. Create a temporary URL for the Blob
+        const url = URL.createObjectURL(blob);
+
+        // 3. Create a hidden <a> element
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.style.display = 'none';
+
+        // 4. Append to body (required for Firefox)
+        document.body.appendChild(a);
+
+        // 5. Trigger the download
+        a.click();
+
+        // 6. Clean up: remove the element and revoke the URL to free memory
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        // T: Maybe this part is shit (END)
     });
 }
 
@@ -1052,7 +1077,7 @@ newBoardButton.addEventListener("click", new_board_button);
 let saveOnCloudButton = document.getElementById("save-option-cloud-button");
 saveOnCloudButton.addEventListener("click", () => {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value; 
+    let fileName = fileNameTextBox.value;
 
     saveOnCloud(data.groupId, fileName);
  
