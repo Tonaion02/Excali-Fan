@@ -815,19 +815,21 @@ function loadBoard(boardId) {
 function downloadBoardServerless(boardId) {
 
     const accessToken = retrieveToken();
-    const email = extractEmailFromToken(accessToken);
 
     const data = {
         "boardStorageId": boardId
     };
-    const headers = {
+    const h = {
         headers: {
             "Authorization": accessToken,
             "Content-Type": "application/json"
         }
     }
 
-    axios.post(const_serverless_service + "/api/downloadBoard", data, headers)
+    // T: DEBUG
+    console.log("Called the function");
+
+    axios.post(const_serverless_service + "/api/downloadBoard", data, h)
     .then(response => {
         // T: DEBUG
         console.log("Response from serverless download service");
@@ -1006,7 +1008,7 @@ function setupLoadBoardWindow() {
                     // T: DEBUG
                     console.log("downloadServerlessButton clicked");
 
-                    
+                    downloadBoardServerless(name);
                 });
 
                 const button = document.createElement('button');
