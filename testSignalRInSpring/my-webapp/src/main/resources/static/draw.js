@@ -331,7 +331,11 @@ function setup() {
         // T: Set EventListener for window (START)
         window.addEventListener("beforeunload", (event) => {
 
-            // T: TODO Add the check on the fact that the user isn't in a foraign board
+            // T: If it this user isn't the owner of the session, simply close. 
+            if(foraignBoard)
+            {
+                return;
+            }
 
             fetch(const_appservice + endPointForCloseBoard, {
                 method: "POST",
@@ -599,6 +603,8 @@ function moveCursor(position, cursor) {
 // T: This method is used to create a new board
 async function newBoard() {
 
+    foraignBoard = false;
+
     const accessToken = retrieveToken();
 
     const headers = {
@@ -758,6 +764,8 @@ function addToGroup() {
 // and trigger the loading on the server of the board
 function loadBoard(boardId) {
 
+    foraignBoard = false;
+
     // Clear the current line and add the first point of the line
     currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
@@ -841,22 +849,17 @@ function downloadBoardServerless(boardId) {
         // T: Maybe this part is shit (START)
         const blob = new Blob([json_content], { type: "application/json" });
 
-        // 2. Create a temporary URL for the Blob
         const url = URL.createObjectURL(blob);
 
-        // 3. Create a hidden <a> element
         const a = document.createElement('a');
         a.href = url;
         a.download = boardId;
         a.style.display = 'none';
 
-        // 4. Append to body (required for Firefox)
         document.body.appendChild(a);
 
-        // 5. Trigger the download
         a.click();
 
-        // 6. Clean up: remove the element and revoke the URL to free memory
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         // T: Maybe this part is shit (END)
