@@ -811,6 +811,29 @@ function loadBoard(boardId) {
 
 
 
+// T: This function is used to download the board from Azure-Functions using serverless
+function downloadBoardServerless(boardId) {
+
+    const accessToken = retrieveToken();
+    const email = extractEmailFromToken(accessToken);
+
+    const data = {
+        "boardStorageId": boardId
+    };
+    const headers = {
+        headers: {
+            "Authorization": accessToken,
+            "Content-Type": "application/json"
+        }
+    }
+
+    axios.post(const_serverless_service + "/api/downloadBoard", data, headers)
+    .then(response => {
+        // T: DEBUG
+        console.log("Response from serverless download service");
+        console.log(response);
+    });
+}
 
 function isAlreadyInUse(boardName)
 {
@@ -981,9 +1004,9 @@ function setupLoadBoardWindow() {
 
                 downloadButton.addEventListener('click', () => {
                     // T: DEBUG
-                    console.log("downloadButton clicked");
+                    console.log("downloadServerlessButton clicked");
 
-                    // alert(`Download ${name}`);
+                    
                 });
 
                 const button = document.createElement('button');
