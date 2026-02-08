@@ -571,8 +571,8 @@ function isPointInLines(point, lines, tollerance) {
 
 
 
-// T: function to compute the distance beetween a point:p and the segment 
-// between two points v and w
+// T: function to compute the distance beetween a point:p and
+// the segment between two points v and w
 function pointToSegmentDistance(p, v, w) {
     const l2 = (v.x - w.x) ** 2 + (v.y - w.y) ** 2;
     if (l2 === 0) return Math.hypot(p.x - v.x, p.y - v.y);
@@ -755,7 +755,7 @@ function addToGroup() {
 
 // T: Load Board (START)
 // T: This function permits the loading of the board in the client
-// and trigger the loading on the server of the board 
+// and trigger the loading on the server of the board
 function loadBoard(boardId) {
 
     // Clear the current line and add the first point of the line
@@ -811,6 +811,52 @@ function loadBoard(boardId) {
 
 
 
+// T: This function is used to download the board from Azure-Functions using serverless
+function downloadBoardServerless(boardId) {
+
+    const accessToken = retrieveToken();
+
+    const data = {
+        "boardStorageId": boardId
+    };
+    const h = {
+        headers: {
+            "Authorization": accessToken,
+            "Content-Type": "application/json"
+        }
+    }
+
+    // T: DEBUG
+    console.log("Called the function");
+
+    axios.post(const_serverless_service + "/api/downloadBoard", data, h)
+    .then(response => {
+        // T: DEBUG
+        console.log("Response from serverless download service");
+        console.log(response);
+
+        let json_content = JSON.stringify(response.data);
+        console.log(json_content);
+
+        // T: Maybe this part is shit (START)
+        const blob = new Blob([json_content], { type: "application/json" });
+
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = boardId;
+        a.style.display = 'none';
+
+        document.body.appendChild(a);
+
+        a.click();
+
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        // T: Maybe this part is shit (END)
+    });
+}
 
 function isAlreadyInUse(boardName)
 {
@@ -976,13 +1022,16 @@ function setupLoadBoardWindow() {
                 downloadIcon.src = 'logo-dw.png';
                 downloadIcon.alt = 'Download';
                 downloadIcon.style.height = '20px'; // Adjust the size as needed
-        
+
                 downloadButton.appendChild(downloadIcon);
-        
+
                 downloadButton.addEventListener('click', () => {
-                    alert(`Download ${name}`);
+                    // T: DEBUG
+                    console.log("downloadServerlessButton clicked");
+
+                    downloadBoardServerless(name);
                 });
-        
+
                 const button = document.createElement('button');
                 button.textContent = name;
                 button.style.flexGrow = '1'; 
@@ -990,7 +1039,7 @@ function setupLoadBoardWindow() {
                 button.addEventListener('click', () => {
                     loadBoard(name);
                 });
-        
+
                 wrapper.appendChild(colorDiv);
                 wrapper.appendChild(downloadButton); // Add the download button to the wrapper
                 wrapper.appendChild(button);
@@ -1007,10 +1056,23 @@ document.addEventListener("contextmenu", function(event) {
     event.preventDefault();
 });
 
+const newBoardButton = document.getElementById("newBoardButton");
+async function new_board_button()
+{
+    // T: Create a new board
+    data.groupId = await newBoard();
+
+    const currentGroupLabel = document.getElementById('current-group-label');
+    currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
+
+    clearBoard();
+}
+newBoardButton.addEventListener("click", new_board_button);
+
 let saveOnCloudButton = document.getElementById("save-option-cloud-button");
 saveOnCloudButton.addEventListener("click", () => {
     let fileNameTextBox = document.getElementById("file-name");
-    let fileName = fileNameTextBox.value; 
+    let fileName = fileNameTextBox.value;
 
     saveOnCloud(data.groupId, fileName);
  
@@ -1032,6 +1094,8 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
 })
+
+
 
 const uploadButton = document.querySelector('#upload-image');
 const fileInput = document.querySelector('#file-input');
