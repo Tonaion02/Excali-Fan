@@ -839,7 +839,7 @@ function downloadBoardServerless(boardId) {
         console.log(json_content);
 
         // T: Maybe this part is shit (START)
-        const blob = new Blob([content], { type: contentType });
+        const blob = new Blob([json_content], { type: "json" });
 
         // 2. Create a temporary URL for the Blob
         const url = URL.createObjectURL(blob);
@@ -847,7 +847,7 @@ function downloadBoardServerless(boardId) {
         // 3. Create a hidden <a> element
         const a = document.createElement('a');
         a.href = url;
-        a.download = fileName;
+        a.download = boardId;
         a.style.display = 'none';
 
         // 4. Append to body (required for Firefox)
