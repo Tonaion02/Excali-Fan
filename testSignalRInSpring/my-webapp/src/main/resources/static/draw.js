@@ -839,7 +839,7 @@ function downloadBoardServerless(boardId) {
         console.log(json_content);
 
         // T: Maybe this part is shit (START)
-        const blob = new Blob([json_content], { type: "json" });
+        const blob = new Blob([json_content], { type: "application/json" });
 
         // 2. Create a temporary URL for the Blob
         const url = URL.createObjectURL(blob);
