@@ -755,7 +755,7 @@ function addToGroup() {
 
 // T: Load Board (START)
 // T: This function permits the loading of the board in the client
-// and trigger the loading on the server of the board 
+// and trigger the loading on the server of the board
 function loadBoard(boardId) {
 
     // Clear the current line and add the first point of the line
@@ -976,13 +976,16 @@ function setupLoadBoardWindow() {
                 downloadIcon.src = 'logo-dw.png';
                 downloadIcon.alt = 'Download';
                 downloadIcon.style.height = '20px'; // Adjust the size as needed
-        
+
                 downloadButton.appendChild(downloadIcon);
-        
+
                 downloadButton.addEventListener('click', () => {
-                    alert(`Download ${name}`);
+                    // T: DEBUG
+                    console.log("downloadButton clicked");
+
+                    // alert(`Download ${name}`);
                 });
-        
+
                 const button = document.createElement('button');
                 button.textContent = name;
                 button.style.flexGrow = '1'; 
@@ -990,7 +993,7 @@ function setupLoadBoardWindow() {
                 button.addEventListener('click', () => {
                     loadBoard(name);
                 });
-        
+
                 wrapper.appendChild(colorDiv);
                 wrapper.appendChild(downloadButton); // Add the download button to the wrapper
                 wrapper.appendChild(button);
@@ -1045,6 +1048,8 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     let windowFileManager = document.getElementById("save-modal");
     windowFileManager.style.display = "none";
 })
+
+
 
 const uploadButton = document.querySelector('#upload-image');
 const fileInput = document.querySelector('#file-input');

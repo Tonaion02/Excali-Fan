@@ -106,7 +106,13 @@ public class DownloadBoard {
                 .connectionString(connectionString)
                 .buildClient();
 
+        // T: DEBUG
+        context.getLogger().info("Here 1");
+
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
+
+        // T: DEBUG
+        context.getLogger().info("Here 2");
 
         if(!containerClient.exists()) {
             containerClient.create();
