@@ -214,6 +214,8 @@ public class SignalRController {
         }
     }
 
+    // T: TODO Here, the problem is that you need to close the old board before opening another. Probably, is possible
+    // to do this, re-communicating even the information like the session of the current board.
     @PostMapping("/api/newBoard")
     public String newBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestNewBoard request) {
         // T: DEBUG
@@ -738,6 +740,12 @@ public class SignalRController {
         System.out.println("userInGroup: " + response.getBody());
     }
 
+
+
+    @PostMapping("/publicApi/countBoards")
+    public void countBoards() {
+        return boards.size();
+    }
 
 
 
