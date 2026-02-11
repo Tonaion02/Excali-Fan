@@ -5,34 +5,34 @@ document.addEventListener('DOMContentLoaded', () => {
     // Gestione del colore di sfondo al clic
     const pencilContainer = document.getElementById('pencil-container');
     const eraserContainer = document.getElementById('eraser-container');
-    const colorDropdown = document.getElementById('color-dropdown');
+    // const colorDropdown = document.getElementById('color-dropdown');
 
-    const colorOptions = [
-        { color: '#ffffff', element: document.createElement('div') },
-        { color: '#ff69b4', element: document.createElement('div') },
-        { color: '#006400', element: document.createElement('div') },
-        { color: '#00008b', element: document.createElement('div') }
-    ];
+    // const colorOptions = [
+    //     { color: '#ffffff', element: document.createElement('div') },
+    //     { color: '#ff69b4', element: document.createElement('div') },
+    //     { color: '#006400', element: document.createElement('div') },
+    //     { color: '#00008b', element: document.createElement('div') }
+    // ];
 
-    colorOptions.forEach(option => {
-        const wrapper = document.createElement('div');
-        wrapper.classList.add('color-wrapper');
-        option.element.classList.add('color-option');
-        option.element.style.backgroundColor = option.color;
-        option.element.setAttribute('data-color', option.color);
-        wrapper.appendChild(option.element);
-        colorDropdown.appendChild(wrapper);
+    // colorOptions.forEach(option => {
+    //     const wrapper = document.createElement('div');
+    //     wrapper.classList.add('color-wrapper');
+    //     option.element.classList.add('color-option');
+    //     option.element.style.backgroundColor = option.color;
+    //     option.element.setAttribute('data-color', option.color);
+    //     wrapper.appendChild(option.element);
+    //     colorDropdown.appendChild(wrapper);
 
-        option.element.addEventListener('click', () => {
-            context.strokeStyle = option.color;
-            document.querySelectorAll('.color-wrapper').forEach(wrap => wrap.classList.remove('selected'));
-            wrapper.classList.add('selected');
-            colorDropdown.style.display = 'none';
-        });
-    });
+    //     option.element.addEventListener('click', () => {
+    //         context.strokeStyle = option.color;
+    //         document.querySelectorAll('.color-wrapper').forEach(wrap => wrap.classList.remove('selected'));
+    //         wrapper.classList.add('selected');
+    //         colorDropdown.style.display = 'none';
+    //     });
+    // });
 
     // Imposta il colore bianco come colore selezionato di base
-    document.querySelector('.color-option[data-color="#ffffff"]').parentElement.classList.add('selected');
+    // document.querySelector('.color-option[data-color="#ffffff"]').parentElement.classList.add('selected');
     context.strokeStyle = '#ffffff';
 
     pencilContainer.addEventListener('click', () => {
@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     eraserContainer.addEventListener('click', () => {
         eraserContainer.style.backgroundColor = '#403e6a'; // Colore viola più scuro
         pencilContainer.style.removeProperty('background-color');
-        colorDropdown.style.display = 'none';
+        // colorDropdown.style.display = 'none';
     });
 
     // Nascondi la tendina dei colori all'inizio
-    colorDropdown.style.display = 'none';
+    // colorDropdown.style.display = 'none';
 
     // Gestione del menu
     const menuButton = document.getElementById('menu-button');
