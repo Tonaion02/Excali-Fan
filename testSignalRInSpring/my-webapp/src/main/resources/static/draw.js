@@ -1073,6 +1073,10 @@ async function new_board_button()
 {
     // T: Create a new board
     data.groupId = await newBoard();
+    data.currentBoardStorageId = data.groupId;
+
+    const boardStorageIdTextBox = document.getElementById("file-name");
+    boardStorageIdTextBox.value = data.groupId;
 
     const currentGroupLabel = document.getElementById('current-group-label');
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
