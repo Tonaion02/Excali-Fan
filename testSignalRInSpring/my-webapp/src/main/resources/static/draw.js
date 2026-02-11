@@ -406,6 +406,9 @@ function setup() {
             const currentGroupLabel = document.getElementById('current-group-label');
             currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
+            // T: Re-activate the button to save on cloud
+            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
+
             clearBoard();
 
             // T: Make appear the write "disconnected" (START)
@@ -1143,6 +1146,9 @@ async function new_board_button()
     const currentGroupLabel = document.getElementById('current-group-label');
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
+    // T: Re-activate the button to save on cloud
+    document.getElementById("save-option-cloud-button").removeAttribute("disabled");
+    
     clearBoard();
 
     // T: Update the load board window
