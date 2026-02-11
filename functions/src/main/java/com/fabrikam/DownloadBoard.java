@@ -40,9 +40,7 @@ public class DownloadBoard {
     // private static final String accountKeyBlobStorage = null;
 
     public static class parameter {
-        parameter() {
-
-        }
+        parameter() {}
 
         public String getBoardStorageId() {
             return boardStorageId;

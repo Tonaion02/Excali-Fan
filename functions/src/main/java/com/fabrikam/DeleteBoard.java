@@ -37,17 +37,7 @@ import com.fabrikam.Constants;
 
 
 
-public class UploadBoard {
-
-    // public static final String secretNameKeySignalR = "keyForSignalR";
-    // public static final String storageAccountName = "excalifunstorage";
-    // public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    // public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
-
-    // private static final String containerName = "boardstorage";
-
-    // private static String secret;
-    // private static String accountKeyBlobStorage = null;
+public class DeleteBoard {
 
     public static class parameter {
         parameter() {}
@@ -60,22 +50,13 @@ public class UploadBoard {
             this.boardStorageId = boardStorageId;
         }
 
-        public String getBoardJson() {
-            return boardJson;
-        }
-
-        public void setBoardJson(String boardJson) {
-            this.boardJson = boardJson;
-        }
-
         public String boardStorageId;
-        public String boardJson;
     }
 
 
 
     
-    @FunctionName("uploadBoard")
+    @FunctionName("deleteBoard")
     public HttpResponseMessage run(
         @HttpTrigger(
             name = "req",
@@ -83,6 +64,9 @@ public class UploadBoard {
             authLevel = AuthorizationLevel.ANONYMOUS)
             HttpRequestMessage<Optional<String>> request,
             final ExecutionContext context) {
+
+        // T: DEBUG
+        System.out.println("Starting deleteing board");
         
         // T: Token validation (START)
         String loginToken = request.getHeaders().get("authorization");
@@ -128,6 +112,7 @@ public class UploadBoard {
         // T: Connect to Azure (END)
 
         System.out.println("Created client");
+
         // T: Check if the container exist (START)
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
         
@@ -140,8 +125,8 @@ public class UploadBoard {
 
         
 
-        // T: Retrieve name of file and content of file (START)
-        System.out.println("Started parsing");
+        // T: Retrieve name of file from request (START)
+        System.out.println("Started parsing the request");
 
         String bodyJson = request.getBody().get();
         ObjectMapper objectMapper = new ObjectMapper();
@@ -156,93 +141,28 @@ public class UploadBoard {
             return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();            
         }        
         String boardStorageId = par.boardStorageId;
-        String boardJson = par.boardJson;
-        // T: Retrieve name of file and content of file (END)
+
+        System.out.println("boardStorageId of board to delete: " + boardStorageId);
+        // T: Retrieve name of file from request (END)
         
 
-
-        // T: Board name validation (START)
-        // T: Check if the name of the board is already used
-
-        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (START)
-        // context.getLogger().info("arrivato all recupero boards");   
-
-        // ListBlobsOptions options = new ListBlobsOptions().setPrefix(email); // your prefix
-        // PagedIterable<BlobItem> blobs = containerClient.listBlobs();
-
-        // for (BlobItem blobItem : blobs) {
-        //     context.getLogger().info("Blob: " + blobItem.getName());
-        //     if (blobItem.getName().equals(par.boardStorageId)) {
-        //         context.getLogger().info("SALAMEEEEEEEEEEEEE");
-        //         return request.createResponseBuilder(HttpStatus.IM_USED)
-        //             .body("name of the board already used")
-        //             .build();
-        //     }
-        // }
-        // T: NOTES: This is the code of the example of the documentation, and doesn't work, GG Microsoft (END)
-
-
-
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-
-            String jsonBody = 
-            "{}";
-
-            // T: NOTE Who knows why we are interrogating the Server to list the boards
-            HttpRequest httpRequest = HttpRequest.newBuilder()
-            .uri(new URI(Constants.appService + "api/listBoards"))
-            .timeout(Duration.ofSeconds(10))
-            .header("Authorization", loginToken)
-            .header("Content-Type", "application/json")
-            .header("Accept", "application/json")
-            .POST(BodyPublishers.ofString(jsonBody))
-            .build();
-
-            HttpResponse<String> response = client.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-
-            context.getLogger().info("Response from API: " + response.body());
-
-            objectMapper = new ObjectMapper();
-            List<String> result = objectMapper.readValue(response.body(), List.class);
-
-            result.forEach(a -> System.out.println(a));
-
-            for(var s : result)
-            {
-                if(s.equals(boardStorageId))
-                {
-                    System.out.println("Error: the name of the board is already used");
-                    
-                    return request.createResponseBuilder(HttpStatus.IM_USED)
-                    .body("Error: the name of the board is already used")
-                    .build();
-                }
-            }
-
-        } catch (Exception e) {
-            return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Failed to call external API")
-                .build();
-            context.getLogger().severe("Error calling API: " + e.getMessage());
-        }
-        // T: Board name validation (END)
-
-
-
-        // T: Effectively upload the file (START)
+        // T: Delete the board (START)
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
-        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(boardJson.getBytes(StandardCharsets.UTF_8))) {
-            blobClient.upload(dataStream, boardJson.length(), true);
-        } catch(Exception e) {
-            context.getLogger().info("Error: " + e.getMessage());
-            for(Object o : e.getStackTrace()) {
-                context.getLogger().info(o.toString());
-            }
-            return request.createResponseBuilder(HttpStatus.BAD_REQUEST).body("Error: " + e.getMessage() + ": \n" + e.getStackTrace()).build();
-        }
-        // T: Effectively upload the file (END)
 
-        return request.createResponseBuilder(HttpStatus.OK).body("default return").build();
+        boolean deleted = blobClient.deleteIfExists();
+
+        if(deleted)
+        {
+            // T: DEBUG
+            System.out.println("Board deleted");
+        }
+        else
+        {
+            // T: DEBUG
+            System.out.println("Board doesn't exist");
+        }
+        // T: Delete the board (END)
+
+        return request.createResponseBuilder(HttpStatus.OK).body("OK deleting board").build();
     }
 }
