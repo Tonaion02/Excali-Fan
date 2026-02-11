@@ -44,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
     eraserContainer.addEventListener('click', () => {
         eraserContainer.style.backgroundColor = '#403e6a'; // Colore viola più scuro
         pencilContainer.style.removeProperty('background-color');
-        colorDropdown.style.display = 'none';
+        // colorDropdown.style.display = 'none';
     });
 
     // Nascondi la tendina dei colori all'inizio
-    colorDropdown.style.display = 'none';
+    // colorDropdown.style.display = 'none';
 
     // Gestione del menu
     const menuButton = document.getElementById('menu-button');
