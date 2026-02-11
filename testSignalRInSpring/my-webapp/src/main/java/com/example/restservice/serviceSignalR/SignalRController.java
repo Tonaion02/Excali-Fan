@@ -743,8 +743,9 @@ public class SignalRController {
 
 
     @PostMapping("/publicApi/countBoards")
-    public int countBoards() {
-        return boards.boards.size();
+    public void countBoards() {
+        int size = boards.boards.size();
+        System.out.println("count boards: " + size);
     }
 
 
