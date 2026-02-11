@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // });
 
     // Imposta il colore bianco come colore selezionato di base
-    document.querySelector('.color-option[data-color="#ffffff"]').parentElement.classList.add('selected');
+    // document.querySelector('.color-option[data-color="#ffffff"]').parentElement.classList.add('selected');
     context.strokeStyle = '#ffffff';
 
     pencilContainer.addEventListener('click', () => {
