@@ -150,7 +150,7 @@ public class SignalRController {
     }
 
     @PostMapping("/api/closeBoard")
-    public void closeBoard(@RequestBody RequestCloseBoard command) {
+    public String closeBoard(@RequestBody RequestCloseBoard command) {
 
         // T: DEBUG
         System.out.println("Close the board");
@@ -194,6 +194,8 @@ public class SignalRController {
         } catch(RuntimeException e) {
             e.printStackTrace();
         }
+
+        return command.userId;
     }
 
     public static class RequestNewBoard {

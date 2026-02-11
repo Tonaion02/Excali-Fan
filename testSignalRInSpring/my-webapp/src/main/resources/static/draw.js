@@ -393,6 +393,12 @@ function setup() {
         }
 
         async function receiveCloseBoard(command) {
+
+            if(data.userId == command.userid)
+            {
+                return;
+            }
+
             // T: DEBUG
             console.log("receiveCloseBoard is called");
 
@@ -1136,8 +1142,11 @@ document.addEventListener("contextmenu", function(event) {
 const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
-    // T: Close the current board
-    await closeBoard();
+    if(! foraignBoard)
+    {
+        // T: Close the current board
+        await closeBoard();
+    }
 
     // T: Create a new board
     data.groupId = await newBoard();
@@ -1153,6 +1162,8 @@ async function new_board_button()
     document.getElementById("save-option-cloud-button").removeAttribute("disabled");
     
     clearBoard();
+
+    foraignBoard = false;
 
     // T: Update the load board window
     setupLoadBoardWindow();
