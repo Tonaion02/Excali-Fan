@@ -1090,9 +1090,18 @@ function setupLoadBoardWindow() {
                     // T: DEBUG
                     console.log("deleteServerlessButton clicked");
 
-                    deleteBoardServerless(name);
+                    // T: Remove from the storageIds the board that is deleted (START)
+                    const index = boardStorageIdsConst.indexOf(name);
 
-                    // T: TODO update the storage window
+                    if(index != -1)
+                    {
+                        boardStorageIdsConst.splice(index, 1);
+                    }
+
+                    setupLoadBoardWindow();
+                    // T: Remove from the storageIds the board that is deleted (END)
+
+                    deleteBoardServerless(name);
                 });
 
 
