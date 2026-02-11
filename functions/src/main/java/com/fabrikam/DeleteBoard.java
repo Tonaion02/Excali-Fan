@@ -150,18 +150,22 @@ public class DeleteBoard {
         // T: Delete the board (START)
         BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
 
+        try {
+            if(deleted)
+            {
+                // T: DEBUG
+                System.out.println("Board deleted");
+            }
+            else
+            {
+                // T: DEBUG
+                System.out.println("Board doesn't exist");
+            }
+        }
+        catch(Exception e) {
+            context.getLogger().info(e.getMessage());
+        }
         boolean deleted = blobClient.deleteIfExists();
-
-        if(deleted)
-        {
-            // T: DEBUG
-            System.out.println("Board deleted");
-        }
-        else
-        {
-            // T: DEBUG
-            System.out.println("Board doesn't exist");
-        }
         // T: Delete the board (END)
 
         return request.createResponseBuilder(HttpStatus.OK).body("OK deleting board").build();
