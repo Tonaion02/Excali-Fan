@@ -394,7 +394,7 @@ function setup() {
 
         async function receiveCloseBoard(command) {
 
-            if(data.userId == command.userid)
+            if(data.userId == command.userId)
             {
                 return;
             }
