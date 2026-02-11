@@ -148,6 +148,8 @@ public class DeleteBoard {
         
 
         // T: Delete the board (START)
+        // T: NOTE when the board that you want to delete, doesn't exist, the following code generate an exception
+        // that is already handled by the catch of the exception.
         try {
             BlobClient blobClient = containerClient.getBlobClient(email + "/" + boardStorageId);
 
