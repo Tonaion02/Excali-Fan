@@ -23,26 +23,24 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import com.fabrikam.Constants; 
+
 
 
 
 
 public class DownloadBoard {
         
-    public static final String storageAccountName = "excalifunstorage";
-    public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
-    public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
+    // public static final String storageAccountName = "excalifunstorage";
+    // public static final String secretNameBlobStorageAccount = "keyForBlobStorage";
+    // public static final String keyVaultUrl = "https://testkeyvault10000.vault.azure.net";
 
-    private static final String containerName = "boardstorage";
+    // private static final String containerName = "boardstorage";
 
-    private static final String accountKeyBlobStorage = null;
-
-
+    // private static final String accountKeyBlobStorage = null;
 
     public static class parameter {
-        parameter() {
-
-        }
+        parameter() {}
 
         public String getBoardStorageId() {
             return boardStorageId;
@@ -100,13 +98,19 @@ public class DownloadBoard {
         
 
 
-        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + storageAccountName + ";AccountKey=" + accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
+        String connectionString = "DefaultEndpointsProtocol=https;AccountName=" + Constants.storageAccountName + ";AccountKey=" + Constants.accountKeyBlobStorage + ";EndpointSuffix=core.windows.net"; 
 
         BlobServiceClient serviceClient = new BlobServiceClientBuilder()
                 .connectionString(connectionString)
                 .buildClient();
 
-        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(containerName);
+        // T: DEBUG
+        context.getLogger().info("Here 1");
+
+        BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
+
+        // T: DEBUG
+        context.getLogger().info("Here 2");
 
         if(!containerClient.exists()) {
             containerClient.create();

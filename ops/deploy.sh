@@ -1,4 +1,4 @@
-# Include parameters
+# T: Include parameters
 source ./parameters.sh
 
 url_app_service="https://$resource_app_service.azurewebsites.net/"
@@ -15,16 +15,16 @@ echo "$url_function_app_service"
 
 
 
-# TESTED HERE (START)
-# Create resource group for storage
+# T: TESTED HERE (START)
+# T: Create resource group for storage
 az group create \
     --name "$resource_group_storage" \
     --location westeurope \
     --debug
 
-# Create storage account
-# Create a container for the storage
-#     --parameters arm_blob_storage_parameters.json \
+# T: Create storage account
+# T: Create a container for the storage
+# T:     --parameters arm_blob_storage_parameters.json \
 az deployment group create \
     --resource-group "$resource_group_storage" \
     --template-file arm_blob_storage.json \
@@ -33,14 +33,14 @@ az deployment group create \
 
 
 
-# Create resource group for SignalR
+# T: Create resource group for SignalR
 az group create \
     --name "$resource_group_signalr" \
     --location westeurope \
     --debug
 
-# Create the resource for SignalR
-#     --parameters arm_signalr_parameters.json \
+# T: Create the resource for SignalR
+# T:     --parameters arm_signalr_parameters.json \
 az deployment group create \
     --resource-group "$resource_group_signalr" \
     --template-file arm_signalr.json \
@@ -50,20 +50,20 @@ az deployment group create \
 
 
 
-# Create resource group for keyvault
+# T: Create resource group for keyvault
 az group create \
     --name "$resource_group_key_vault" \
     --location westeurope \
     --debug
 
-# Wait until the SignalR resource is created, and so the primary key is available
+# T: Wait until the SignalR resource is created, and so the primary key is available
 az signalr wait \
   --name "$resource_signalr" \
   --resource-group "$resource_group_signalr" \
   --created \
   --debug
 
-# Retrieve secret from SignalR
+# T: Retrieve secret from SignalR
 signalRsecret=$(az signalr key list \
   --name "$resource_signalr" \
   --resource-group "$resource_group_signalr" \
@@ -72,14 +72,14 @@ signalRsecret=$(az signalr key list \
 
 echo "SignalR primary key: $signalRsecret"
 
-# Wait until the storage account is created, and so the primary access key is available
+# T: Wait until the storage account is created, and so the primary access key is available
 az storage account wait \
   --name "$resource_storage" \
   --resource-group "$resource_group_storage" \
   --created \
   --debug
 
-# Retrieve the primary access key from storage account
+# T: Retrieve the primary access key from storage account
 blobStoragePrimaryAccessKey=$(az storage account keys list \
   --account-name "$resource_storage" \
   --resource-group "$resource_group_storage" \
@@ -88,7 +88,7 @@ blobStoragePrimaryAccessKey=$(az storage account keys list \
 
 echo "Storage account primary key: $blobStoragePrimaryAccessKey"
 
-# Create the resources for the deployment
+# T: Create the resources for the deployment
 az deployment group create \
   --resource-group "$resource_group_key_vault" \
   --template-file arm_key_vault.json \
@@ -99,7 +99,7 @@ az deployment group create \
 
 
 
-# Write in the env file some setup information (START)
+# T: Write in the env file some setup information (START)
 touch .env
 
 > .env
@@ -109,9 +109,9 @@ echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
 echo "storageAccountName=$resource_storage" >> .env
 
 mv .env ../testSignalRInSpring/my-webapp/src/main/resources/.env
-# Write in the env file some setup information (END)
+# T: Write in the env file some setup information (END)
 
-# Create constants.js file for the single page application (START)
+# T: Create constants.js file for the single page application (START)
 touch constants.js
 
 > constants.js
@@ -122,29 +122,29 @@ echo "var const_redirectUri = \""$url_app_service"\";" >> constants.js
 echo "var const_clientId = \"b1453203-8719-4a2a-8cc6-96bf883a7e65\";" >> constants.js
 
 mv constants.js ../testSignalRInSpring/my-webapp/src/main/resources/static/constants.js
-# Create constants.js file for the single page application (ENV)
+# T: Create constants.js file for the single page application (ENV)
 
-# Create resource group for App Service
-# Create Spring server with App Service
+# T: Create resource group for App Service
+# T: Create Spring server with App Service
 cd ../testSignalRInSpring/my-webapp &&
 mvn clean package -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 mvn azure-webapp:deploy -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 cd ../../ops
 
-# Assign the identity to app service
+# T: Assign the identity to app service
 az webapp identity assign \
   --name "$resource_app_service" \
   --resource-group "$resource_group_app_service" \
   --debug
 
-# Retrieve the principalId of the deployed app
+# T: Retrieve the principalId of the deployed app
 principalIdAppService=$(az webapp show \
   --name "$resource_app_service" \
   --resource-group "$resource_group_app_service" \
   --query identity.principalId \
   -o tsv)
 
-# Wait for the managed identity to be available
+# T: Wait for the managed identity to be available
 echo "Waiting for managed identity of Web App Service to be available in AAD..."
 for i in {1..10}; do
   if az ad sp show --id "$principalIdAppService" &>/dev/null; then
@@ -155,7 +155,7 @@ for i in {1..10}; do
   sleep 5
 done
 
-# Assign privileges to app service to retrieve secrets from KeyVault
+# T: Assign privileges to app service to retrieve secrets from KeyVault
 az role assignment create \
   --assignee "$principalIdAppService" \
   --role "Key Vault Secrets User" \
@@ -168,7 +168,7 @@ az role assignment create \
 
 
 
-# Embed constants in Constants file (START)
+# T: Embed constants in Constants file (START)
 touch Constants.java
 
 > Constants.java
@@ -184,31 +184,31 @@ echo "public static String appService = \""$url_app_service"\";" >> Constants.ja
 echo "}" >> Constants.java
 
 mv Constants.java ../functions/src/main/java/com/fabrikam/Constants.java
-# Embed constants in Constants file (END)
+# T: Embed constants in Constants file (END)
 
 
 
-# Create resource group and create resources for Azure Functions
+# T: Create resource group and create resources for Azure Functions
 cd ../functions &&
 mvn clean package -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
 mvn azure-functions:deploy -DfunctionAppName="$resource_function_app_service" -DresourceGroupName="$resource_group_function_app_service" &&
 cd ../ops
 
-# Assign an identity to azure functions
-# TODO: change name and resource group (conflict)
+# T: Assign an identity to azure functions
+# T: T: TODO: change name and resource group (conflict)
 az functionapp identity assign \
   --name "$resource_function_app_service" \
   --resource-group "$resource_group_function_app_service" \
   --debug
 
-# Retrieve the principalId of the function app
+# T: Retrieve the principalId of the function app
 principalIdFunctionAppService=$(az functionapp identity show \
   --name "$resource_function_app_service" \
   --resource-group "$resource_group_function_app_service" \
   --query principalId \
   -o tsv)
 
-# Wait for the managed identity of Function App Service to be available
+# T: Wait for the managed identity of Function App Service to be available
 echo "Waiting for managed identity of Function App Service to be available in AAD..."
 for i in {1..10}; do
   if az ad sp show --id "$principalIdFunctionAppService" &>/dev/null; then
@@ -219,14 +219,14 @@ for i in {1..10}; do
   sleep 5
 done  
 
-# Assign privileges to function app service to retrieve secrets from KeyVault
+# T: Assign privileges to function app service to retrieve secrets from KeyVault
 az role assignment create \
   --assignee "$principalIdFunctionAppService" \
   --role "Key Vault Secrets User" \
   --scope $(az keyvault show --name "$resource_key_vault" --query id -o tsv) \
   --debug
 
-# Enable Cross Origin (Enable CORS)
+# T: Enable Cross Origin (Enable CORS)
 az functionapp cors add \
   --name "$resource_function_app_service" \
   --resource-group "$resource_group_function_app_service" \

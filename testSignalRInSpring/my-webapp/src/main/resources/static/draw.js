@@ -199,7 +199,7 @@ function setup() {
         // T: Set like default boardStorageId the groupId (START)
         data.currentBoardStorageId = data.groupId;
         const boardStorageIdTextBox = document.getElementById("file-name");
-        boardStorageIdTextBox.value = data.currentBoardStorageId;
+        boardStorageIdTextBox.value = data.groupId;
         // T: Set like default boardStorageId the groupId (END)
 
 
@@ -331,7 +331,11 @@ function setup() {
         // T: Set EventListener for window (START)
         window.addEventListener("beforeunload", (event) => {
 
-            // T: TODO Add the check on the fact that the user isn't in a foraign board
+            // T: If it this user isn't the owner of the session, simply close. 
+            if(foraignBoard)
+            {
+                return;
+            }
 
             fetch(const_appservice + endPointForCloseBoard, {
                 method: "POST",
@@ -394,6 +398,10 @@ function setup() {
 
             // T: Create a new board
             data.groupId = await newBoard();
+            data.currentBoardStorageId = data.groupId;
+
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.groupId;
 
             const currentGroupLabel = document.getElementById('current-group-label');
             currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
@@ -599,6 +607,8 @@ function moveCursor(position, cursor) {
 // T: This method is used to create a new board
 async function newBoard() {
 
+    foraignBoard = false;
+
     const accessToken = retrieveToken();
 
     const headers = {
@@ -758,6 +768,8 @@ function addToGroup() {
 // and trigger the loading on the server of the board
 function loadBoard(boardId) {
 
+    foraignBoard = false;
+
     // Clear the current line and add the first point of the line
     currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
@@ -827,7 +839,7 @@ function downloadBoardServerless(boardId) {
     }
 
     // T: DEBUG
-    console.log("Called the function");
+    console.log("Called the download board serverless function");
 
     axios.post(const_serverless_service + "/api/downloadBoard", data, h)
     .then(response => {
@@ -855,6 +867,31 @@ function downloadBoardServerless(boardId) {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         // T: Maybe this part is shit (END)
+    });
+}
+
+function deleteBoardServerless(boardId) {
+
+    const accessToken = retrieveToken();
+
+    const data = {
+        "boardStorageId": boardId
+    };
+    const h = {
+        headers: {
+            "Authorization": accessToken,
+            "Content-Type": "application/json"
+        }
+    }
+
+    // T: DEBUG
+    console.log("Called the delete board serverless function");
+
+    axios.post(const_serverless_service + "/api/deleteBoard", data, h)
+    .then(response => {
+        // T: DEBUG
+        console.log("Response from serverless delete service");
+        console.log(response);
     });
 }
 
@@ -1009,7 +1046,8 @@ function setupLoadBoardWindow() {
                 colorDiv.style.backgroundColor = '#8a87ff';
                 colorDiv.style.marginRight = '5px';
                 colorDiv.style.borderRadius = '4px';
-        
+
+
                 // Create the download button
                 const downloadButton = document.createElement('button');
                 downloadButton.style.backgroundColor = 'transparent';
@@ -1032,6 +1070,32 @@ function setupLoadBoardWindow() {
                     downloadBoardServerless(name);
                 });
 
+
+                // Create the delate button
+                const deleteButton = document.createElement('button');
+                deleteButton.style.backgroundColor = 'transparent';
+                deleteButton.style.border = 'none';
+                deleteButton.style.cursor = 'pointer';
+                deleteButton.style.marginRight = '5px';
+                deleteButton.style.width = '20px';
+
+                const deleteIcon = document.createElement('img');
+                deleteIcon.src = 'logo-cestino.png';
+                deleteIcon.alt = 'Delete';
+                deleteIcon.style.height = '20px';
+
+                deleteButton.appendChild(deleteIcon);
+
+                deleteButton.addEventListener('click', () => {
+                    // T: DEBUG
+                    console.log("deleteServerlessButton clicked");
+
+                    deleteBoardServerless(name);
+
+                    // T: TODO update the storage window
+                });
+
+
                 const button = document.createElement('button');
                 button.textContent = name;
                 button.style.flexGrow = '1'; 
@@ -1041,7 +1105,8 @@ function setupLoadBoardWindow() {
                 });
 
                 wrapper.appendChild(colorDiv);
-                wrapper.appendChild(downloadButton); // Add the download button to the wrapper
+                wrapper.appendChild(downloadButton);
+                wrapper.appendChild(deleteButton);
                 wrapper.appendChild(button);
                 lodeBoardDropdown.appendChild(wrapper);
             }
@@ -1061,6 +1126,10 @@ async function new_board_button()
 {
     // T: Create a new board
     data.groupId = await newBoard();
+    data.currentBoardStorageId = data.groupId;
+
+    const boardStorageIdTextBox = document.getElementById("file-name");
+    boardStorageIdTextBox.value = data.groupId;
 
     const currentGroupLabel = document.getElementById('current-group-label');
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
