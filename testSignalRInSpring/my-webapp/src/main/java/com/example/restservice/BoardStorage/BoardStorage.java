@@ -84,7 +84,7 @@ public class BoardStorage {
     public void saveBoard(String boardStorageId, String precBoardStorageId, String email, Board board) throws Exception {
 
         try {
-            if(! boardStorageId.equals(precBoardStorageId)) {
+            if(precBoardStorageId != null && (! boardStorageId.equals(precBoardStorageId))) {
                 BlobClient precBlobClient = containerClient.getBlobClient(email + "/" + precBoardStorageId);
                 precBlobClient.delete();
             }

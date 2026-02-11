@@ -197,9 +197,9 @@ function setup() {
 
 
         // T: Set like default boardStorageId the groupId (START)
-        data.currentBoardStorageId = data.groupId;
+        data.currentBoardStorageId = null;
         const boardStorageIdTextBox = document.getElementById("file-name");
-        boardStorageIdTextBox.value = data.currentBoardStorageId;
+        boardStorageIdTextBox.value = data.groupId;
         // T: Set like default boardStorageId the groupId (END)
 
 
@@ -398,6 +398,10 @@ function setup() {
 
             // T: Create a new board
             data.groupId = await newBoard();
+            data.currentBoardStorageId = null;
+
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.groupId;
 
             const currentGroupLabel = document.getElementById('current-group-label');
             currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
