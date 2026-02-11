@@ -1021,7 +1021,8 @@ function setupLoadBoardWindow() {
                 colorDiv.style.backgroundColor = '#8a87ff';
                 colorDiv.style.marginRight = '5px';
                 colorDiv.style.borderRadius = '4px';
-        
+
+
                 // Create the download button
                 const downloadButton = document.createElement('button');
                 downloadButton.style.backgroundColor = 'transparent';
@@ -1044,6 +1045,27 @@ function setupLoadBoardWindow() {
                     downloadBoardServerless(name);
                 });
 
+
+                // Create the delate button
+                const deleteButton = document.createElement('button');
+                deleteButton.style.backgroundColor = 'transparent';
+                deleteButton.style.border = 'none';
+                deleteButton.style.cursor = 'pointer';
+                deleteButton.style.marginRight = '5px';
+                deleteButton.style.width = '20px';
+
+                const deleteIcon = document.createElement('img');
+                deleteIcon.src = 'logo-cestino.png';
+                deleteIcon.alt = 'Delete';
+                deleteIcon.style.height = '20px';
+
+                deleteButton.appendChild(deleteIcon);
+
+                deleteButton.addEventListener('click', () => {
+
+                });
+
+
                 const button = document.createElement('button');
                 button.textContent = name;
                 button.style.flexGrow = '1'; 
@@ -1053,7 +1075,8 @@ function setupLoadBoardWindow() {
                 });
 
                 wrapper.appendChild(colorDiv);
-                wrapper.appendChild(downloadButton); // Add the download button to the wrapper
+                wrapper.appendChild(downloadButton);
+                wrapper.appendChild(deleteButton);
                 wrapper.appendChild(button);
                 lodeBoardDropdown.appendChild(wrapper);
             }
