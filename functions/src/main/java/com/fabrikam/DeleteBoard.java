@@ -66,7 +66,7 @@ public class DeleteBoard {
             final ExecutionContext context) {
 
         // T: DEBUG
-        System.out.println("Starting deleteing board");
+        context.getLogger().info("Starting deleteing board");
         
         // T: Token validation (START)
         String loginToken = request.getHeaders().get("authorization");
