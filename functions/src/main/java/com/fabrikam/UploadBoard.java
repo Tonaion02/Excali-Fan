@@ -221,10 +221,11 @@ public class UploadBoard {
             }
 
         } catch (Exception e) {
+            context.getLogger().severe("Error calling API: " + e.getMessage());
+
             return request.createResponseBuilder(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body("Failed to call external API")
                 .build();
-            context.getLogger().severe("Error calling API: " + e.getMessage());
         }
         // T: Board name validation (END)
 
