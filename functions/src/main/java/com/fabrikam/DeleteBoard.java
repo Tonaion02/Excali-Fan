@@ -117,7 +117,8 @@ public class DeleteBoard {
         BlobContainerClient containerClient = serviceClient.getBlobContainerClient(Constants.containerName);
         
         if (!containerClient.exists()) {
-            containerClient.create();
+            // containerClient.create();
+            context.getLogger().info("container not created");
         }
 
         System.out.println("Created connection");
