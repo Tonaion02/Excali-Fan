@@ -839,7 +839,7 @@ function downloadBoardServerless(boardId) {
     }
 
     // T: DEBUG
-    console.log("Called the function");
+    console.log("Called the download board serverless function");
 
     axios.post(const_serverless_service + "/api/downloadBoard", data, h)
     .then(response => {
@@ -867,6 +867,31 @@ function downloadBoardServerless(boardId) {
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
         // T: Maybe this part is shit (END)
+    });
+}
+
+function deleteBoardServerless(boardId) {
+
+    const accessToken = retrieveToken();
+
+    const data = {
+        "boardStorageId": boardId
+    };
+    const h = {
+        headers: {
+            "Authorization": accessToken,
+            "Content-Type": "application/json"
+        }
+    }
+
+    // T: DEBUG
+    console.log("Called the delete board serverless function");
+
+    axios.post(const_serverless_service + "/api/deleteBoard", data, h)
+    .then(response => {
+        // T: DEBUG
+        console.log("Response from serverless delete service");
+        console.log(response);
     });
 }
 
@@ -1062,7 +1087,12 @@ function setupLoadBoardWindow() {
                 deleteButton.appendChild(deleteIcon);
 
                 deleteButton.addEventListener('click', () => {
+                    // T: DEBUG
+                    console.log("deleteServerlessButton clicked");
 
+                    deleteBoardServerless(name);
+
+                    // T: TODO update the storage window
                 });
 
 
