@@ -1144,6 +1144,9 @@ async function new_board_button()
     currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
     clearBoard();
+
+    // T: Update the load board window
+    setupLoadBoardWindow();
 }
 newBoardButton.addEventListener("click", new_board_button);
 
