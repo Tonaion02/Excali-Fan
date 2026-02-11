@@ -1136,6 +1136,9 @@ document.addEventListener("contextmenu", function(event) {
 const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
+    // T: Close the current board
+    await closeBoard();
+
     // T: Create a new board
     data.groupId = await newBoard();
     data.currentBoardStorageId = data.groupId;
