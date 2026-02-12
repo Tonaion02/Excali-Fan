@@ -396,9 +396,9 @@ function setup() {
 
             // T: These two checks are used to check in different method if
             // the user is in a foraignBoard, only in that case you need to
-            // execute the following code. 
+            // execute the following code.
             // if(data.userId == command.userId)
-            if(foraignBoard)
+            if(!foraignBoard)
             {
                 return;
             }
