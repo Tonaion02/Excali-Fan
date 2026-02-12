@@ -141,8 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         notification.innerHTML = `
         <span>${message}</span>
-        <button>&times;</button>
-    `;
+        <button>&times;</button>`;
 
         container.appendChild(notification);
 

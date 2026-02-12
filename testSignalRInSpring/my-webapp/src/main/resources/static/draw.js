@@ -690,12 +690,6 @@ function clearBoard()
 }
 
 function putLoadingScreenDiv() {
-    // T: TODO substitute this, with a proper loading screen
-    // const div_loading_screen = document.createElement("div");
-    // const body_html = document.getElementsByTagName("body")[0];
-    // body_html.appendChild(div_loading_screen);
-    // div_loading_screen.className = "loadingscreen";
-
     const div_loading_screen = document.getElementById("loadingOverlay")
     div_loading_screen.classList.add("active");
 
@@ -707,7 +701,6 @@ function hideLoadingScreenDiv() {
     div_loading_screen.classList.remove("active");
 }
 
-// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
     // T: Put the loading screen
@@ -953,7 +946,7 @@ function saveOnCloud(boardSessionId, boardName)
     if(isAlreadyInUse(boardName))
     {
         // T: TODO display the error message
-        alert("There is already a board with this name"); 
+        showError("There is already a board with this name");
         return;
     }
 
