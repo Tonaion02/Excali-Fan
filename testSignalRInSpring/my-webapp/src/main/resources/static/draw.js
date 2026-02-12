@@ -789,6 +789,9 @@ async function addToGroup() {
         // T: unlock the board through the setting of the boolean field
         isJoiningBoard = false;
 
+        // T: Update the storage window
+        setupLoadBoardWindow();
+
         // T: Remove the loading screen
         hideLoadingScreenDiv();
 
