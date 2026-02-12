@@ -731,6 +731,9 @@ async function addToGroup() {
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
+    // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
+    data.currentBoardStorageId = groupId;
+
     let accessToken = retrieveToken();
 
     await rmGroup(groupId, accessToken);
@@ -1112,7 +1115,7 @@ function setupLoadBoardWindow() {
                 });
 
 
-                // Create the delate button
+                // Create the delete button
                 const deleteButton = document.createElement('button');
                 deleteButton.style.backgroundColor = 'transparent';
                 deleteButton.style.border = 'none';
