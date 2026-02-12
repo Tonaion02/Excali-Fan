@@ -393,6 +393,16 @@ function setup() {
         }
 
         async function receiveCloseBoard(command) {
+
+            // T: These two checks are used to check in different method if
+            // the user is in a foraignBoard, only in that case you need to
+            // execute the following code.
+            // if(data.userId == command.userId)
+            if(!foraignBoard)
+            {
+                return;
+            }
+
             // T: DEBUG
             console.log("receiveCloseBoard is called");
 
@@ -679,17 +689,29 @@ function clearBoard()
     update(canvasContext);
 }
 
+function putLoadingScreenDiv() {
+    // T: TODO substitute this, with a proper loading screen
+    // const div_loading_screen = document.createElement("div");
+    // const body_html = document.getElementsByTagName("body")[0];
+    // body_html.appendChild(div_loading_screen);
+    // div_loading_screen.className = "loadingscreen";
+
+    const div_loading_screen = document.getElementById("loadingOverlay")
+    div_loading_screen.classList.add("active");
+
+    return div_loading_screen;
+}
+
+function hideLoadingScreenDiv() {
+    const div_loading_screen = document.getElementById("loadingOverlay");
+    div_loading_screen.classList.remove("active");
+}
+
 // T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
-    // T: Put the loading screen (START)
-    // T: TODO substitute this, with a proper loading screen
-    const div_loading_screen = document.createElement("div");
-    const body_html = document.getElementsByTagName("body")[0];
-    body_html.appendChild(div_loading_screen);
-    div_loading_screen.className = "loadingscreen";
-    // T: Put the loading screen (START)
-
+    // T: Put the loading screen
+    putLoadingScreenDiv();
 
 
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -757,7 +779,7 @@ function addToGroup() {
         isJoiningBoard = false;
 
         // T: Remove the loading screen
-        body_html.removeChild(div_loading_screen);
+        hideLoadingScreenDiv();
 
         // T: Update the canvas
         update(canvasContext);
@@ -1136,6 +1158,15 @@ document.addEventListener("contextmenu", function(event) {
 const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
+    // T: Put loading screen div
+    putLoadingScreenDiv();
+
+    if(! foraignBoard)
+    {
+        // T: Close the current board
+        await closeBoard();
+    }
+
     // T: Create a new board
     data.groupId = await newBoard();
     data.currentBoardStorageId = data.groupId;
@@ -1151,8 +1182,13 @@ async function new_board_button()
     
     clearBoard();
 
+    foraignBoard = false;
+
     // T: Update the load board window
     setupLoadBoardWindow();
+
+    // T: Remove the loading screen
+    hideLoadingScreenDiv();
 }
 newBoardButton.addEventListener("click", new_board_button);
 

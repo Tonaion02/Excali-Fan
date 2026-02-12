@@ -150,7 +150,7 @@ public class SignalRController {
     }
 
     @PostMapping("/api/closeBoard")
-    public void closeBoard(@RequestBody RequestCloseBoard command) {
+    public String closeBoard(@RequestBody RequestCloseBoard command) {
 
         // T: DEBUG
         System.out.println("Close the board");
@@ -180,8 +180,8 @@ public class SignalRController {
                         System.out.println("result of trying to send the receiveCloseBoard message: " + response.getStatus());
     
                         // T: Remove the board, because is disconnect
-                        boards.boards.remove(command.groupId);
-    
+                        board = boards.boards.remove(command.groupId);
+
                         // T: TODO evaluate if it's useful to save the board like a temporary board...
                     }
                     else
@@ -191,9 +191,15 @@ public class SignalRController {
                     }
                 }
             }
+            else
+            {
+                System.out.println("Not found the board: " + command.groupId);
+            }
         } catch(RuntimeException e) {
             e.printStackTrace();
         }
+
+        return command.userId;
     }
 
     public static class RequestNewBoard {
@@ -743,9 +749,10 @@ public class SignalRController {
 
 
     @PostMapping("/publicApi/countBoards")
-    public void countBoards() {
+    public int countBoards() {
         int size = boards.boards.size();
         System.out.println("count boards: " + size);
+        return size;
     }
 
 

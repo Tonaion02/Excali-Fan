@@ -128,4 +128,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const joinGroupButton = document.getElementById("add-group-button");
 });
