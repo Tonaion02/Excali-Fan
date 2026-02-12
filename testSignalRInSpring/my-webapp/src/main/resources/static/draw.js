@@ -32,6 +32,7 @@ let boardStorageIdsConst = [];
 const endPointForCreateLine = `/api/createLine`;
 const endPointForDeleteLine = `/api/deleteLine`;
 const endPointForCloseBoard = `/api/closeBoard`;
+const endPointForRmGroup =  "/api/rmgroup";
 
 
 
@@ -394,6 +395,11 @@ function setup() {
 
         async function receiveCloseBoard(command) {
 
+            let accessToken = retrieveToken();
+
+            // T: Remove yourself from this group
+            await rmGroup(data.groupId, accessToken);
+
             // T: These two checks are used to check in different method if
             // the user is in a foraignBoard, only in that case you need to
             // execute the following code.
@@ -701,7 +707,19 @@ function hideLoadingScreenDiv() {
     div_loading_screen.classList.remove("active");
 }
 
-function addToGroup() {
+async function rmGroup(groupId, accessToken) {
+    await fetch(const_appservice + endPointForRmGroup + "?groupId=" + groupId + "&userId=" + data.userId, 
+        {
+            method: "GET",
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": "application/json",
+            }
+        }
+    );
+}
+
+async function addToGroup() {
 
     // T: Put the loading screen
     putLoadingScreenDiv();
@@ -713,12 +731,12 @@ function addToGroup() {
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
+    let accessToken = retrieveToken();
+
+    await rmGroup(groupId, accessToken);
 
     // T: Block all other actions setting this boolean value to true
     isJoiningBoard = true;
-
-
-    let accessToken = retrieveToken();
 
     fetch(const_appservice + "/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
@@ -784,7 +802,7 @@ function addToGroup() {
 // T: Load Board (START)
 // T: This function permits the loading of the board in the client
 // and trigger the loading on the server of the board
-function loadBoard(boardId) {
+async function loadBoard(boardId) {
 
     foraignBoard = false;
 
@@ -794,6 +812,8 @@ function loadBoard(boardId) {
 
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
+
+    await rmGroup(data.groupId, accessToken);
 
     axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "userId": data.userId},
     {
@@ -1153,6 +1173,10 @@ async function new_board_button()
 {
     // T: Put loading screen div
     putLoadingScreenDiv();
+
+    const accessToken = retrieveToken();
+
+    await rmGroup(data.groupId, accessToken);
 
     if(! foraignBoard)
     {
