@@ -428,18 +428,22 @@ function setup() {
             clearBoard();
 
             // T: Make appear the write "disconnected" (START)
-            const div_disconnect_write = document.createElement("div");
-            div_disconnect_write.innerHTML = "disconnected";
-            div_disconnect_write.className = "disconnect";
-            const body_html = document.getElementsByTagName("body")[0];
-            body_html.appendChild(div_disconnect_write);
+            // const div_disconnect_write = document.createElement("div");
+            // div_disconnect_write.innerHTML = "disconnected";
+            // div_disconnect_write.className = "disconnect";
+            // const body_html = document.getElementsByTagName("body")[0];
+            // body_html.appendChild(div_disconnect_write);
             // T: Make appear the write "disconnected" (END)
-            
-            setTimeout(() => 
-            {
-                // T: Remove the write "disconnected"
-                body_html.removeChild(div_disconnect_write);
-            }, 500);
+
+            // T: Timeout for the "disconnected" write (START)
+            // setTimeout(() => 
+            // {
+            //     // T: Remove the write "disconnected"
+            //     body_html.removeChild(div_disconnect_write);
+            // }, 500);
+            // T: Timeout for the "disconnected" write (END)
+
+            showError("The host disconnected from the board");
         }
 
         function sendDeleteLine(lineToDelete) {
@@ -647,6 +651,9 @@ async function newBoard() {
 // T: TODO Check if this method can be directly used during close
 function closeBoard() {
     
+    // T: DEBUG
+    console.log("Trying to close the board");
+
     let timestamp = Date.now();
 
     let accessToken = retrieveToken();
@@ -791,6 +798,8 @@ async function addToGroup() {
 
         // T: unlock the board through the setting of the boolean field
         isJoiningBoard = false;
+
+        foraignBoard = true;
 
         // T: Update the storage window
         setupLoadBoardWindow();
@@ -1182,13 +1191,13 @@ async function new_board_button()
 
     const accessToken = retrieveToken();
 
-    await rmGroup(data.groupId, accessToken);
-
     if(! foraignBoard)
     {
         // T: Close the current board
         await closeBoard();
     }
+
+    await rmGroup(data.groupId, accessToken);
 
     // T: Create a new board
     data.groupId = await newBoard();
@@ -1229,10 +1238,13 @@ saveOnCloudButton.addEventListener("click", () => {
 let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button");
 saveOnLocalFilesButton.addEventListener("click", () => 
 {
+    let accessToken = retrieveToken();
+    let email = extractEmailFromToken(accessToken);
+
     let fileNameTextBox = document.getElementById("file-name");
     let fileName = fileNameTextBox.value + ".json";
 
-    let content = {lines: listLines, ownerUserId: data.userId};
+    let content = {lines: listLines, ownerUserId: email, hostUserId: data.userId};
     content = JSON.stringify(content);
     console.log(content);
     saveOnLocalFiles(fileName, content);
