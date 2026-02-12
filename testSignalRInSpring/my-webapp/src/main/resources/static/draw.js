@@ -695,13 +695,16 @@ function putLoadingScreenDiv() {
     const body_html = document.getElementsByTagName("body")[0];
     body_html.appendChild(div_loading_screen);
     div_loading_screen.className = "loadingscreen";
+
+    return div_loading_screen;
 }
 
 // T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
     // T: Put the loading screen
-    putLoadingScreenDiv();
+    const div_loading_screen = putLoadingScreenDiv();
+    const body_html = document.getElementsByTagName("body")[0];
 
 
 
@@ -1150,7 +1153,8 @@ const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
     // T: Put loading screen div
-    putLoadingScreenDiv();
+    const div_loading_screen = putLoadingScreenDiv();
+    const body_html = document.getElementsByTagName("body")[0];
 
     if(! foraignBoard)
     {
@@ -1177,6 +1181,9 @@ async function new_board_button()
 
     // T: Update the load board window
     setupLoadBoardWindow();
+
+    // T: Remove the loading screen
+    body_html.removeChild(div_loading_screen);
 }
 newBoardButton.addEventListener("click", new_board_button);
 
