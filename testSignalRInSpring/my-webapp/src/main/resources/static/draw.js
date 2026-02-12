@@ -647,6 +647,9 @@ async function newBoard() {
 // T: TODO Check if this method can be directly used during close
 function closeBoard() {
     
+    // T: DEBUG
+    console.log("Trying to close the board");
+
     let timestamp = Date.now();
 
     let accessToken = retrieveToken();
@@ -791,6 +794,8 @@ async function addToGroup() {
 
         // T: unlock the board through the setting of the boolean field
         isJoiningBoard = false;
+
+        foraignBoard = true;
 
         // T: Update the storage window
         setupLoadBoardWindow();
@@ -1182,13 +1187,13 @@ async function new_board_button()
 
     const accessToken = retrieveToken();
 
-    await rmGroup(data.groupId, accessToken);
-
     if(! foraignBoard)
     {
         // T: Close the current board
         await closeBoard();
     }
+
+    await rmGroup(data.groupId, accessToken);
 
     // T: Create a new board
     data.groupId = await newBoard();
