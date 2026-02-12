@@ -128,4 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 
+    const loadingOverlay = document.getElementById("loadingOverlay");
+    const joinGroupButton = document.getElementById("add-group-button");
+
+    function mostraLoading() {
+        document.getElementById("loadingOverlay").classList.add("active");
+    }
+
+    function nascondiLoading() {
+        document.getElementById("loadingOverlay").classList.remove("active");
+    }
+
+
+
 });
