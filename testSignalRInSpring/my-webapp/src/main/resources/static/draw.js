@@ -1241,7 +1241,7 @@ saveOnLocalFilesButton.addEventListener("click", () =>
     let fileNameTextBox = document.getElementById("file-name");
     let fileName = fileNameTextBox.value + ".json";
 
-    let content = {lines: listLines, ownerUserId: data.userId};
+    let content = {lines: listLines, ownerUserId: data.userId, hostUserId: data.userId};
     content = JSON.stringify(content);
     console.log(content);
     saveOnLocalFiles(fileName, content);
