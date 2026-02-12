@@ -1238,7 +1238,8 @@ fileInput.addEventListener("change", (event) =>
     if(isAlreadyInUse(file.name))
     {
         // T: TODO display an error message
-        alert("There is already a board with this name");
+        // alert("There is already a board with this name");
+        showError("There is already a board with this name");
         return;
     }
 
@@ -1286,13 +1287,15 @@ fileInput.addEventListener("change", (event) =>
             }
             else
             {
-                alert("Error during uploading of the file");
+                showError("Error during uploading of the file");
+                // alert("Error during uploading of the file");
             }
         });
     };
 
     reader.onerror = function(err) {
-        alert("Error during loading of the file");
+        showError("Error during loading of the file");
+        // alert("Error during loading of the file");
     };
 
     reader.readAsText(file);
