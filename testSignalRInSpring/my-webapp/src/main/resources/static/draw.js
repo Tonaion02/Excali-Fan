@@ -689,16 +689,19 @@ function clearBoard()
     update(canvasContext);
 }
 
-// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
-function addToGroup() {
-
-    // T: Put the loading screen (START)
+function putLoadingScreenDiv() {
     // T: TODO substitute this, with a proper loading screen
     const div_loading_screen = document.createElement("div");
     const body_html = document.getElementsByTagName("body")[0];
     body_html.appendChild(div_loading_screen);
     div_loading_screen.className = "loadingscreen";
-    // T: Put the loading screen (START)
+}
+
+// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
+function addToGroup() {
+
+    // T: Put the loading screen
+    putLoadingScreenDiv();
 
 
 
@@ -1146,6 +1149,9 @@ document.addEventListener("contextmenu", function(event) {
 const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
+    // T: Put loading screen div
+    putLoadingScreenDiv();
+
     if(! foraignBoard)
     {
         // T: Close the current board

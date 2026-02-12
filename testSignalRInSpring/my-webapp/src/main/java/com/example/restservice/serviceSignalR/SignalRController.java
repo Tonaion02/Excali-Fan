@@ -181,15 +181,7 @@ public class SignalRController {
     
                         // T: Remove the board, because is disconnect
                         board = boards.boards.remove(command.groupId);
-                        // if(board == null)
-                        // {
-                        //     System.out.println("Not found the board: " + command.groupId);
-                        // }
-                        // else
-                        // {
-                        //     System.out.println("Board: " + command.groupId + " removed with sucess");
-                        // }
-    
+
                         // T: TODO evaluate if it's useful to save the board like a temporary board...
                     }
                     else
@@ -201,7 +193,7 @@ public class SignalRController {
             }
             else
             {
-                            System.out.println("Not found the board: " + command.groupId);
+                System.out.println("Not found the board: " + command.groupId);
             }
         } catch(RuntimeException e) {
             e.printStackTrace();
