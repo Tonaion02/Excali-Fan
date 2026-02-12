@@ -196,7 +196,7 @@ header {
 }
 
 .share-box {
-    user-select: text;
+    user-select: none;
     display: none;
     background-color: #232329;
     padding: 10px;
