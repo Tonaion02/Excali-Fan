@@ -732,7 +732,7 @@ public class SignalRController {
 
     @GetMapping("/api/rmgroup")
     // T: This function remove a user from a group
-    public void addToGroup(@RequestParam String groupId, @RequestParam String userId) {
+    public void rmGroup(@RequestParam String groupId, @RequestParam String userId) {
 
         System.out.println("adding to group");
 
