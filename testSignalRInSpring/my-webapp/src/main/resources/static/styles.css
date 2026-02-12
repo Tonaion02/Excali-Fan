@@ -32,6 +32,8 @@ body {
     background-color: red;
     z-index: 999;
     position: relative;
+
+    display: none;
 }
 
 header {

@@ -691,10 +691,13 @@ function clearBoard()
 
 function putLoadingScreenDiv() {
     // T: TODO substitute this, with a proper loading screen
-    const div_loading_screen = document.createElement("div");
-    const body_html = document.getElementsByTagName("body")[0];
-    body_html.appendChild(div_loading_screen);
-    div_loading_screen.className = "loadingscreen";
+    // const div_loading_screen = document.createElement("div");
+    // const body_html = document.getElementsByTagName("body")[0];
+    // body_html.appendChild(div_loading_screen);
+    // div_loading_screen.className = "loadingscreen";
+
+    const div_loading_screen = document.getElementsByClassName("loadingscreen")[0];
+    div_loading_screen.style.display = "block";
 
     return div_loading_screen;
 }
@@ -773,7 +776,8 @@ function addToGroup() {
         isJoiningBoard = false;
 
         // T: Remove the loading screen
-        body_html.removeChild(div_loading_screen);
+        // body_html.removeChild(div_loading_screen);
+        div_loading_screen.style.display = "none";
 
         // T: Update the canvas
         update(canvasContext);
@@ -1183,7 +1187,8 @@ async function new_board_button()
     setupLoadBoardWindow();
 
     // T: Remove the loading screen
-    body_html.removeChild(div_loading_screen);
+    // body_html.removeChild(div_loading_screen);
+    div_loading_screen.style.display = "none";
 }
 newBoardButton.addEventListener("click", new_board_button);
 
