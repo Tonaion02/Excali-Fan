@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadingOverlay = document.getElementById("loadingOverlay");
     const joinGroupButton = document.getElementById("add-group-button");
+<<<<<<< Updated upstream
 
     function mostraLoading() {
         document.getElementById("loadingOverlay").classList.add("active");
@@ -141,4 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+=======
+>>>>>>> Stashed changes
 });

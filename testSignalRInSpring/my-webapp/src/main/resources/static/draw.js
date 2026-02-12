@@ -696,19 +696,22 @@ function putLoadingScreenDiv() {
     // body_html.appendChild(div_loading_screen);
     // div_loading_screen.className = "loadingscreen";
 
-    const div_loading_screen = document.getElementsByClassName("loadingscreen")[0];
-    div_loading_screen.style.display = "block";
+    const div_loading_screen = document.getElementById("loadingOverlay")
+    div_loading_screen.classList.add("active");
 
     return div_loading_screen;
+}
+
+function hideLoadingScreenDiv() {
+    const div_loading_screen = document.getElementById("loadingOverlay");
+    div_loading_screen.classList.remove("active");
 }
 
 // T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
 function addToGroup() {
 
     // T: Put the loading screen
-    const div_loading_screen = putLoadingScreenDiv();
-    const body_html = document.getElementsByTagName("body")[0];
-
+    putLoadingScreenDiv();
 
 
     const currentGroupLabel = document.getElementById('current-group-label');
@@ -776,8 +779,7 @@ function addToGroup() {
         isJoiningBoard = false;
 
         // T: Remove the loading screen
-        // body_html.removeChild(div_loading_screen);
-        div_loading_screen.style.display = "none";
+        hideLoadingScreenDiv();
 
         // T: Update the canvas
         update(canvasContext);
@@ -1157,8 +1159,7 @@ const newBoardButton = document.getElementById("newBoardButton");
 async function new_board_button()
 {
     // T: Put loading screen div
-    const div_loading_screen = putLoadingScreenDiv();
-    const body_html = document.getElementsByTagName("body")[0];
+    putLoadingScreenDiv();
 
     if(! foraignBoard)
     {
@@ -1187,8 +1188,7 @@ async function new_board_button()
     setupLoadBoardWindow();
 
     // T: Remove the loading screen
-    // body_html.removeChild(div_loading_screen);
-    div_loading_screen.style.display = "none";
+    hideLoadingScreenDiv();
 }
 newBoardButton.addEventListener("click", new_board_button);
 
