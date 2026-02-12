@@ -1238,10 +1238,13 @@ saveOnCloudButton.addEventListener("click", () => {
 let saveOnLocalFilesButton = document.querySelector("#save-option-disco-button");
 saveOnLocalFilesButton.addEventListener("click", () => 
 {
+    let accessToken = retrieveToken();
+    let email = extractEmailFromToken(accessToken);
+
     let fileNameTextBox = document.getElementById("file-name");
     let fileName = fileNameTextBox.value + ".json";
 
-    let content = {lines: listLines, ownerUserId: data.userId, hostUserId: data.userId};
+    let content = {lines: listLines, ownerUserId: email, hostUserId: data.userId};
     content = JSON.stringify(content);
     console.log(content);
     saveOnLocalFiles(fileName, content);
