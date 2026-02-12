@@ -32,6 +32,7 @@ let boardStorageIdsConst = [];
 const endPointForCreateLine = `/api/createLine`;
 const endPointForDeleteLine = `/api/deleteLine`;
 const endPointForCloseBoard = `/api/closeBoard`;
+const endPointForRmGroup =  "/api/rmgroup";
 
 
 
@@ -394,6 +395,11 @@ function setup() {
 
         async function receiveCloseBoard(command) {
 
+            let accessToken = retrieveToken();
+
+            // T: Remove yourself from this group
+            await rmGroup(data.groupId, accessToken);
+
             // T: These two checks are used to check in different method if
             // the user is in a foraignBoard, only in that case you need to
             // execute the following code.
@@ -690,12 +696,6 @@ function clearBoard()
 }
 
 function putLoadingScreenDiv() {
-    // T: TODO substitute this, with a proper loading screen
-    // const div_loading_screen = document.createElement("div");
-    // const body_html = document.getElementsByTagName("body")[0];
-    // body_html.appendChild(div_loading_screen);
-    // div_loading_screen.className = "loadingscreen";
-
     const div_loading_screen = document.getElementById("loadingOverlay")
     div_loading_screen.classList.add("active");
 
@@ -707,8 +707,19 @@ function hideLoadingScreenDiv() {
     div_loading_screen.classList.remove("active");
 }
 
-// T: TODO in general it is necessary, until the loading of the board is finished, to block all the input to the board
-function addToGroup() {
+async function rmGroup(groupId, accessToken) {
+    await fetch(const_appservice + endPointForRmGroup + "?groupId=" + groupId + "&userId=" + data.userId, 
+        {
+            method: "GET",
+            headers: {
+                "Authorization": accessToken,
+                "Content-Type": "application/json",
+            }
+        }
+    );
+}
+
+async function addToGroup() {
 
     // T: Put the loading screen
     putLoadingScreenDiv();
@@ -720,12 +731,15 @@ function addToGroup() {
     data.groupId = groupId
     currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
+    // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
+    data.currentBoardStorageId = groupId;
+
+    let accessToken = retrieveToken();
+
+    await rmGroup(groupId, accessToken);
 
     // T: Block all other actions setting this boolean value to true
     isJoiningBoard = true;
-
-
-    let accessToken = retrieveToken();
 
     fetch(const_appservice + "/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
         {
@@ -778,6 +792,9 @@ function addToGroup() {
         // T: unlock the board through the setting of the boolean field
         isJoiningBoard = false;
 
+        // T: Update the storage window
+        setupLoadBoardWindow();
+
         // T: Remove the loading screen
         hideLoadingScreenDiv();
 
@@ -791,7 +808,7 @@ function addToGroup() {
 // T: Load Board (START)
 // T: This function permits the loading of the board in the client
 // and trigger the loading on the server of the board
-function loadBoard(boardId) {
+async function loadBoard(boardId) {
 
     foraignBoard = false;
 
@@ -801,6 +818,8 @@ function loadBoard(boardId) {
 
     let accessToken = retrieveToken();
     let email = extractEmailFromToken(accessToken);
+
+    await rmGroup(data.groupId, accessToken);
 
     axios.post(const_appservice + "/api/loadBoard", { "blobName": boardId, "userId": data.userId},
     {
@@ -953,7 +972,7 @@ function saveOnCloud(boardSessionId, boardName)
     if(isAlreadyInUse(boardName))
     {
         // T: TODO display the error message
-        alert("There is already a board with this name"); 
+        showError("There is already a board with this name");
         return;
     }
 
@@ -1096,7 +1115,7 @@ function setupLoadBoardWindow() {
                 });
 
 
-                // Create the delate button
+                // Create the delete button
                 const deleteButton = document.createElement('button');
                 deleteButton.style.backgroundColor = 'transparent';
                 deleteButton.style.border = 'none';
@@ -1160,6 +1179,10 @@ async function new_board_button()
 {
     // T: Put loading screen div
     putLoadingScreenDiv();
+
+    const accessToken = retrieveToken();
+
+    await rmGroup(data.groupId, accessToken);
 
     if(! foraignBoard)
     {
@@ -1245,7 +1268,8 @@ fileInput.addEventListener("change", (event) =>
     if(isAlreadyInUse(file.name))
     {
         // T: TODO display an error message
-        alert("There is already a board with this name");
+        // alert("There is already a board with this name");
+        showError("There is already a board with this name");
         return;
     }
 
@@ -1293,13 +1317,15 @@ fileInput.addEventListener("change", (event) =>
             }
             else
             {
-                alert("Error during uploading of the file");
+                showError("Error during uploading of the file");
+                // alert("Error during uploading of the file");
             }
         });
     };
 
     reader.onerror = function(err) {
-        alert("Error during loading of the file");
+        showError("Error during loading of the file");
+        // alert("Error during loading of the file");
     };
 
     reader.readAsText(file);

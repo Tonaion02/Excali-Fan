@@ -130,4 +130,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const loadingOverlay = document.getElementById("loadingOverlay");
     const joinGroupButton = document.getElementById("add-group-button");
+
+
+    // funzione per mostrare il messaggio di errore
+    window.showError = function(message, duration = 4000) {
+        const container = document.getElementById("notificationContainer");
+
+        const notification = document.createElement("div");
+        notification.classList.add("notification");
+
+        notification.innerHTML = `
+        <span>${message}</span>
+        <button>&times;</button>`;
+
+        container.appendChild(notification);
+
+        // animazione entrata
+        setTimeout(() => {
+            notification.classList.add("show");
+        }, 10);
+
+        // chiusura manuale
+        notification.querySelector("button").addEventListener("click", () => {
+            removeNotification(notification);
+        });
+
+        // auto chiusura
+        setTimeout(() => {
+            removeNotification(notification);
+        }, duration);
+    };
+
+    function removeNotification(notification) {
+        notification.classList.remove("show");
+        setTimeout(() => {
+            notification.remove();
+        }, 300);
+    }
+
 });

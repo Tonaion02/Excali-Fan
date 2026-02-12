@@ -196,7 +196,7 @@ header {
 }
 
 .share-box {
-    user-select: text;
+    user-select: none;
     display: none;
     background-color: #232329;
     padding: 10px;
@@ -513,4 +513,55 @@ canvas:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Error message */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    z-index: 10000;
+}
+
+/* Singolo messaggio */
+.notification {
+    background: rgba(220, 53, 69, 0.9);
+    color: white;
+
+    padding: 12px 18px;
+    border-radius: 8px;
+
+    min-width: 250px;
+    max-width: 350px;
+
+    font-family: 'Roboto', sans-serif;
+    font-weight: 500;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.3s ease;
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification button {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
 }
