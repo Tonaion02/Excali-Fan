@@ -265,7 +265,7 @@ public class SignalRController {
         Board board = new Board();
         board.setOwnerUserId(email);
         board.setHostUserId(request.userId);
-        boards.boards.put(boardId, board);     
+        boards.boards.put(boardId, board);
 
         return boardId;
     }
@@ -728,6 +728,24 @@ public class SignalRController {
 
         System.out.println("addgroup: " + response.getStatus());
         System.out.println("addgroup: " + response.getBody());
+    }
+
+    @GetMapping("/api/rmgroup")
+    // T: This function remove a user from a group
+    public void addToGroup(@RequestParam String groupId, @RequestParam String userId) {
+
+        System.out.println("adding to group");
+
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+            String accessKey = generateJwt(hubUrl, userId);
+
+        HttpResponse<String> response = Unirest.delete(hubUrl)
+            .header("Content-Type", "application/json")
+            .header("Authorization", "Bearer " + accessKey)
+            .asString();
+
+        System.out.println("rmgroup: " + response.getStatus());
+        System.out.println("rmgroup: " + response.getBody());
     }
 
 
