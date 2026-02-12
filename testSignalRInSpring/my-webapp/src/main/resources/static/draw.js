@@ -428,18 +428,22 @@ function setup() {
             clearBoard();
 
             // T: Make appear the write "disconnected" (START)
-            const div_disconnect_write = document.createElement("div");
-            div_disconnect_write.innerHTML = "disconnected";
-            div_disconnect_write.className = "disconnect";
-            const body_html = document.getElementsByTagName("body")[0];
-            body_html.appendChild(div_disconnect_write);
+            // const div_disconnect_write = document.createElement("div");
+            // div_disconnect_write.innerHTML = "disconnected";
+            // div_disconnect_write.className = "disconnect";
+            // const body_html = document.getElementsByTagName("body")[0];
+            // body_html.appendChild(div_disconnect_write);
             // T: Make appear the write "disconnected" (END)
-            
-            setTimeout(() => 
-            {
-                // T: Remove the write "disconnected"
-                body_html.removeChild(div_disconnect_write);
-            }, 500);
+
+            // T: Timeout for the "disconnected" write (START)
+            // setTimeout(() => 
+            // {
+            //     // T: Remove the write "disconnected"
+            //     body_html.removeChild(div_disconnect_write);
+            // }, 500);
+            // T: Timeout for the "disconnected" write (END)
+
+            showError("The host disconnected from the board");
         }
 
         function sendDeleteLine(lineToDelete) {
