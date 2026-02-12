@@ -180,7 +180,15 @@ public class SignalRController {
                         System.out.println("result of trying to send the receiveCloseBoard message: " + response.getStatus());
     
                         // T: Remove the board, because is disconnect
-                        boards.boards.remove(command.groupId);
+                        Board board = boards.boards.remove(command.groupId);
+                        if(board == null)
+                        {
+                            System.out.println("Not found the board: " + command.groupId);
+                        }
+                        else
+                        {
+                            System.out.println("Board: " + command.groupId + " removed with sucess");
+                        }
     
                         // T: TODO evaluate if it's useful to save the board like a temporary board...
                     }
