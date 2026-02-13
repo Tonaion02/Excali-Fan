@@ -33,8 +33,15 @@ With the current solution, the board that we obtain depend on the base of the or
 
 We need to find an agreement between all the clients about the ordering in which the commands are applied.
 
-With this architecture is difficult to obtain the agreement about the ordering. 
+<!-- T: Talk about how using id in the correct way, we can easily obtain the agreement that we need, but it's difficult to agree about the id (START) -->
+Now that we have understood a little bit the problems that we have with the current solution, let's assume that each client has the ability to embed in a command a unique ID that is used to specify the total order in which the commands need to be applied to obtain the same exact board.
 
+At this point, if we receive commands in different order, we can always apply commands in the correct order. So, the commands are "commutative".
+Even if we receive two commands that are equal operation, we can identify, for example the line that we want to delete. If we find the line, we delete it, otherwise, we don't find the line and we are ok with it.
+<!-- T: Talk about how using id in the correct way, we can easily obtain the agreement that we need, but it's difficult to agree about the id (END) -->
+
+
+With this architecture is difficult to obtain the agreement about the ordering. 
 
 <!-- T: Talk about the undeterministic nature of the problem (START)-->
 <!-- T: Add ref to a book or notes of the professor, even about the theorem -->
@@ -53,12 +60,6 @@ This type of solution became also really complex.
 <!-- T: Talk about the possible solutions and problems (END)-->
 
 
-<!-- T: Talk about how using id in the correct way, we can easily obtain the agreement that we need, but it's difficult to agree about the id (START) -->
-Now that we have understood a little bit the problems that we have with the current solution, let's assume that each client has the ability to embed in a command a unique ID that is used to specify the total order in which the commands need to be applied to obtain the same exact board.
-
-At this point, if we receive commands in different order, we can always apply commands in the correct order. So, the commands are "commutative".
-Even if we receive two commands that are equal operation, we can identify, for example the line that we want to delete. If we find the line, we delete it, otherwise, we don't find the line and we are ok with it.
-<!-- T: Talk about how using id in the correct way, we can easily obtain the agreement that we need, but it's difficult to agree about the id (END) -->
 
 <br>
 
