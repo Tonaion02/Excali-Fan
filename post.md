@@ -19,9 +19,17 @@ So, ideally, if we have a reliable connection(messages are delivered exactly one
 
 Problem: If we assume to have three clients that are operating on the same board. If the client_1 and client_2 create a new line, they send to other clients the commands to create new lines. We can't make assumption on the order in which these commands are received by the client_3. So, if we apply the commands in the order in which we received these lines, we will obtain different boards on different clients.
 
-Problem: We assume to have three clients that are operating on the same board. client_1 and client_2 delete the same line in the same moment. The client_3 receive two commands to delete the same line. What happens?
+Problem: We assume to have 3 clients that are operating on the same board. 
+1. client_1 create a line. 
+2. client_2 receive the command to create the line.
+3. client_2 delete that line.
+4. client_3 receive the command to delete the line.
+5. client_3 receive the command to create the line.
 
-With the current solution, the board that we obtain depend on the base of the order in which we receive commands. The result of the commands, is also influenced by the fact that we can receive multiple commands that are the same operation.
+In this case, the order in which the commands are received, can bring to a wrong result.
+<!-- Problem: We assume to have three clients that are operating on the same board. client_1 and client_2 delete the same line in the same moment. The client_3 receive two commands to delete the same line. What happens? -->
+
+With the current solution, the board that we obtain depend on the base of the order in which we receive commands.
 
 We need to find an agreement between all the clients about the ordering in which the commands are applied.
 
