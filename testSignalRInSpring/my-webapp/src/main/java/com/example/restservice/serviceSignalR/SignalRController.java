@@ -715,7 +715,7 @@ public class SignalRController {
 
     @GetMapping("/api/addgroup")
     // T: This function create the association between a userId and a group with a put request
-    public boolean addToGroup(@RequestParam String groupId, @RequestParam String userId) {
+    public Boolean addToGroup(@RequestParam String groupId, @RequestParam String userId) {
 
         System.out.println("adding to group");
 
