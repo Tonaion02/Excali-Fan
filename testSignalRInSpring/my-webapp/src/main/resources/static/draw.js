@@ -816,12 +816,9 @@ async function addToGroup() {
 
             });
         }
-        else // T: Some error occured
+        else // T: Some error occured when you are joining a new board, so create a new board directly from the API
         {
             showError("Board doesn't exist");
-
-            // T: Update foraignBoard
-            foraignBoard = false;
 
             // T: Create a new board
             data.groupId = await newBoard();
@@ -835,6 +832,12 @@ async function addToGroup() {
 
             // T: Re-activate the button to save on cloud
             document.getElementById("save-option-cloud-button").removeAttribute("disabled");
+
+            // T: Unlock the board through the setting of the boolean field 
+            isJoiningBoard = false;
+
+            // T: Update foraignBoard
+            foraignBoard = false;
         }
 
         // T: Remove the loading screen
