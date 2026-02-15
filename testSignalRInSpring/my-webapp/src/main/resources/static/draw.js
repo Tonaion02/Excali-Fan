@@ -742,15 +742,14 @@ async function addToGroup() {
             await closeBoard();
         }
 
+        let accessToken = retrieveToken();
+        await rmGroup(data.groupId, accessToken);
+
         data.groupId = groupId
         currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
         // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
         data.currentBoardStorageId = groupId;
-
-        let accessToken = retrieveToken();
-
-        await rmGroup(groupId, accessToken);
 
         // T: Block all other actions setting this boolean value to true
         isJoiningBoard = true;
