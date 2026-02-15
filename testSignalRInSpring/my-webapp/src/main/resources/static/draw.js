@@ -811,17 +811,19 @@ async function addToGroup() {
                 // T: Update the storage window
                 setupLoadBoardWindow();
 
-                // T: Remove the loading screen
-                hideLoadingScreenDiv();
-
-                // T: Update the canvas
-                update(canvasContext);
             });
         }
         else // T: Some error occured
         {
             showError("Board doesn't exist");
         }
+
+        // T: Remove the loading screen
+        hideLoadingScreenDiv();
+
+        // T: Update the canvas
+        update(canvasContext);
+
     })
 
 }
