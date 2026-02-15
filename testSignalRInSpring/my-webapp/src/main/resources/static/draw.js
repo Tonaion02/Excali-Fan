@@ -691,15 +691,18 @@ function loadBoardFromServer()
 
 function clearBoard()
 {
-    listLines.splice(0, listLines.length);
+    if(listLines.length > 0)
+    {
+        listLines.splice(0, listLines.length);
 
-    currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
+        currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
-    // T: DEBUG
-    console.log(listLines);
+        // T: DEBUG
+        // console.log(listLines);
 
-    // T: Update the screen
-    update(canvasContext);
+        // T: Update the screen
+        update(canvasContext);
+    }
 }
 
 function putLoadingScreenDiv() {
@@ -816,6 +819,22 @@ async function addToGroup() {
         else // T: Some error occured
         {
             showError("Board doesn't exist");
+
+            // T: Update foraignBoard
+            foraignBoard = false;
+
+            // T: Create a new board
+            data.groupId = await newBoard();
+            data.currentBoardStorageId = data.groupId;
+
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.groupId;
+
+            const currentGroupLabel = document.getElementById('current-group-label');
+            currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
+
+            // T: Re-activate the button to save on cloud
+            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
         }
 
         // T: Remove the loading screen
