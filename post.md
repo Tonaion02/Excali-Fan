@@ -124,3 +124,7 @@ For this type of operations, is easy to interact with Blob Storage from Function
 
 <br>
 The last piece that we miss is an efficient way to store secrets. Each service of Azure need some key/token to work. In Azure, to retrieve this information at run-time, usually is used Azure Key Vault. This service, give the possiblity to store in a single point of true secrets and retrieve them from multiple services at run-time.
+
+
+<!-- T: Add some evaluation about the vendor lock-in of this web-app -->
+<!-- T: Add what are the critical points of this web-app -->
