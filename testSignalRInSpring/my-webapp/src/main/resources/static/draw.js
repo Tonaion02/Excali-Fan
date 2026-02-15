@@ -757,7 +757,12 @@ async function addToGroup() {
             }
         }
     ).
-    then((response) => console.log("adding to group: " + response.status))
+    then((response) => {
+        
+        // T: DEBUG
+        console.log("adding to group: " + response.status);
+        console.log(response);
+    })
 
     // T: disable the button to save on cloud the board when you are a guest
     document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
