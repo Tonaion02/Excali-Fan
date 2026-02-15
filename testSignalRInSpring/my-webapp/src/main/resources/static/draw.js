@@ -691,15 +691,18 @@ function loadBoardFromServer()
 
 function clearBoard()
 {
-    listLines.splice(0, listLines.length);
+    if(listLines.length > 0)
+    {
+        listLines.splice(0, listLines.length);
 
-    currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
+        currentLine = {color: currentColor, userId: data.userId, timestamp: null, points: []};
 
-    // T: DEBUG
-    console.log(listLines);
+        // T: DEBUG
+        // console.log(listLines);
 
-    // T: Update the screen
-    update(canvasContext);
+        // T: Update the screen
+        update(canvasContext);
+    }
 }
 
 function putLoadingScreenDiv() {
@@ -757,59 +760,98 @@ async function addToGroup() {
             }
         }
     ).
-    then((response) => console.log("adding to group: " + response.status))
-
-    // T: disable the button to save on cloud the board when you are a guest
-    document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
-
-    // T: Clear the current board
-    clearBoard();
-
-    // T: Download the current board while you are listening for new messages
-    loadBoardFromServer()
-    .then(response => 
-    {
-        // T: DEBUG
-        console.log(response);
-
-        let parsed_board = response.data;
+    then(async (response) => {
 
         // T: DEBUG
-        console.log(parsed_board);
+        console.log("adding to group: " + response.status);
+        const result = await response.json();
+        console.log(result);
 
-        listLines = parsed_board.lines;
-
-        // T: Apply all commands that are store in waitMessageStack (START)
-        while(waitMessageStack.length > 0)
+        if(result)
         {
-            const next_command = waitMessageStack.pop();
-            const command = next_command.command;
+            // T: disable the button to save on cloud the board when you are a guest
+            document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
 
-            if(next_command.type == "createLine")
+            // T: Clear the current board
+            clearBoard();
+
+            // T: Download the current board while you are listening for new messages
+            loadBoardFromServer()
+            .then(response => 
             {
-                listLines.push(command.line);
-            }
-            else // T: In other case is "deleteLine"
-            {
-                deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
-            }
+                // T: DEBUG
+                console.log(response);
+
+                let parsed_board = response.data;
+
+                // T: DEBUG
+                console.log(parsed_board);
+
+                listLines = parsed_board.lines;
+
+                // T: Apply all commands that are store in waitMessageStack (START)
+                while(waitMessageStack.length > 0)
+                {
+                    const next_command = waitMessageStack.pop();
+                    const command = next_command.command;
+
+                    if(next_command.type == "createLine")
+                    {
+                        listLines.push(command.line);
+                    }
+                    else // T: In other case is "deleteLine"
+                    {
+                        deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+                    }
+                }
+                // T: Apply all commands that are store in waitMessageStack (END)
+
+                // T: unlock the board through the setting of the boolean field
+                isJoiningBoard = false;
+
+                foraignBoard = true;
+
+                // T: Update the storage window
+                setupLoadBoardWindow();
+
+                // T: Remove the loading screen
+                hideLoadingScreenDiv();
+
+                // T: Update the canvas
+                update(canvasContext);
+            });
         }
-        // T: Apply all commands that are store in waitMessageStack (END)
+        else // T: Some error occured when you are joining a new board, so create a new board directly from the API
+        {
+            showError("Board doesn't exist");
 
-        // T: unlock the board through the setting of the boolean field
-        isJoiningBoard = false;
+            // T: Create a new board
+            data.groupId = await newBoard();
+            data.currentBoardStorageId = data.groupId;
 
-        foraignBoard = true;
+            const boardStorageIdTextBox = document.getElementById("file-name");
+            boardStorageIdTextBox.value = data.groupId;
 
-        // T: Update the storage window
-        setupLoadBoardWindow();
+            const currentGroupLabel = document.getElementById('current-group-label');
+            currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
 
-        // T: Remove the loading screen
-        hideLoadingScreenDiv();
+            // T: Re-activate the button to save on cloud
+            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
 
-        // T: Update the canvas
-        update(canvasContext);
-    });
+            // T: Unlock the board through the setting of the boolean field 
+            isJoiningBoard = false;
+
+            // T: Update foraignBoard
+            foraignBoard = false;
+
+            // T: Remove the loading screen
+            hideLoadingScreenDiv();
+
+            // T: Update the canvas
+            update(canvasContext);
+        }
+    })
+
 }
 
 

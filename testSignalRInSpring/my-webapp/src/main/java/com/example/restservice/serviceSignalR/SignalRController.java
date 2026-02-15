@@ -712,22 +712,35 @@ public class SignalRController {
 
 
 
+
     @GetMapping("/api/addgroup")
     // T: This function create the association between a userId and a group with a put request
-    public void addToGroup(@RequestParam String groupId, @RequestParam String userId) {
+    public Boolean addToGroup(@RequestParam String groupId, @RequestParam String userId) {
 
         System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        Board board = boards.boards.get(groupId);
+        if(board != null)
+        {
+            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
             String accessKey = generateJwt(hubUrl, userId);
 
-        HttpResponse<String> response = Unirest.put(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .asString();
+            HttpResponse<String> response = Unirest.put(hubUrl)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessKey)
+                .asString();
 
-        System.out.println("addgroup: " + response.getStatus());
-        System.out.println("addgroup: " + response.getBody());
+            System.out.println("addgroup: " + response.getStatus());
+            System.out.println("addgroup: " + response.getBody());
+
+            return true;
+        }
+        else
+        {
+            System.out.println("Group: " + groupId + " doesn't exist");
+
+            return false;
+        }
     }
 
     @GetMapping("/api/rmgroup")
