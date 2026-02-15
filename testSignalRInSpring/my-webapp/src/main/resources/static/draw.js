@@ -814,6 +814,11 @@ async function addToGroup() {
                 // T: Update the storage window
                 setupLoadBoardWindow();
 
+                // T: Remove the loading screen
+                hideLoadingScreenDiv();
+
+                // T: Update the canvas
+                update(canvasContext);
             });
         }
         else // T: Some error occured when you are joining a new board, so create a new board directly from the API
@@ -838,14 +843,13 @@ async function addToGroup() {
 
             // T: Update foraignBoard
             foraignBoard = false;
+
+            // T: Remove the loading screen
+            hideLoadingScreenDiv();
+
+            // T: Update the canvas
+            update(canvasContext);
         }
-
-        // T: Remove the loading screen
-        hideLoadingScreenDiv();
-
-        // T: Update the canvas
-        update(canvasContext);
-
     })
 
 }
