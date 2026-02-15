@@ -718,16 +718,24 @@ public class SignalRController {
 
         System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
+        Board board = boards.boards.get(groupId);
+        if(board != null)
+        {
+            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
             String accessKey = generateJwt(hubUrl, userId);
 
-        HttpResponse<String> response = Unirest.put(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .asString();
+            HttpResponse<String> response = Unirest.put(hubUrl)
+                .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + accessKey)
+                .asString();
 
-        System.out.println("addgroup: " + response.getStatus());
-        System.out.println("addgroup: " + response.getBody());
+            System.out.println("addgroup: " + response.getStatus());
+            System.out.println("addgroup: " + response.getBody());
+        }
+        else
+        {
+            System.out.println("Group: " + groupId + " doesn't exist");
+        }
     }
 
     @GetMapping("/api/rmgroup")
