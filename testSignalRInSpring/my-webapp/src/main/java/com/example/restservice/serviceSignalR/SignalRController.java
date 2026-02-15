@@ -747,10 +747,10 @@ public class SignalRController {
     // T: This function remove a user from a group
     public void rmGroup(@RequestParam String groupId, @RequestParam String userId) {
 
-        System.out.println("adding to group");
+        System.out.println("removing from a group");
 
         String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + groupId + "/users/" + userId;
-            String accessKey = generateJwt(hubUrl, userId);
+        String accessKey = generateJwt(hubUrl, userId);
 
         HttpResponse<String> response = Unirest.delete(hubUrl)
             .header("Content-Type", "application/json")

@@ -675,8 +675,6 @@ function closeBoard() {
         keepalive: true,
         body: JSON.stringify(data_request)
     });
-
-    // T: TODO understand what to do when the board is closed
 }
 
 // T: This method load the board directly from the server
@@ -731,127 +729,134 @@ async function rmGroup(groupId, accessToken) {
 
 async function addToGroup() {
 
-    // T: Put the loading screen
-    putLoadingScreenDiv();
-
-
     const currentGroupLabel = document.getElementById('current-group-label');
     const groupId = document.getElementById('group-name').value;
 
-    data.groupId = groupId
-    currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
+    if(groupId != data.groupId)
+    {
+        // T: Put the loading screen
+        putLoadingScreenDiv();
 
-    // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
-    data.currentBoardStorageId = groupId;
-
-    let accessToken = retrieveToken();
-
-    await rmGroup(groupId, accessToken);
-
-    // T: Block all other actions setting this boolean value to true
-    isJoiningBoard = true;
-
-    fetch(const_appservice + "/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
+        if(!foraignBoard)
         {
-            method: "GET",
-            headers: {
-                "Authorization": accessToken,
-                "Content-Type": "application/json",
-            }
+            await closeBoard();
         }
-    ).
-    then(async (response) => {
 
-        // T: DEBUG
-        console.log("adding to group: " + response.status);
-        const result = await response.json();
-        console.log(result);
+        let accessToken = retrieveToken();
+        await rmGroup(data.groupId, accessToken);
 
-        if(result)
-        {
-            // T: disable the button to save on cloud the board when you are a guest
-            document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
+        data.groupId = groupId
+        currentGroupLabel.textContent = `GroupID corrente: ${groupId}`;
 
-            // T: Clear the current board
-            clearBoard();
+        // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
+        data.currentBoardStorageId = groupId;
 
-            // T: Download the current board while you are listening for new messages
-            loadBoardFromServer()
-            .then(response => 
+        // T: Block all other actions setting this boolean value to true
+        isJoiningBoard = true;
+
+        fetch(const_appservice + "/api/addgroup?groupId=" + groupId + "&userId=" + data.userId,
             {
-                // T: DEBUG
-                console.log(response);
-
-                let parsed_board = response.data;
-
-                // T: DEBUG
-                console.log(parsed_board);
-
-                listLines = parsed_board.lines;
-
-                // T: Apply all commands that are store in waitMessageStack (START)
-                while(waitMessageStack.length > 0)
-                {
-                    const next_command = waitMessageStack.pop();
-                    const command = next_command.command;
-
-                    if(next_command.type == "createLine")
-                    {
-                        listLines.push(command.line);
-                    }
-                    else // T: In other case is "deleteLine"
-                    {
-                        deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
-                    }
+                method: "GET",
+                headers: {
+                    "Authorization": accessToken,
+                    "Content-Type": "application/json",
                 }
-                // T: Apply all commands that are store in waitMessageStack (END)
+            }
+        ).
+        then(async (response) => {
 
-                // T: unlock the board through the setting of the boolean field
+            // T: DEBUG
+            console.log("adding to group: " + response.status);
+            const result = await response.json();
+            console.log(result);
+
+            if(result)
+            {
+                // T: disable the button to save on cloud the board when you are a guest
+                document.getElementById("save-option-cloud-button").setAttribute("disabled", "true");
+
+                // T: Clear the current board
+                clearBoard();
+
+                // T: Download the current board while you are listening for new messages
+                loadBoardFromServer()
+                .then(response => 
+                {
+                    // T: DEBUG
+                    console.log(response);
+
+                    let parsed_board = response.data;
+
+                    // T: DEBUG
+                    console.log(parsed_board);
+
+                    listLines = parsed_board.lines;
+
+                    // T: Apply all commands that are store in waitMessageStack (START)
+                    while(waitMessageStack.length > 0)
+                    {
+                        const next_command = waitMessageStack.pop();
+                        const command = next_command.command;
+
+                        if(next_command.type == "createLine")
+                        {
+                            listLines.push(command.line);
+                        }
+                        else // T: In other case is "deleteLine"
+                        {
+                            deleteLineFromList(listLines, command.userIdOfLine, command.timestampOfLine);
+                        }
+                    }
+                    // T: Apply all commands that are store in waitMessageStack (END)
+
+                    // T: unlock the board through the setting of the boolean field
+                    isJoiningBoard = false;
+
+                    foraignBoard = true;
+
+                    // T: Update the storage window
+                    setupLoadBoardWindow();
+
+                    // T: Remove the loading screen
+                    hideLoadingScreenDiv();
+
+                    // T: Update the canvas
+                    update(canvasContext);
+                });
+            }
+            else // T: Some error occured when you are joining a new board, so create a new board directly from the API
+            {
+                showError("Board doesn't exist");
+
+                // T: Create a new board
+                data.groupId = await newBoard();
+                data.currentBoardStorageId = data.groupId;
+
+                const boardStorageIdTextBox = document.getElementById("file-name");
+                boardStorageIdTextBox.value = data.groupId;
+
+                const currentGroupLabel = document.getElementById('current-group-label');
+                currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
+
+                clearBoard();
+
+                // T: Re-activate the button to save on cloud
+                document.getElementById("save-option-cloud-button").removeAttribute("disabled");
+
+                // T: Unlock the board through the setting of the boolean field 
                 isJoiningBoard = false;
 
-                foraignBoard = true;
-
-                // T: Update the storage window
-                setupLoadBoardWindow();
+                // T: Update foraignBoard
+                foraignBoard = false;
 
                 // T: Remove the loading screen
                 hideLoadingScreenDiv();
 
                 // T: Update the canvas
                 update(canvasContext);
-            });
-        }
-        else // T: Some error occured when you are joining a new board, so create a new board directly from the API
-        {
-            showError("Board doesn't exist");
-
-            // T: Create a new board
-            data.groupId = await newBoard();
-            data.currentBoardStorageId = data.groupId;
-
-            const boardStorageIdTextBox = document.getElementById("file-name");
-            boardStorageIdTextBox.value = data.groupId;
-
-            const currentGroupLabel = document.getElementById('current-group-label');
-            currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-
-            // T: Re-activate the button to save on cloud
-            document.getElementById("save-option-cloud-button").removeAttribute("disabled");
-
-            // T: Unlock the board through the setting of the boolean field 
-            isJoiningBoard = false;
-
-            // T: Update foraignBoard
-            foraignBoard = false;
-
-            // T: Remove the loading screen
-            hideLoadingScreenDiv();
-
-            // T: Update the canvas
-            update(canvasContext);
-        }
-    })
-
+            }
+        });
+    }
 }
 
 

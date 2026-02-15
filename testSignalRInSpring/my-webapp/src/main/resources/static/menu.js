@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     pencilContainer.addEventListener('click', () => {
         pencilContainer.style.backgroundColor = '#403e6a'; // Colore viola più scuro
         eraserContainer.style.removeProperty('background-color');
-        colorDropdown.style.display = colorDropdown.style.display === 'flex' ? 'none' : 'flex';
+        // colorDropdown.style.display = colorDropdown.style.display === 'flex' ? 'none' : 'flex';
     });
 
     eraserContainer.addEventListener('click', () => {
