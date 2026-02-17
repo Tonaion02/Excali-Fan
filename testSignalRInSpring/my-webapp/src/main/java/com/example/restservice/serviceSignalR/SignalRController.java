@@ -290,15 +290,18 @@ public class SignalRController {
     }
 
     @PostMapping("/api/downloadBoardFromServer")
-    public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {
+    public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {        
         try
         {
             Board board = boards.boards.get(request.groupId);
             
-            // T: TODO try to optimize this thing
-            synchronized (board)
+            if(board != null)
             {
-                return board;
+                // T: TODO try to optimize this thing
+                synchronized (board)
+                {
+                    return board;
+                }
             }
         }
         catch(RuntimeException e)
