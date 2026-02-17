@@ -15,7 +15,6 @@
 
 
 # BUGS
-- When you join a non-existent board, everything goes to "puttane".
 - Http doesn't work: is possible to use http with the current configuration of Azure App Service, but the login doesn't work. At this point, if there isn't any point in continuing using Http, we can directly put off Http using:
 "properties": {
   "httpsOnly": true
