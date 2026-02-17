@@ -48,7 +48,7 @@ public class TokenValidatorEntraId {
                 return false;
             }
 
-            // Verifica della firma
+            // Check the sign
             JWSVerifier verifier = new RSASSAVerifier(publicKey);
             if (!signedJWT.verify(verifier)) {
                 System.out.println("Firma non valida.");
@@ -56,21 +56,21 @@ public class TokenValidatorEntraId {
             }
             System.out.println("Firma verificata con successo.");
 
-            // Controllo della scadenza (exp)
+            // Check the expire date
             if (isTokenExpired(signedJWT)) {
                 System.out.println("Token scaduto.");
                 return false;
             }
             System.out.println("Token non scaduto.");
 
-            // Controllo dell'issuer (iss)
+            // Check of the issuer (iss)
             if (!isIssuerValid(signedJWT)) {
                 System.out.println("Issuer non valido.");
                 return false;
             }
             System.out.println("Issuer valido.");
 
-            // Controllo dell’audience (aud)
+            // Check of the audience (aud)
             if (!isAudienceValid(signedJWT)) {
                 System.out.println("Audience non valida.");
                 return false;
