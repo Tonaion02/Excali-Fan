@@ -23,7 +23,7 @@ az group delete --name "$resource_group_function_app_service" --yes --no-wait
 rm ../functions/src/main/java/com/fabrikam/Constants.java
 
 # T:  Remove from the azure app service the .env file
-rm  ../testSignalRInSpring/my-webapp/src/main/resources/.env
+rm  ../webapp/src/main/resources/.env
 
 # T:  Remove from the single page application the file where the constants are contained
-rm ../testSignalRInSpring/my-webapp/src/main/resources/static/constants.js
+rm ../webapp/src/main/resources/static/constants.js

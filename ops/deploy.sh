@@ -108,7 +108,7 @@ echo "keyVaultUrl=$url_key_vault" >> .env
 echo "signalRServiceBaseEndpoint=$url_signalr_service" >> .env
 echo "storageAccountName=$resource_storage" >> .env
 
-mv .env ../testSignalRInSpring/my-webapp/src/main/resources/.env
+mv .env ../webapp/src/main/resources/.env
 # T: Write in the env file some setup information (END)
 
 # T: Create constants.js file for the single page application (START)
@@ -121,12 +121,12 @@ echo "var const_serverless_service = \""$url_function_app_service"\";" >> consta
 echo "var const_redirectUri = \""$url_app_service"\";" >> constants.js
 echo "var const_clientId = \"b1453203-8719-4a2a-8cc6-96bf883a7e65\";" >> constants.js
 
-mv constants.js ../testSignalRInSpring/my-webapp/src/main/resources/static/constants.js
+mv constants.js ../webapp/src/main/resources/static/constants.js
 # T: Create constants.js file for the single page application (ENV)
 
 # T: Create resource group for App Service
 # T: Create Spring server with App Service
-cd ../testSignalRInSpring/my-webapp &&
+cd ../webapp &&
 mvn clean package -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 mvn azure-webapp:deploy -DresourceGroup="$resource_group_app_service" -DappName="$resource_app_service" &&
 cd ../../ops
