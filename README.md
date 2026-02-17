@@ -4,7 +4,7 @@
 
 Excali-Fun is a webapp inspired to Excalidraw: https://excalidraw.com/.
 Excali-Fun is a webapp application that allows multiple clients to draw on a virtual board in real-time.
-We realized this webapp like project of the Cloud's exam
+We realized this webapp like project of the Cloud's course: https://docenti.unisa.it/033807/didattica?anno=2025&id=513250&cId=10008-2016&pId=N0*N0*S1.
 
 ## Run the application
 To create azure resources and deploy the application on cloud you can run the *deploy.sh* script that is contained in the *ops* directory.
@@ -17,11 +17,11 @@ To eliminate all the resource you can run the *undeploy.sh* shell script.
 ## Project Architecture
 ![architecture_image](doc/arc.png)
 
-## Services used
+## Technologies and Services used
 - **Azure App Service**: It is used to run the web-app server that use Spring.
 - **Azure SignalR**: It is used to lighten the server load by handling client WebSocket connections and sending messages to clients within the same group.
 - **Azure EntraId**: It is used to manage user authentication. It allows users to log in using a Microsoft account.
-- **Azure KeyVault**: It is used to manage the secrets that are used by other services(Azure SignalR accountKey, Azure Blob Storage accountKey...)
+- **Azure KeyVault**: It is used to manage the secrets that are used by other services(like for example Azure SignalR accountKey and Azure Blob Storage accountKey).
 - **Azure Blob Storage**: It is used to persist boards in memory.
 - **Azure Function**: It is used to handle some bulk operations: download, delete and upload boards. 
 
