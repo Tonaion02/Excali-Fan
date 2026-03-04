@@ -1,10 +1,14 @@
 # Excali-Fun
 
-<!--T: Logo of Excalidraw or Video of it -->
+<!--T: Logo of Excalidraw -->
 
 Excali-Fun is a webapp inspired to Excalidraw: https://excalidraw.com/.
+
 Excali-Fun is a webapp application that allows multiple clients to draw on a virtual board in real-time.
+
 We realized this webapp like project of the Cloud's course: https://docenti.unisa.it/033807/didattica?anno=2025&id=513250&cId=10008-2016&pId=N0*N0*S1.
+
+![excalifan_presentation](doc/images/excalifanPresentation.gif)
 
 ## Run the application
 To create azure resources and deploy the application on cloud you can run the *deploy.sh* script that is contained in the *ops* directory.
@@ -12,7 +16,7 @@ To create azure resources and deploy the application on cloud you can run the *d
 cd ops
 ./deploy.sh
 ```
-To eliminate all the resource you can run the *undeploy.sh* shell script.
+To eliminate all the resources you can run the *undeploy.sh* shell script.
 
 ## Project Architecture
 ![architecture_image](doc/arc.png)
@@ -29,4 +33,4 @@ To eliminate all the resource you can run the *undeploy.sh* shell script.
 The repository is structured as follows:
 - **app directory**: In this directory there is the code that implement the communication between clients, the storing of loaded boards and the front-end that is distributed to clients.
 - **functions** dir: In this directory there is the code of the Azure Functions.
-- **ops** dir: In this directory, there is all the necessary bash scripts to deploy/undeploy resources from Azure.
+- **ops** dir: In this directory, there are all the necessary bash scripts to deploy/undeploy resources from Azure.
