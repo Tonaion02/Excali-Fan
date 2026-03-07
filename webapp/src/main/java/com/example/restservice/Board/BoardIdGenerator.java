@@ -9,7 +9,7 @@ import java.util.Base64;
 
 
 
-public class BoardIdgenerator {
+public class BoardIdGenerator {
     // T: Method to encrypt the id
     public static String generateHmacId(String originalUserId) {
         try {
