@@ -61,7 +61,7 @@ public class Application {
         // T: Retrieve the key to encript sensible information in BoardId (START)
         Keys.keyEncryption = secretClient.getSecret(Keys.keyEncryptionName).getValue();
         
-        System.out.println("Key Encryption: " + keyEncryption);
+        System.out.println("Key Encryption: " + Keys.keyEncryption);
         // T: Retrieve the key to encript sensible information in BoardId (END)
 
         
