@@ -45,7 +45,7 @@ import java.text.ParseException;
 @RestController
 public class SignalRController {
 
-    private final BoardsRuntimeStorage boards;
+    public final BoardsRuntimeStorage boards;
     private String hubName = "board";
 
 
