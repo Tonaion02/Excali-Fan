@@ -488,7 +488,7 @@ public class SignalRController {
         // T: WARNING: you can substitute that with UserId(email) + timestamp
         // int numericBoardSessionId = Math.abs(ThreadLocalRandom.current().nextInt());
         // String boardSessionId = Integer.toString(numericBoardSessionId);
-        String boardSessionId = SignalRController.generateIdBoard();
+        String boardSessionId = SignalRController.generateIdBoard(requestBody.userId);
 
 
 
