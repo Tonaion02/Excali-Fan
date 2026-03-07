@@ -15,7 +15,7 @@ import com.azure.security.keyvault.secrets.SecretClientBuilder;
 
 
 
-
+@EnableScheduling
 @SpringBootApplication
 public class Application {
 
