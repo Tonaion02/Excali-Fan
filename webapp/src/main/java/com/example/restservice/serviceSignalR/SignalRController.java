@@ -37,7 +37,6 @@ import com.example.restservice.Board.*;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 
-import com.example.restservice.Board.BoardIdGenerator;
 
 
 
