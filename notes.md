@@ -1,5 +1,7 @@
 - Write the README.md
-- substitute the disconnected write with showError.
+- Change how we create new boardID, use the timestamp + UserID.
+- Add to the NOTES the fact that we can change when we want how the messages are exchaneged between Clients and Server, using Azure SignalR like a forwarder.
+
 - make better the upload board(probably I need an interface that is similar to download board, so it is possible to rename the board that I want to upload and is possible to see a confirm message that the board is uploaded).
 - Probably it's necessary to add the loading screen even when you are loading one of your boards.(just to be sure).
 - Implement the download from Server for the current board(probably intended like a better version of that).
