@@ -3,13 +3,17 @@ package com.example.restservice.serviceSignalR;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+
+
+
+
 @Component
 public class GarbageBoardCollector {
 
-    private final SignalRContoller contoller;
+    private final SignalRController controller;
 
-    public GarbageBoardCollector(SignalRContoller contoller) {
-        this.contoller = controller;
+    public GarbageBoardCollector(SignalRController controller) {
+        this.controller = controller;
     }
 
     // T: This method runs each 5 seconds to collect the boards that are garbage
@@ -17,6 +21,6 @@ public class GarbageBoardCollector {
     public void garbage_collect() {
         System.out.println("Running GarbageBoardCollector at: " + System.currentTimeMillis());
 
-        System.out.println("boards from GarbageBoardCollector point of view: " + contoller.boards);
+        System.out.println("boards from GarbageBoardCollector point of view: " + controller.boards);
     }
 }
