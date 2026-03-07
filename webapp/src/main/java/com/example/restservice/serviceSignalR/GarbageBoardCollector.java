@@ -1,7 +1,7 @@
+package com.example.restservice.serviceSignalR;
+ 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-
-import com.example.restservice.serviceSignalR.SignalRContoller;
 
 @Component
 public class GarbageBoardCollector {
