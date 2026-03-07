@@ -56,6 +56,14 @@ public class Application {
         System.out.println("Azure Blob Storage Key: " + secretValueForAzureBlobStorage);
         // T: Retrieve the key for Azure Blob Storage (END)
 
+
+
+        // T: Retrieve the key to encript sensible information in BoardId (START)
+        Keys.keyEncryption = secretClient.getSecret(Keys.keyEncryptionName).getValue();
+        
+        System.out.println("Key Encryption: " + keyEncryption);
+        // T: Retrieve the key to encript sensible information in BoardId (END)
+
         
 
         var context = SpringApplication.run(Application.class, args);

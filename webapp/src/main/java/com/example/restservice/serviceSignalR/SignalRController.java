@@ -37,6 +37,8 @@ import com.example.restservice.Board.*;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 
+import com.example.restservice.Board.BoardIdGenerator;
+
 
 
 
@@ -117,14 +119,6 @@ public class SignalRController {
         } catch(RuntimeException e) {
             e.printStackTrace();
         }   
-    }
-
-    // T: Method to generate the board session id
-    public static String generateIdBoard(String userId) {
-        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        String boardId = userId + Integer.toString(randomNumericBoardId);
-
-        return boardId;
     }
 
     // T: TODO Substitute this objcet with a real command to close the board
@@ -254,7 +248,7 @@ public class SignalRController {
         // T: Create the new board
         // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         // String boardId = Integer.toString(randomNumericBoardId);
-        String boardId = SignalRController.generateIdBoard(request.userId);
+        String boardId = BoardIdGenerator.generateIdBoard(request.userId);
 
         // T: Autojoin a new group (START)
         System.out.println("adding to group");
@@ -398,7 +392,7 @@ public class SignalRController {
         // T: WARNING: you can substitute that with UserId(email) + timestamp
         // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         // String boardId = Integer.toString(randomNumericBoardId);
-        String boardId = SignalRController.generateIdBoard(lr.userId);
+        String boardId = BoardIdGenerator.generateIdBoard(lr.userId);
         
 
 
@@ -489,7 +483,7 @@ public class SignalRController {
         // T: WARNING: you can substitute that with UserId(email) + timestamp
         // int numericBoardSessionId = Math.abs(ThreadLocalRandom.current().nextInt());
         // String boardSessionId = Integer.toString(numericBoardSessionId);
-        String boardSessionId = SignalRController.generateIdBoard(requestBody.userId);
+        String boardSessionId = BoardIdGenerator.generateIdBoard(requestBody.userId);
 
 
 
