@@ -43,7 +43,7 @@ public class BoardIdGenerator {
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
         String boardId = userId + Integer.toString(randomNumericBoardId);
 
-        boardId = HmacIdGenerator.generateHmacId(boardId);
+        boardId = BoardIdGenerator.generateHmacId(boardId);
 
         return boardId;
     }

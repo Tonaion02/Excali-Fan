@@ -17,6 +17,6 @@ public class Keys {
     public static final String EXPECTED_AUDIENCE = "b1453203-8719-4a2a-8cc6-96bf883a7e65";
 
     // T: This secret is used to encrypt some sensible informations
-    public static final String keyEncryption = "";
+    public static String keyEncryption = "";
     public static final String keyEncryptionName = "keyEncryptionName";
 }
