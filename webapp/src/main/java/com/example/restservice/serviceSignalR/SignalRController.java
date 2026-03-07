@@ -41,6 +41,7 @@ import java.text.ParseException;
 
 
 
+
 @RestController
 public class SignalRController {
 
@@ -244,8 +245,9 @@ public class SignalRController {
         // T: Retrieve email from token (END)
 
         // T: Create the new board
-        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        String boardId = Integer.toString(randomNumericBoardId);
+        // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+        // String boardId = Integer.toString(randomNumericBoardId);
+        String boardId = BoardIdGenerator.generateIdBoard(request.userId);
 
         // T: Autojoin a new group (START)
         System.out.println("adding to group");
@@ -387,8 +389,9 @@ public class SignalRController {
         // T: NOTE: we use this number to identify the board in persistence and like session
         // to exchange messages from clients
         // T: WARNING: you can substitute that with UserId(email) + timestamp
-        int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        String boardId = Integer.toString(randomNumericBoardId);
+        // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+        // String boardId = Integer.toString(randomNumericBoardId);
+        String boardId = BoardIdGenerator.generateIdBoard(lr.userId);
         
 
 
@@ -477,8 +480,9 @@ public class SignalRController {
 
 
         // T: WARNING: you can substitute that with UserId(email) + timestamp
-        int numericBoardSessionId = Math.abs(ThreadLocalRandom.current().nextInt());
-        String boardSessionId = Integer.toString(numericBoardSessionId);
+        // int numericBoardSessionId = Math.abs(ThreadLocalRandom.current().nextInt());
+        // String boardSessionId = Integer.toString(numericBoardSessionId);
+        String boardSessionId = BoardIdGenerator.generateIdBoard(requestBody.userId);
 
 
 
