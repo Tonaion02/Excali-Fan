@@ -1,3 +1,5 @@
+package com.example.restservice.Board;
+
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
@@ -7,7 +9,7 @@ import java.util.Base64;
 
 
 
-public class HmacIdGenerator {
+public class BoardIdgenerator {
     // T: Method to encrypt the id
     public static String generateHmacId(String originalUserId) {
         try {
