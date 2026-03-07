@@ -119,9 +119,10 @@ public class SignalRController {
         }   
     }
 
+    // T: Method to generate the board session id
     public static String generateIdBoard(String userId) {
         int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        String boardId = Integer.toString(randomNumericBoardId);
+        String boardId = userId + Integer.toString(randomNumericBoardId);
 
         return boardId;
     }
