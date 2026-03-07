@@ -153,7 +153,7 @@ function setup() {
     // cursor.style.height = `${tollerance * 2}px`;
 
     // T: set the content of GroupLabel
-    let gid = data.groupid;
+    let gid = data.groupId;
     let short = gid.substring(0,7) + "...";
     document.getElementById("current-group-label").innerHTML =
         `GroupID corrente: <span title="${gid}">${short}</span>`;
@@ -423,7 +423,7 @@ function setup() {
 
             //const currentGroupLabel = document.getElementById('current-group-label');
             //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-            let gid = data.groupid;
+            let gid = data.groupId;
             let short = gid.substring(0,7) + "...";
             document.getElementById("current-group-label").innerHTML =
                 `GroupID corrente: <span title="${gid}">${short}</span>`;
@@ -753,7 +753,7 @@ async function addToGroup() {
 
         data.groupId = groupId
 
-        let gid = data.groupid;
+        let gid = data.groupId;
         let short = gid.substring(0,7) + "...";
         currentGroupLabel.innerHTML =
             `GroupID corrente: <span title="${gid}">${short}</span>`;
@@ -847,7 +847,7 @@ async function addToGroup() {
 
                 //const currentGroupLabel = document.getElementById('current-group-label');
                 //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-                let gid = data.groupid;
+                let gid = data.groupId;
                 let short = gid.substring(0,7) + "...";
                 document.getElementById("current-group-label").innerHTML =
                     `GroupID corrente: <span title="${gid}">${short}</span>`;
@@ -915,7 +915,7 @@ async function loadBoard(boardId) {
             // T: update the boardSessionId in share div
             //const shareBox = document.getElementById("current-group-label");
             //shareBox.textContent = "GroupID corrente: " + data.groupId;
-            let gid = data.groupid;
+            let gid = data.groupId;
             let short = gid.substring(0,7) + "...";
             document.getElementById("current-group-label").innerHTML =
                 `GroupID corrente: <span title="${gid}">${short}</span>`;
@@ -1273,7 +1273,7 @@ async function new_board_button()
 
     //const currentGroupLabel = document.getElementById('current-group-label');
     //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
-    let gid = data.groupid;
+    let gid = data.groupId;
     let short = gid.substring(0,7) + "...";
     document.getElementById("current-group-label").innerHTML =
         `GroupID corrente: <span title="${gid}">${short}</span>`;
