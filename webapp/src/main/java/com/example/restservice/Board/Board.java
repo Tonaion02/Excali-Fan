@@ -39,9 +39,21 @@ public class Board {
         this.hostUserId = hostUserId;
     }
 
+    public Instant getInstantLastMod() {
+        this.instantLastMod;
+    }
+
+    public void setInstantLastMod(Instant instantLastMod) {
+        this.instantLastMod = instantLastMod; 
+    }
+
     public List<Line> lines;
     // T: It is the email of the user that created the board
     public String ownerUserId;
     // T: It is the userId(email + random number generated from client)
     public String hostUserId;
+
+    // T: This is the instant in which the owner of the board made the last modification
+    // T: NOTE We are checking for hostUserId
+    public Instant instantLastMod;
 }
