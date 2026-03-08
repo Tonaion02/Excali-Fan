@@ -37,6 +37,7 @@ import com.example.restservice.Board.*;
 import com.nimbusds.jwt.SignedJWT;
 import java.text.ParseException;
 
+import java.time.Instant;
 
 
 
@@ -45,7 +46,7 @@ import java.text.ParseException;
 @RestController
 public class SignalRController {
 
-    private final BoardsRuntimeStorage boards;
+    public final BoardsRuntimeStorage boards;
     private String hubName = "board";
 
 
@@ -71,7 +72,12 @@ public class SignalRController {
         Board board = boards.boards.get(command.groupId);
         synchronized(board) {
             Line fakeLine = new Line("null", null, command.userIdOfLine, command.timestampOfLine);
-            board.lines.remove(fakeLine);    
+            board.lines.remove(fakeLine);
+
+            if(command.userId.equals(board.hostUserId))
+            {
+                board.instantLastMod = Instant.now();
+            }
         }
 
 
@@ -97,7 +103,13 @@ public class SignalRController {
             Board board = boards.boards.get(command.groupId);
             synchronized (board) {
                 board.lines.add(command.line);
-                System.out.println("number of lines: " + board.lines.size());        
+
+                if(command.userId.equals(board.hostUserId))
+                {
+                    board.instantLastMod = Instant.now();
+                }
+
+                System.out.println("number of lines: " + board.lines.size());
             }
             
 
@@ -267,6 +279,7 @@ public class SignalRController {
         Board board = new Board();
         board.setOwnerUserId(email);
         board.setHostUserId(request.userId);
+        board.setInstantLastMod(Instant.now());
         boards.boards.put(boardId, board);
 
         return boardId;
@@ -398,6 +411,7 @@ public class SignalRController {
         Board board = new Board();
         board.setOwnerUserId(email);
         board.setHostUserId(lr.userId);
+        board.setInstantLastMod(Instant.now());
         boards.boards.put(boardId, board);     
 
         
@@ -518,6 +532,9 @@ public class SignalRController {
 
         // T: Set the right hostUserId
         board.setHostUserId(requestBody.userId);
+
+        // T: Set the last instant of modification
+        board.setInstantLastMod(Instant.now());
 
         // T: Add board to the collection of boards
         boards.boards.put(boardSessionId, board);

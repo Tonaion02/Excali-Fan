@@ -156,7 +156,7 @@ function setup() {
     let gid = data.groupId;
     let short = gid.substring(0,7) + "...";
     document.getElementById("current-group-label").innerHTML =
-        `GroupID corrente: <span title="${gid}">${short}</span>`;
+        `Current GroupID: <span title="${gid}">${short}</span>`;
     // T: set some properties of the cursor (END)
 
 
@@ -421,12 +421,10 @@ function setup() {
             const boardStorageIdTextBox = document.getElementById("file-name");
             boardStorageIdTextBox.value = data.groupId;
 
-            //const currentGroupLabel = document.getElementById('current-group-label');
-            //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
             let gid = data.groupId;
             let short = gid.substring(0,7) + "...";
             document.getElementById("current-group-label").innerHTML =
-                `GroupID corrente: <span title="${gid}">${short}</span>`;
+                `Current GroupID: <span title="${gid}">${short}</span>`;
 
             // T: Re-activate the button to save on cloud
             document.getElementById("save-option-cloud-button").removeAttribute("disabled");
@@ -756,7 +754,7 @@ async function addToGroup() {
         let gid = data.groupId;
         let short = gid.substring(0,7) + "...";
         currentGroupLabel.innerHTML =
-            `GroupID corrente: <span title="${gid}">${short}</span>`;
+            `Current GroupID: <span title="${gid}">${short}</span>`;
 
         // T: Reset the data.currentBoardStorageId(The name of the board loaded, in this case is used the groupId value...not for any reason)
         data.currentBoardStorageId = groupId;
@@ -845,12 +843,10 @@ async function addToGroup() {
                 const boardStorageIdTextBox = document.getElementById("file-name");
                 boardStorageIdTextBox.value = data.groupId;
 
-                //const currentGroupLabel = document.getElementById('current-group-label');
-                //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
                 let gid = data.groupId;
                 let short = gid.substring(0,7) + "...";
                 document.getElementById("current-group-label").innerHTML =
-                    `GroupID corrente: <span title="${gid}">${short}</span>`;
+                    `Current GroupID: <span title="${gid}">${short}</span>`;
 
                 clearBoard();
 
@@ -913,12 +909,10 @@ async function loadBoard(boardId) {
             data.currentBoardStorageId = boardId;
 
             // T: update the boardSessionId in share div
-            //const shareBox = document.getElementById("current-group-label");
-            //shareBox.textContent = "GroupID corrente: " + data.groupId;
             let gid = data.groupId;
             let short = gid.substring(0,7) + "...";
             document.getElementById("current-group-label").innerHTML =
-                `GroupID corrente: <span title="${gid}">${short}</span>`;
+                `Current GroupID: <span title="${gid}">${short}</span>`;
 
             // T: update the text-box of boardStorageId
             const boardStorageIdTextBox = document.getElementById("file-name");
@@ -1271,12 +1265,10 @@ async function new_board_button()
     const boardStorageIdTextBox = document.getElementById("file-name");
     boardStorageIdTextBox.value = data.groupId;
 
-    //const currentGroupLabel = document.getElementById('current-group-label');
-    //currentGroupLabel.textContent = `GroupID corrente: ${data.groupId}`;
     let gid = data.groupId;
     let short = gid.substring(0,7) + "...";
     document.getElementById("current-group-label").innerHTML =
-        `GroupID corrente: <span title="${gid}">${short}</span>`;
+        `Current GroupID: <span title="${gid}">${short}</span>`;
 
     // T: Re-activate the button to save on cloud
     document.getElementById("save-option-cloud-button").removeAttribute("disabled");

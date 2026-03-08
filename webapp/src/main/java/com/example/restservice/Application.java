@@ -11,11 +11,12 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.security.keyvault.secrets.SecretClient;
 import com.azure.security.keyvault.secrets.SecretClientBuilder;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 
 
 
-
+@EnableScheduling
 @SpringBootApplication
 public class Application {
 
