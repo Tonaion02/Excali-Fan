@@ -40,8 +40,6 @@ public class GarbageBoardCollector {
                 String boardId = entry.getKey();
                 Board board = entry.getValue();
 
-
-
                 if(board != null)
                 {
                     synchronized(board)
@@ -55,6 +53,9 @@ public class GarbageBoardCollector {
                         {
                             // T: DEBUG
                             System.out.println("Closing board: " + boardId);
+
+                            // T: TODO This is the real part, not tested
+                            contoller.boards.boards.remove(boardId);
                         }
                     }
                 }
