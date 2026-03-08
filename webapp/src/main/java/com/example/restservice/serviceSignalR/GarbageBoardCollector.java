@@ -29,9 +29,9 @@ public class GarbageBoardCollector {
         System.out.println("Running GarbageBoardCollector at: " + System.currentTimeMillis());
         System.out.println("boards from GarbageBoardCollector point of view: " + controller.boards);
 
-        if(contoller.boards != null)
+        if(controller.boards != null)
         {
-            for (Map.Entry<String, Board> entry: contoller.boards.boards.entrySet())
+            for (Map.Entry<String, Board> entry: controller.boards.boards.entrySet())
             {
                 String boardId = entry.getKey();
                 String board = entry.getValue();
