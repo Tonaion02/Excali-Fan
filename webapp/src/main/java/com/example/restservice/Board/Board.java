@@ -40,7 +40,7 @@ public class Board {
     }
 
     public Instant getInstantLastMod() {
-        this.instantLastMod;
+        return this.instantLastMod;
     }
 
     public void setInstantLastMod(Instant instantLastMod) {
