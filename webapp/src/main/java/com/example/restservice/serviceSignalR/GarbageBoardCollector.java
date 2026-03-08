@@ -26,8 +26,8 @@ public class GarbageBoardCollector {
         this.controller = controller;
     }
 
-    // T: This method runs each 5 seconds to collect the boards that are garbage
-    @Scheduled(fixedDelay = 20000)
+    // T: This method runs each "fixedDelay" seconds to collect the boards that are garbage
+    @Scheduled(fixedDelay = 10000000)
     public void garbage_collect() {
         // T: DEBUG
         System.out.println("Running GarbageBoardCollector at: " + System.currentTimeMillis());
