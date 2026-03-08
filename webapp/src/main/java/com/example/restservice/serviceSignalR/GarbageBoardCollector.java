@@ -36,7 +36,7 @@ public class GarbageBoardCollector {
             for (Map.Entry<String, Board> entry: controller.boards.boards.entrySet())
             {
                 String boardId = entry.getKey();
-                String board = entry.getValue();
+                Board board = entry.getValue();
 
 
 
