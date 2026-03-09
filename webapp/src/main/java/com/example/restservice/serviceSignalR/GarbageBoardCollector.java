@@ -55,7 +55,7 @@ public class GarbageBoardCollector {
                             System.out.println("Closing board: " + boardId);
 
                             // T: TODO This is the real part, not tested
-                            contoller.boards.boards.remove(boardId);
+                            controller.boards.boards.remove(boardId);
                         }
                     }
                 }
