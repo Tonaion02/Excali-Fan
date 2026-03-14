@@ -4,6 +4,7 @@ import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import java.util.Date;
+import java.nio.charset.StandardCharsets;
 
 
 
