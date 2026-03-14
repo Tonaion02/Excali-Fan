@@ -31,6 +31,7 @@ import com.example.restservice.BoardStorage.BoardStorage;
 import com.example.restservice.BoardStorage.BoardStorage.TestBlob;
 import com.azure.core.annotation.Post;
 import com.example.restservice.Keys;
+import static com.example.restservice.Keys.hubName;
 import com.example.restservice.TokenValidatorEntraId;
 import com.example.restservice.Board.*;
 
@@ -47,7 +48,8 @@ import java.time.Instant;
 public class SignalRController {
 
     public final BoardsRuntimeStorage boards;
-    private String hubName = "board";
+    // T: Must become a constant
+    // private final String hubName = "board";
 
 
 
