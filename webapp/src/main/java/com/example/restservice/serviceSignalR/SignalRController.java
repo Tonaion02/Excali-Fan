@@ -137,75 +137,75 @@ public class SignalRController {
     // }
 
 
-    public static class RequestNewBoard {
-        public String userId;
+    // public static class RequestNewBoard {
+    //     public String userId;
 
-        public RequestNewBoard() {}
+    //     public RequestNewBoard() {}
 
-        public RequestNewBoard(String userId) {
-            this.userId = userId;
-        }
+    //     public RequestNewBoard(String userId) {
+    //         this.userId = userId;
+    //     }
 
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
+    //     public void setUserId(String userId) {
+    //         this.userId = userId;
+    //     }
 
-        public String getUserId() {
-            return userId;
-        }
-    }
+    //     public String getUserId() {
+    //         return userId;
+    //     }
+    // }
 
-    // T: TODO Here, the problem is that you need to close the old board before opening another. Probably, is possible
-    // to do this, re-communicating even the information like the session of the current board.
-    @PostMapping("/api/newBoard")
-    public String newBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestNewBoard request) {
-        // T: DEBUG
-        System.out.println("New board");
+    // // T: TODO Here, the problem is that you need to close the old board before opening another. Probably, is possible
+    // // to do this, re-communicating even the information like the session of the current board.
+    // @PostMapping("/api/newBoard")
+    // public String newBoard(@RequestHeader("Authorization") String accessToken, @RequestBody RequestNewBoard request) {
+    //     // T: DEBUG
+    //     System.out.println("New board");
 
-        // T: Retrieve email from token (START)
-        String email = null;
-        try {
-            SignedJWT signedJwt = SignedJWT.parse(accessToken);
-            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
-        } catch(Exception e) {
-            System.out.println("signedJwt exception: " + e.getMessage());
-            e.printStackTrace();
-        }
-        if(email == null) {
-            System.out.println("email retrieved from token is null");
-            return null;
-        }
-        System.out.println("email of user retrieved from token: " + email);
-        // T: Retrieve email from token (END)
+    //     // T: Retrieve email from token (START)
+    //     String email = null;
+    //     try {
+    //         SignedJWT signedJwt = SignedJWT.parse(accessToken);
+    //         email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+    //     } catch(Exception e) {
+    //         System.out.println("signedJwt exception: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    //     if(email == null) {
+    //         System.out.println("email retrieved from token is null");
+    //         return null;
+    //     }
+    //     System.out.println("email of user retrieved from token: " + email);
+    //     // T: Retrieve email from token (END)
 
-        // T: Create the new board
-        // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        // String boardId = Integer.toString(randomNumericBoardId);
-        String boardId = BoardIdGenerator.generateIdBoard(request.userId);
+    //     // T: Create the new board
+    //     // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+    //     // String boardId = Integer.toString(randomNumericBoardId);
+    //     String boardId = BoardIdGenerator.generateIdBoard(request.userId);
 
-        // T: Autojoin a new group (START)
-        System.out.println("adding to group");
+    //     // T: Autojoin a new group (START)
+    //     System.out.println("adding to group");
 
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardId + "/users/" + request.userId;
-        String accessKey = generateJwt(hubUrl, email);
+    //     String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + boardId + "/users/" + request.userId;
+    //     String accessKey = generateJwt(hubUrl, email);
 
-        HttpResponse<String> response = Unirest.put(hubUrl)
-            .header("Content-Type", "application/json")
-            .header("Authorization", "Bearer " + accessKey)
-            .asString();
+    //     HttpResponse<String> response = Unirest.put(hubUrl)
+    //         .header("Content-Type", "application/json")
+    //         .header("Authorization", "Bearer " + accessKey)
+    //         .asString();
 
-        System.out.println("addgroup: " + response.getStatus());
-        System.out.println("addgroup: " + response.getBody());
-        // T: Autojoin a new group (END)
+    //     System.out.println("addgroup: " + response.getStatus());
+    //     System.out.println("addgroup: " + response.getBody());
+    //     // T: Autojoin a new group (END)
 
-        Board board = new Board();
-        board.setOwnerUserId(email);
-        board.setHostUserId(request.userId);
-        board.setInstantLastMod(Instant.now());
-        boards.boards.put(boardId, board);
+    //     Board board = new Board();
+    //     board.setOwnerUserId(email);
+    //     board.setHostUserId(request.userId);
+    //     board.setInstantLastMod(Instant.now());
+    //     boards.boards.put(boardId, board);
 
-        return boardId;
-    }
+    //     return boardId;
+    // }
 
     public static class RequestDownloadFromServer
     {
