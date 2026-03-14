@@ -99,40 +99,40 @@ public class SignalRController {
         System.out.println("sendMessage: " + response.getBody());
     }
 
-    @PostMapping("/api/createLine")
-    public void createLine(@RequestBody CreateLineCommand command) {
-        try {        
-            Board board = boards.boards.get(command.groupId);
-            synchronized (board) {
-                board.lines.add(command.line);
+    // @PostMapping("/api/createLine")
+    // public void createLine(@RequestBody CreateLineCommand command) {
+    //     try {        
+    //         Board board = boards.boards.get(command.groupId);
+    //         synchronized (board) {
+    //             board.lines.add(command.line);
 
-                if(command.userId.equals(board.hostUserId))
-                {
-                    board.instantLastMod = Instant.now();
-                }
+    //             if(command.userId.equals(board.hostUserId))
+    //             {
+    //                 board.instantLastMod = Instant.now();
+    //             }
 
-                System.out.println("number of lines: " + board.lines.size());
-            }
+    //             System.out.println("number of lines: " + board.lines.size());
+    //         }
             
 
-            System.out.println("timestamp of last line: " + command.line.timestamp);
-            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-            String accessKey = generateJwt(hubUrl, command.userId);
+    //         System.out.println("timestamp of last line: " + command.line.timestamp);
+    //         String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+    //         String accessKey = generateJwt(hubUrl, command.userId);
 
 
 
-            HttpResponse<String> response =  Unirest.post(hubUrl)
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + accessKey)
-                .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
-                .asString();
+    //         HttpResponse<String> response =  Unirest.post(hubUrl)
+    //             .header("Content-Type", "application/json")
+    //             .header("Authorization", "Bearer " + accessKey)
+    //             .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
+    //             .asString();
 
-            System.out.println("sendMessage: " + response.getStatus());
-            System.out.println("sendMessage: " + response.getBody());
-        } catch(RuntimeException e) {
-            e.printStackTrace();
-        }   
-    }
+    //         System.out.println("sendMessage: " + response.getStatus());
+    //         System.out.println("sendMessage: " + response.getBody());
+    //     } catch(RuntimeException e) {
+    //         e.printStackTrace();
+    //     }   
+    // }
 
     // T: TODO Substitute this objcet with a real command to close the board
     public static class RequestCloseBoard
