@@ -8,7 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 
 public class GenerateJwt {
-    private static String generateJwt(String audience, String userId) {
+    public static String generateJwt(String audience, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
         long nowMillis = System.currentTimeMillis();
