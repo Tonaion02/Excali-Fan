@@ -1,6 +1,8 @@
 package com.example.restservice;
 
 public class Keys {
+    public static final String hubName = "board";
+
     public static String keyVaultUrl = "";
     public static String signalRServiceBaseEndpoint = "";
     public static String storageAccountName = "";

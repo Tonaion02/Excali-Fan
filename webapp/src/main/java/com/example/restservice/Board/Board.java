@@ -3,6 +3,8 @@ package com.example.restservice.Board;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.time.Instant;
 
 
@@ -61,5 +63,6 @@ public class Board {
 
     // T: This is the instant in which the owner of the board made the last modification
     // T: NOTE We are checking for hostUserId
+    @JsonIgnore
     public Instant instantLastMod;
 }

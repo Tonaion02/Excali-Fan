@@ -39,7 +39,7 @@ public class BoardStorage {
                 .connectionString(connectionString)
                 .buildClient();
 
-        System.out.println("PORCODIO!!!!!!!!!!!!!!");
+        System.out.println("QUI!!!!!!!!!!!!!!");
 
         this.containerClient = serviceClient.getBlobContainerClient(containerName);
         
