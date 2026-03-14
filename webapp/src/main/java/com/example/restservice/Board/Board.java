@@ -61,5 +61,6 @@ public class Board {
 
     // T: This is the instant in which the owner of the board made the last modification
     // T: NOTE We are checking for hostUserId
+    @JsonIgnore
     public Instant instantLastMod;
 }
