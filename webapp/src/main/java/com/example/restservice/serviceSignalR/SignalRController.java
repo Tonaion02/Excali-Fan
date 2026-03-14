@@ -265,81 +265,81 @@ public class SignalRController {
         }
     }
 
-    public static class LoginRequest {
-        private String userId;
+    // public static class LoginRequest {
+    //     private String userId;
     
-        public LoginRequest() {}
+    //     public LoginRequest() {}
     
-        public LoginRequest(String userId) {
-            this.userId = userId;
-        }
+    //     public LoginRequest(String userId) {
+    //         this.userId = userId;
+    //     }
     
-        public String getUserId() {
-            return userId;
-        }
+    //     public String getUserId() {
+    //         return userId;
+    //     }
     
-        public void setUserId(String userId) {
-            this.userId = userId;
-        }
-    }
+    //     public void setUserId(String userId) {
+    //         this.userId = userId;
+    //     }
+    // }
 
-    // T: This api permits to make the login the first time during
-    // a session of using the application.
-    @PostMapping("/publicApi/login")
-    public String Login(@RequestBody LoginRequest lr, HttpServletRequest request, HttpServletResponse response) {
+    // // T: This api permits to make the login the first time during
+    // // a session of using the application.
+    // @PostMapping("/publicApi/login")
+    // public String Login(@RequestBody LoginRequest lr, HttpServletRequest request, HttpServletResponse response) {
                 
-        // T: verify if the token is valid (START)
-        String loginToken = request.getHeader("Authorization");
-        if(!TokenValidatorEntraId.validateToken(loginToken)) {
-            System.out.println("Invalid token used to try login");
-            response.setStatus(201);
-            return "#ERROR";
-        } else {
-            System.out.println("Valid token used to try login");
-            response.setStatus(200);
-        }
-        // T: verify if the token is valid (END)
+    //     // T: verify if the token is valid (START)
+    //     String loginToken = request.getHeader("Authorization");
+    //     if(!TokenValidatorEntraId.validateToken(loginToken)) {
+    //         System.out.println("Invalid token used to try login");
+    //         response.setStatus(201);
+    //         return "#ERROR";
+    //     } else {
+    //         System.out.println("Valid token used to try login");
+    //         response.setStatus(200);
+    //     }
+    //     // T: verify if the token is valid (END)
 
 
 
-        // T: Retrieve email from token (START)
-        String email = null;
-        try {
-            SignedJWT signedJwt = SignedJWT.parse(loginToken);
-            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
-        } catch(Exception e) {
-            System.out.println("signedJwt exception: " + e.getMessage());
-            e.printStackTrace();
-        }
-        if(email == null) {
-            System.out.println("email retrieved from token is null");
-            return null;
-        }
-        System.out.println("email of user retrieved from token: " + email);
-        // T: Retrieve email from token (END)
+    //     // T: Retrieve email from token (START)
+    //     String email = null;
+    //     try {
+    //         SignedJWT signedJwt = SignedJWT.parse(loginToken);
+    //         email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+    //     } catch(Exception e) {
+    //         System.out.println("signedJwt exception: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    //     if(email == null) {
+    //         System.out.println("email retrieved from token is null");
+    //         return null;
+    //     }
+    //     System.out.println("email of user retrieved from token: " + email);
+    //     // T: Retrieve email from token (END)
         
 
 
-        // T: generate a randomic identifier to identify the board
-        // T: NOTE: we use this number to identify the board in persistence and like session
-        // to exchange messages from clients
-        // T: WARNING: you can substitute that with UserId(email) + timestamp
-        // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
-        // String boardId = Integer.toString(randomNumericBoardId);
-        String boardId = BoardIdGenerator.generateIdBoard(lr.userId);
+    //     // T: generate a randomic identifier to identify the board
+    //     // T: NOTE: we use this number to identify the board in persistence and like session
+    //     // to exchange messages from clients
+    //     // T: WARNING: you can substitute that with UserId(email) + timestamp
+    //     // int randomNumericBoardId = Math.abs(ThreadLocalRandom.current().nextInt());
+    //     // String boardId = Integer.toString(randomNumericBoardId);
+    //     String boardId = BoardIdGenerator.generateIdBoard(lr.userId);
         
 
 
-        Board board = new Board();
-        board.setOwnerUserId(email);
-        board.setHostUserId(lr.userId);
-        board.setInstantLastMod(Instant.now());
-        boards.boards.put(boardId, board);     
+    //     Board board = new Board();
+    //     board.setOwnerUserId(email);
+    //     board.setHostUserId(lr.userId);
+    //     board.setInstantLastMod(Instant.now());
+    //     boards.boards.put(boardId, board);     
 
         
 
-        return boardId;
-    }
+    //     return boardId;
+    // }
 
 
 
