@@ -1,4 +1,4 @@
-package com.example.restservice.serviceSignalR.GenerateJwt;
+package com.example.restservice.serviceSignalR;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
