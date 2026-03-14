@@ -591,41 +591,41 @@ public class SignalRController {
     //     }
     // }
 
-    @PostMapping("/api/listBoards")
-    public List<String> listBoards(@RequestHeader("Authorization") String accessToken) {
+    // @PostMapping("/api/listBoards")
+    // public List<String> listBoards(@RequestHeader("Authorization") String accessToken) {
         
-        // T: Retrieve email from token (START)
-        String email = null;
-        try {
-            SignedJWT signedJwt = SignedJWT.parse(accessToken);
-            email = signedJwt.getJWTClaimsSet().getStringClaim("email");
-        } catch(Exception e) {
-            System.out.println("signedJwt exception: " + e.getMessage());
-            e.printStackTrace();
-        }
-        if(email == null) {
-            System.out.println("email retrieved is null");
-        }
-        System.out.println("email of user retrieved from token: " + email);
-        // T: Retrieve email from token (END)
+    //     // T: Retrieve email from token (START)
+    //     String email = null;
+    //     try {
+    //         SignedJWT signedJwt = SignedJWT.parse(accessToken);
+    //         email = signedJwt.getJWTClaimsSet().getStringClaim("email");
+    //     } catch(Exception e) {
+    //         System.out.println("signedJwt exception: " + e.getMessage());
+    //         e.printStackTrace();
+    //     }
+    //     if(email == null) {
+    //         System.out.println("email retrieved is null");
+    //     }
+    //     System.out.println("email of user retrieved from token: " + email);
+    //     // T: Retrieve email from token (END)
 
 
 
-        // T: Retrieve the list of boards (START)
-        BoardStorage boardStorage = new BoardStorage();
-        List<String> boardsList;
-        try {
-            boardsList = boardStorage.listBoards(email);
-        } catch(Exception e) {
-            System.out.println("Error during saving of Board: " + e.getMessage());
-            e.printStackTrace();
+    //     // T: Retrieve the list of boards (START)
+    //     BoardStorage boardStorage = new BoardStorage();
+    //     List<String> boardsList;
+    //     try {
+    //         boardsList = boardStorage.listBoards(email);
+    //     } catch(Exception e) {
+    //         System.out.println("Error during saving of Board: " + e.getMessage());
+    //         e.printStackTrace();
 
-            return null;
-        }
-        // T: Retrieve the list of boards (END)
+    //         return null;
+    //     }
+    //     // T: Retrieve the list of boards (END)
 
-        return boardsList;
-    }
+    //     return boardsList;
+    // }
     
 
 
