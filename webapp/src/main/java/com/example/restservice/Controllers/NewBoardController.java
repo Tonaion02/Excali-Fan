@@ -1,4 +1,4 @@
-package com.example.restservice.CreateLineController;
+package com.example.restservice.NewBoardController;
 
 import com.example.restservice.serviceSignalR.SignalRMessage;
 import static com.example.restservice.serviceSignalR.GenerateJwt.generateJwt;
@@ -57,7 +57,7 @@ public class NewBoardController {
         this.boards = boards;
         System.out.println("boards: " + boards);
     }
-    
+
     public static class RequestNewBoard {
         public String userId;
 
