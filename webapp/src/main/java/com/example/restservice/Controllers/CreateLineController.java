@@ -1,5 +1,7 @@
 package com.example.restservice.CreateLineController;
 
+import com.example.restservice.serviceSignalR.SignalRMessage;
+
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
