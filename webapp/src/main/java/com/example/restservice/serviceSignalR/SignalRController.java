@@ -207,47 +207,47 @@ public class SignalRController {
     //     return boardId;
     // }
 
-    public static class RequestDownloadFromServer
-    {
-        private String groupId;
+    // public static class RequestDownloadFromServer
+    // {
+    //     private String groupId;
 
-        public RequestDownloadFromServer(){}
+    //     public RequestDownloadFromServer(){}
 
-        public RequestDownloadFromServer(String groupId) {
-            this.groupId = groupId;
-        }
+    //     public RequestDownloadFromServer(String groupId) {
+    //         this.groupId = groupId;
+    //     }
 
-        public String getGroupId() {
-            return this.groupId;
-        }
+    //     public String getGroupId() {
+    //         return this.groupId;
+    //     }
 
-        public void setGroupId(String groupId) {
-            this.groupId = groupId;
-        }
-    }
+    //     public void setGroupId(String groupId) {
+    //         this.groupId = groupId;
+    //     }
+    // }
 
-    @PostMapping("/api/downloadBoardFromServer")
-    public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {        
-        try
-        {
-            Board board = boards.boards.get(request.groupId);
+    // @PostMapping("/api/downloadBoardFromServer")
+    // public Board downloadBoardFromServer(@RequestBody RequestDownloadFromServer request) {        
+    //     try
+    //     {
+    //         Board board = boards.boards.get(request.groupId);
             
-            if(board != null)
-            {
-                // T: TODO try to optimize this thing
-                synchronized (board)
-                {
-                    return board;
-                }
-            }
-        }
-        catch(RuntimeException e)
-        {
-            e.printStackTrace();
-        }
+    //         if(board != null)
+    //         {
+    //             // T: TODO try to optimize this thing
+    //             synchronized (board)
+    //             {
+    //                 return board;
+    //             }
+    //         }
+    //     }
+    //     catch(RuntimeException e)
+    //     {
+    //         e.printStackTrace();
+    //     }
 
-        return null;
-    }
+    //     return null;
+    // }
 
     // T: This api is used to test if the validation of the Token works
     // T: The status of the HTTP response is:
