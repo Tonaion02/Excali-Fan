@@ -6,6 +6,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import java.security.Key;
 import java.util.Date;
 import java.nio.charset.StandardCharsets;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.example.restservice.Keys;
 
