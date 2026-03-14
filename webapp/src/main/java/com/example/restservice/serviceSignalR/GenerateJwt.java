@@ -7,7 +7,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 
 
-class GenerateJwt {
+public class GenerateJwt {
     private String generateJwt(String audience, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
