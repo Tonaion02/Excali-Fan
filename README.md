@@ -19,7 +19,7 @@ cd ops
 To eliminate all the resources you can run the *undeploy.sh* shell script.
 
 ## Project Architecture
-![architecture_image](doc/arc.png)
+![architecture_image](doc/arcDark.png)
 
 ## Technologies and Services used
 - **Azure App Service**: It is used to run the web-app server that use Spring.
