@@ -68,36 +68,36 @@ public class SignalRController {
         return new SignalRConnectionInfo(hubUrl, accessKey);
     }
 
-    @PostMapping("/api/deleteLine")
-    public void deleteLine(@RequestBody DeleteLineCommand command) {
+    // @PostMapping("/api/deleteLine")
+    // public void deleteLine(@RequestBody DeleteLineCommand command) {
 
-        Board board = boards.boards.get(command.groupId);
-        synchronized(board) {
-            Line fakeLine = new Line("null", null, command.userIdOfLine, command.timestampOfLine);
-            board.lines.remove(fakeLine);
+    //     Board board = boards.boards.get(command.groupId);
+    //     synchronized(board) {
+    //         Line fakeLine = new Line("null", null, command.userIdOfLine, command.timestampOfLine);
+    //         board.lines.remove(fakeLine);
 
-            if(command.userId.equals(board.hostUserId))
-            {
-                board.instantLastMod = Instant.now();
-            }
-        }
-
-
-
-        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-        String accessKey = generateJwt(hubUrl, command.userId);
+    //         if(command.userId.equals(board.hostUserId))
+    //         {
+    //             board.instantLastMod = Instant.now();
+    //         }
+    //     }
 
 
 
-        HttpResponse<String> response =  Unirest.post(hubUrl)
-        .header("Content-Type", "application/json")
-        .header("Authorization", "Bearer " + accessKey)
-        .body(new SignalRMessage("receiveDeleteLine", new Object[] { command }))
-        .asString();
+    //     String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+    //     String accessKey = generateJwt(hubUrl, command.userId);
 
-        System.out.println("sendMessage: " + response.getStatus());
-        System.out.println("sendMessage: " + response.getBody());
-    }
+
+
+    //     HttpResponse<String> response =  Unirest.post(hubUrl)
+    //     .header("Content-Type", "application/json")
+    //     .header("Authorization", "Bearer " + accessKey)
+    //     .body(new SignalRMessage("receiveDeleteLine", new Object[] { command }))
+    //     .asString();
+
+    //     System.out.println("sendMessage: " + response.getStatus());
+    //     System.out.println("sendMessage: " + response.getBody());
+    // }
 
     // @PostMapping("/api/createLine")
     // public void createLine(@RequestBody CreateLineCommand command) {

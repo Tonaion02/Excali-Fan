@@ -1,4 +1,4 @@
-package com.example.restservice.CreateLineController;
+package com.example.restservice.DeleteLineController;
 
 import com.example.restservice.serviceSignalR.SignalRMessage;
 
@@ -47,51 +47,46 @@ import java.time.Instant;
 
 
 @RestController
-public class CreateLineController {
+public class DeleteLineController {
 
     public final BoardsRuntimeStorage boards;
 
     @Autowired
-    public CreateLineController(BoardsRuntimeStorage boards) {
+    public DeleteLineController(BoardsRuntimeStorage boards) {
         this.boards = boards;
         System.out.println("boards: " + boards);
     }
 
-    @PostMapping("/api/createLine")
-    public void createLine(@RequestBody CreateLineCommand command) {
-        try {        
-            Board board = boards.boards.get(command.groupId);
-            synchronized (board) {
-                board.lines.add(command.line);
+    @PostMapping("/api/deleteLine")
+    public void deleteLine(@RequestBody DeleteLineCommand command) {
 
-                if(command.userId.equals(board.hostUserId))
-                {
-                    board.instantLastMod = Instant.now();
-                }
+        Board board = boards.boards.get(command.groupId);
+        synchronized(board) {
+            Line fakeLine = new Line("null", null, command.userIdOfLine, command.timestampOfLine);
+            board.lines.remove(fakeLine);
 
-                System.out.println("number of lines: " + board.lines.size());
+            if(command.userId.equals(board.hostUserId))
+            {
+                board.instantLastMod = Instant.now();
             }
-            
-
-            System.out.println("timestamp of last line: " + command.line.timestamp);
-            String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
-            String accessKey = generateJwt(hubUrl, command.userId);
+        }
 
 
 
-            HttpResponse<String> response =  Unirest.post(hubUrl)
-                .header("Content-Type", "application/json")
-                .header("Authorization", "Bearer " + accessKey)
-                .body(new SignalRMessage("receiveCreateLine", new Object[] { command }))
-                .asString();
+        String hubUrl = Keys.signalRServiceBaseEndpoint + "/api/v1/hubs/" + hubName + "/groups/" + command.groupId;
+        String accessKey = generateJwt(hubUrl, command.userId);
 
-            System.out.println("sendMessage: " + response.getStatus());
-            System.out.println("sendMessage: " + response.getBody());
-        } catch(RuntimeException e) {
-            e.printStackTrace();
-        }   
+
+
+        HttpResponse<String> response =  Unirest.post(hubUrl)
+        .header("Content-Type", "application/json")
+        .header("Authorization", "Bearer " + accessKey)
+        .body(new SignalRMessage("receiveDeleteLine", new Object[] { command }))
+        .asString();
+
+        System.out.println("sendMessage: " + response.getStatus());
+        System.out.println("sendMessage: " + response.getBody());
     }
-
 
 
 
