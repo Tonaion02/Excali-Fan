@@ -1,7 +1,7 @@
 package com.example.restservice.CreateLineController;
 
 import com.example.restservice.serviceSignalR.SignalRMessage;
-import com.example.restservice.serviceSignalR.GenerateJwt;
+import static com.example.restservice.serviceSignalR.GenerateJwt.generateJwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;

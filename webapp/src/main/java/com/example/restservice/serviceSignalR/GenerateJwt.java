@@ -1,6 +1,4 @@
-package com.example.restservice.serviceSignalR;
-
-import com.example.restservice.serviceSignalR.GenerateJwt;
+package com.example.restservice.serviceSignalR.GenerateJwt;
 
 import io.jsonwebtoken.JwtBuilder;
 import io.jsonwebtoken.Jwts;
@@ -10,7 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 
 public class GenerateJwt {
-    private String generateJwt(String audience, String userId) {
+    private static String generateJwt(String audience, String userId) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
 
         long nowMillis = System.currentTimeMillis();

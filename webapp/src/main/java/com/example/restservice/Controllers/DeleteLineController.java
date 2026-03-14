@@ -1,6 +1,7 @@
 package com.example.restservice.DeleteLineController;
 
 import com.example.restservice.serviceSignalR.SignalRMessage;
+import static com.example.restservice.serviceSignalR.GenerateJwt.generateJwt;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
