@@ -70,13 +70,3 @@ public class SignalRWebhookController {
 ```
 
 At this point you can create from each client a WebSocket connection and relies on it to exchange these requests.
-
-<!-- Check if it is necessary to delete this section -->
-## IDENTIFIERS
-In this table are described some identifiers and their charateristics.
-
-| Identify of Users | Short Name | How is obtained? | For what is used? | Notes |
-| :-------- | :-------- | :-------- | :-------- | :-------- |
-| Identifier of Users | UserId | email of microsoft account | Is used during creation of connection with SignalR, identify a client for SignalR | |
-| Identifier of a Session of drawing | BoardSessionId | UserId concatenato timestamp | Is used to identify a group(of clients) in SignalR and is used to identify a remote board in the server | |
-| Identifier of persisted Boards | BoardStorageId | first time the Board is created, is temporary setted to BoardSessionId, <br> then is a name chosen by user(non guest-user) during savings | Is used to identify the board in the storage |  |

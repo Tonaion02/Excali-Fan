@@ -1,12 +1,12 @@
-# Excali-Fun
+# Excali-Fan
 
 <!--T: Logo of Excalidraw -->
 
-Excali-Fun is a webapp inspired to Excalidraw: https://excalidraw.com/.
+Excali-Fan is a webapp inspired to [Excalidraw](https://excalidraw.com/).
 
-Excali-Fun is a webapp application that allows multiple clients to draw on a virtual board in real-time.
+Excali-Fan is a webapp application that allows multiple clients to draw on a virtual board in real-time.
 
-We realized this webapp like project of the Cloud's course: https://docenti.unisa.it/033807/didattica?anno=2025&id=513250&cId=10008-2016&pId=N0*N0*S1.
+We realized this webapp like project of the [Cloud's course](https://docenti.unisa.it/033807/didattica?anno=2025&id=513250&cId=10008-2016&pId=N0*N0*S1=.
 
 ![excalifan_presentation](doc/images/excalifanPresentation.gif)
 
