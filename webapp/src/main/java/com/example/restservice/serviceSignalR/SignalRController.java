@@ -1,5 +1,7 @@
 package com.example.restservice.serviceSignalR;
 
+import com.example.restservice.serviceSignalR.GenerateJwt;
+
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
